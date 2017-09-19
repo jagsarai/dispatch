@@ -1,0 +1,37 @@
+<ion-header>
+  <ion-navbar color="primary">
+    <ion-title>Register</ion-title>
+  </ion-navbar>
+</ion-header>
+    
+<ion-content padding>
+  <form>
+    <ion-item>
+        <ion-label floating>Name</ion-label>
+        <ion-input type="text" name="name"></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label floating>Ph (000)000-0000</ion-label>
+        <ion-input type='tel' pattern='[[\(]\d{3}[\)]\d{3}[\-]\d{4}'></ion-input>
+    </ion-item>
+
+    <ion-item>
+        <ion-label floating>Email</ion-label>
+        <ion-input type="email" name="email"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+        <ion-label floating>Password</ion-label>
+        <ion-input type="password" name="password"></ion-input>
+    </ion-item>
+    <ion-item>
+        <ion-label floating>Confirm Password</ion-label>
+        <ion-input type="password" name="password"></ion-input>
+    </ion-item>
+      <br>
+    <div id="registration-button">
+        <button ion-button color="secondary" type="submit">Register</button>
+    </div>
+  </form> 
+</ion-content>
