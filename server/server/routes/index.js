@@ -23,9 +23,9 @@ module.exports = (app) => {
     });
 
     app.get('/api/users', requireAuth, usersController.list);
-    app.get('/api/users/:userId', usersController.retrive);
-    app.put('/api/users/:userId', usersController.update);
-    app.delete('/api/users/:userId', usersController.destroy);
+    app.get('/api/users/:userId', requireAuth, usersController.retrive);
+    app.put('/api/users/:userId', requireAuth, usersController.update);
+    app.delete('/api/users/:userId', requireAuth, usersController.destroy);
 
     app.post('/api/loads/:userId/:truckId/:shipperId/:recieverId/create', loadsController.create);
     app.get('/api/loads', loadsController.list);
