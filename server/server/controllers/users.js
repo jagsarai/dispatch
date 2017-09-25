@@ -1,19 +1,12 @@
 const User = require('../models').User;
+var bcypt = require('bcrypt-node');
+
+
 
 module.exports = {
-    create(req, res) {
-        return User
-            .create({
-                role: req.body.role,
-                phone: parseInt(req.body.phone),
-                name: req.body.name,
-                email: req.body.email,
-                password: req.body.password
-            })
-            .then(user => res.status(201).send(user))
-            .catch(error => res.status(400).send(error))
-    },
+    
     list(req, res) {
+        console.log("Inside user.list");
         return User
             .findAll()
             .then(users => res.status(200).send(users))
@@ -47,7 +40,7 @@ module.exports = {
                     .update({
                         name: req.body.name || user.name,
                         email: req.body.email || user.email,
-                        password: req.body.password || user.password,
+                        password: bcypt.hashSync(req.body.password, salt) || user.password,
                         phone: req.body.phone || user.phone,
                         role: req.body.role || user.role
                     })

@@ -3,14 +3,26 @@ const loadsController = require('../controllers').loads;
 const trucksController = require('../controllers').trucks;
 const shippersController = require('../controllers').shippers;
 const recieversController = require('../controllers').recievers;
+const AuthenticationController = require('../controllers/authentication');
+const passportService = require('../config/passport');
+const passport = require('passport');
+
+var requireAuth = passport.authenticate('jwt', {session: false});
+var requireLogin = passport.authenticate('local', {session: false});
 
 module.exports = (app) => {
     app.get('/api', (req, res) => res.status(200).send({
         message: 'Welcome!'
     }));
 
-    app.post('/api/users', usersController.create);
-    app.get('/api/users', usersController.list);
+    app.post('/register', AuthenticationController.register);
+    app.post('/login', requireLogin, AuthenticationController.login);
+
+    app.get('/protected', requireAuth, function(req, res){
+        res.send({ content: 'Success'});
+    });
+
+    app.get('/api/users', requireAuth, usersController.list);
     app.get('/api/users/:userId', usersController.retrive);
     app.put('/api/users/:userId', usersController.update);
     app.delete('/api/users/:userId', usersController.destroy);
