@@ -5,33 +5,75 @@
 </ion-header>
     
 <ion-content padding>
-  <form>
-    <ion-item>
-        <ion-label floating>Name</ion-label>
-        <ion-input type="text" name="name"></ion-input>
-    </ion-item>
+    <form #f="ngForm" novalidate (ngSubmit)="register()">
+        <ion-card>
+            <ion-card-content>
+                <ion-item>
+                    <!-- <ion-icon name="person"></ion-icon> -->
+                    <ion-label floating>Name</ion-label>
+                    <ion-input type="text"  name="name" [(ngModel)]="userName" required minlength="3" #name="ngModel"></ion-input>
+                </ion-item>
 
-    <ion-item>
-        <ion-label floating>Ph (000)000-0000</ion-label>
-        <ion-input type='tel' pattern='[[\(]\d{3}[\)]\d{3}[\-]\d{4}'></ion-input>
-    </ion-item>
+                <div padding *ngIf="name.invalid && name.dirty">
+                    <span class="global__input-error">Name is required (minimum 3 characters).</span>
+                </div>
+                
+                <ion-item>
+                        <!-- <ion-icon name="call"></ion-icon> -->
+                    <ion-label floating>Phone</ion-label>
+                    <ion-input type='tel'  minlength="10" maxlength="10" name="phone" [(ngModel)]="userPhone" #phone="ngModel"></ion-input>
+                </ion-item>
 
-    <ion-item>
-        <ion-label floating>Email</ion-label>
-        <ion-input type="email" name="email"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-        <ion-label floating>Password</ion-label>
-        <ion-input type="password" name="password"></ion-input>
-    </ion-item>
-    <ion-item>
-        <ion-label floating>Confirm Password</ion-label>
-        <ion-input type="password" name="password"></ion-input>
-    </ion-item>
-      <br>
-    <div id="registration-button">
-        <button ion-button color="secondary" type="submit">Register</button>
-    </div>
-  </form> 
+                <div padding *ngIf="phone.invalid && phone.dirty">
+                    <span class="global__input-error">Please provide a valid 10 digit phone number (1234567890).</span>
+                </div>
+                
+                <ion-item>
+                        <!-- <ion-icon name="mail"></ion-icon> -->
+                    <ion-label floating>Email</ion-label>
+                    <ion-input type="email"  name="email" [(ngModel)]="userEmail" required  #email="ngModel" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"></ion-input>
+                </ion-item>
+
+                <div padding *ngIf="email.invalid && email.dirty">
+                    <span class="global__input-error">Email is requierd and format should be like <i>john@doe.com</i></span>
+                </div>
+                
+                <ion-item>
+                        <!-- <ion-icon name="lock"></ion-icon> -->
+                    <ion-label floating>Password</ion-label>
+                    <ion-input type="password" name="password" [(ngModel)]="userPassword" required validateEqual="confirmPassword" reverse="true" #password="ngModel"></ion-input>
+                </ion-item>
+
+                <div padding *ngIf="password.invalid && password.dirty">
+                    <span class="global__input-error">Password is requierd</span>
+                </div>
+                
+                <ion-item>
+                        <!-- <ion-icon name="lock"></ion-icon> -->
+                    <ion-label floating>Confirm Password</ion-label>
+                    <ion-input type="password" name="confirmPassword" [(ngModel)]="userConfPassword" required validEqual="password" reverse="false" #confirmPassword="ngModel"></ion-input>
+                </ion-item>
+
+                <div padding *ngIf="confirmPassword.invalid && confirmPassword.dirty">
+                    <span class="global__input-error">Password mismatch</span>
+                </div>
+                
+                <ion-item>
+                    <ion-label><ion-icon name="people"></ion-icon></ion-label>
+                    <ion-select name="role" placeholder="Role" [(ngModel)]="userRole" #role="ngModel" required>
+                        <ion-option value="driver">Driver</ion-option>
+                        <ion-option value="admin">Admin</ion-option>
+                    </ion-select>
+                </ion-item>
+
+                <div padding *ngIf="role.invalid && role.dirty">
+                    <span class="global__input-error">Please select a role</span>
+                </div>
+                
+                <div id="registration-button">
+                    <button ion-button color="secondary" type="submit" [disabled]="f.invalid">Register</button>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </form> 
 </ion-content>

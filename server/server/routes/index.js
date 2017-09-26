@@ -15,39 +15,40 @@ module.exports = (app) => {
         message: 'Welcome!'
     }));
 
-    app.post('/register', AuthenticationController.register);
-    app.post('/login', requireLogin, AuthenticationController.login);
-
-    app.get('/protected', requireAuth, function(req, res){
+    
+    app.get('api/protected', requireAuth, function(req, res){
         res.send({ content: 'Success'});
     });
+
+    app.post('/api/register', AuthenticationController.register);
+    app.post('/api/login', requireLogin, AuthenticationController.login);
 
     app.get('/api/users', requireAuth, usersController.list);
     app.get('/api/users/:userId', requireAuth, usersController.retrive);
     app.put('/api/users/:userId', requireAuth, usersController.update);
     app.delete('/api/users/:userId', requireAuth, usersController.destroy);
 
-    app.post('/api/loads/:userId/:truckId/:shipperId/:recieverId/create', loadsController.create);
-    app.get('/api/loads', loadsController.list);
-    app.get('/api/loads/:loadId', loadsController.retrive);
-    app.put('/api/loads/:loadId', loadsController.update);
-    app.delete('/api/loads/:loadId', loadsController.destroy);
+    app.post('/api/loads/:userId/:truckId/:shipperId/:recieverId/create', requireAuth, loadsController.create);
+    app.get('/api/loads', requireAuth, loadsController.list);
+    app.get('/api/loads/:loadId', requireAuth, loadsController.retrive);
+    app.put('/api/loads/:loadId', requireAuth, loadsController.update);
+    app.delete('/api/loads/:loadId', requireAuth, loadsController.destroy);
 
-    app.post('/api/trucks', trucksController.create);
-    app.get('/api/trucks', trucksController.list);
-    app.get('/api/trucks/:truckId', trucksController.retrive);
-    app.put('/api/trucks/:truckId', trucksController.update);
-    app.delete('/api/trucks/:truckId', trucksController.destroy);
+    app.post('/api/trucks', requireAuth, trucksController.create);
+    app.get('/api/trucks', requireAuth, trucksController.list);
+    app.get('/api/trucks/:truckId', requireAuth, trucksController.retrive);
+    app.put('/api/trucks/:truckId', requireAuth, trucksController.update);
+    app.delete('/api/trucks/:truckId', requireAuth, trucksController.destroy);
 
-    app.post('/api/shippers', shippersController.create);
-    app.get('/api/shippers', shippersController.list);
-    app.get('/api/shippers/:shipperId', shippersController.retrive);
-    app.put('/api/shippers/:shipperId', shippersController.update);
-    app.delete('/api/shippers/:shipperId', shippersController.destroy);
+    app.post('/api/shippers', requireAuth, shippersController.create);
+    app.get('/api/shippers', requireAuth, shippersController.list);
+    app.get('/api/shippers/:shipperId', requireAuth, shippersController.retrive);
+    app.put('/api/shippers/:shipperId', requireAuth, shippersController.update);
+    app.delete('/api/shippers/:shipperId', requireAuth, shippersController.destroy);
 
-    app.post('/api/recievers', recieversController.create);
-    app.get('/api/recievers', recieversController.list);
-    app.get('/api/recievers/:recieverId', recieversController.retrive);
-    app.put('/api/recievers/:recieverId', recieversController.update);
-    app.delete('/api/recievers/:recieverId', recieversController.destroy);
+    app.post('/api/recievers', requireAuth, recieversController.create);
+    app.get('/api/recievers', requireAuth, recieversController.list);
+    app.get('/api/recievers/:recieverId', requireAuth, recieversController.retrive);
+    app.put('/api/recievers/:recieverId', requireAuth, recieversController.update);
+    app.delete('/api/recievers/:recieverId', requireAuth, recieversController.destroy);
 }

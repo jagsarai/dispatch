@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController } from 'ionic-angular';
+import { AuthProvider } from '../../providers/auth/auth';
+
 
 /**
  * Generated class for the LoginPage page.
@@ -15,11 +17,51 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  userEmail: string;
+  userPassword: string;
+  loading: any;
+
+  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
+  }
+    
+    login(){
+
+      this.showLoader();
+
+      let credentials = {
+          email: this.userEmail,
+          password: this.userPassword
+      };
+
+      console.log("Email inside login function " + this.userEmail);
+      console.log("password inside login function " + this.userPassword);
+      
+      this.authService.login(credentials).then((result) => {
+          this.loading.dismiss();
+          console.log(result);
+          this.navCtrl.setRoot('HomePage');
+      }, (err) => {
+          this.loading.dismiss();
+          console.log(err);
+      });
+
+    }
+    
+    launchSignup(){
+        this.navCtrl.push("RegisterPage");
+    }
+    
+    showLoader(){
+
+      this.loading = this.loadingCtrl.create({
+          content: 'Loading...'
+      });
+
+      this.loading.present();
   }
 
 }

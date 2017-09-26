@@ -3,15 +3,26 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { IonicStorageModule } from '@ionic/storage';
+import { HttpModule } from '@angular/http';
 import { MyApp } from './app.component';
+import { AuthProvider } from '../providers/auth/auth';
+import { LoadProvider } from '../providers/load/load';
+import { FormsModule } from '@angular/forms';
+import { EqualValidator } from '../directives/equal-validator.directive';
+
 
 @NgModule({
   declarations: [
     MyApp,
+    EqualValidator,
   ],
   imports: [
+    FormsModule,
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    HttpModule,
+    IonicModule.forRoot(MyApp),
+    IonicStorageModule.forRoot()
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -20,7 +31,9 @@ import { MyApp } from './app.component';
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthProvider,
+    LoadProvider
   ]
 })
 export class AppModule {}

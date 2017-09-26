@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController } from 'ionic-angular';
+import { AuthProvider } from '../../providers/auth/auth';
 
 /**
  * Generated class for the LandingPage page.
@@ -15,7 +16,9 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class LandingPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  loading: any;
+
+  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public authService: AuthProvider) {
   }
 
   sendToLogin(){
@@ -28,6 +31,26 @@ export class LandingPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LandingPage');
+
+    this.showLoader();
+           //Check if already authenticated
+      this.authService.checkAuthentication().then((res) => {
+          console.log("Already authorized");
+          this.loading.dismiss();
+          this.navCtrl.setRoot('HomePage');
+      }, (err) => {
+          console.log("Not already authorized");
+          this.loading.dismiss();
+      });
+  }
+
+  showLoader(){
+    
+    this.loading = this.loadingCtrl.create({
+        content: 'Loading...'
+    });
+
+    this.loading.present();
   }
 
 }

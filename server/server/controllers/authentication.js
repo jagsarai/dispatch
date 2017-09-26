@@ -66,11 +66,11 @@ exports.register = function(req, res, next){
         }
     }).then((existingUser) => {
 
-        // if(existingUser){
-        //     return res.status(422).send({
-        //         error: "That Email address is already is use"
-        //     })
-        // }
+        if(existingUser){
+            return res.status(400).send({
+                error: "That Email address is already is use"
+            })
+        }
 
         User.create({
             role: role,
@@ -99,7 +99,7 @@ exports.register = function(req, res, next){
 exports.roleAuthorization = function(roles){
     console.log("Inside the role auth function");
     return function(req, res, next){
-        console.log("user inside the rol auth: " + req.user)
+        console.log("user inside the role auth: " + req.user)
         var user = req.user;
 
         User.findById(user.id)
