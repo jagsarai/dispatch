@@ -1,8 +1,8 @@
-const Reciever = require('../models').Reciever;
+const Receiver = require('../models').Receiver;
 
 module.exports = {
     create(req, res) {
-        return Reciever
+        return Receiver
             .create({
                 name: req.body.name,
                 address: req.body.address,
@@ -14,61 +14,61 @@ module.exports = {
             .catch(error => res.status(400).send(error))
     },
     list(req, res) {
-        return Reciever
+        return Receiver
             .findAll()
             .then(users => res.status(200).send(users))
             .catch(error => res.status(400).send(error))
     },
     retrive(req, res) {
-        return Reciever
-            .findById(req.params.recieverId, {
+        return receiver
+            .findById(req.params.receiverId, {
             })
-            .then(reciever => {
-                if (!reciever){
+            .then(receiver => {
+                if (!receiver){
                     return res.status(404).send({
-                        message: 'Reciever Not Found'
+                        message: 'Receiver Not Found'
                     });
                 }
-                return res.status(200).send(reciever);
+                return res.status(200).send(receiver);
             })
             .catch(error => res.status(400).send(error));
     },
     update(req, res){
-        return Reciever
-            .findById(req.params.recieverId, {  
+        return Receiver
+            .findById(req.params.receiverId, {  
             })
-            .then(reciever => {
-                if(!reciever){
+            .then(receiver => {
+                if(!receiver){
                     return res.status(400).send({
-                        message: "Reciever not Found"
+                        message: "Receiver not Found"
                     })
                 }
-                return reciever 
+                return receiver 
                     .update({
-                        name: req.body.name || reciever.name,
-                        address: req.body.address || reciever.address,
-                        city: req.body.city || reciever.city,
-                        state: req.body.state || reciever.state,
-                        zipCode: req.body.zipCode || reciever.zipCode
+                        name: req.body.name || receiver.name,
+                        address: req.body.address || receiver.address,
+                        city: req.body.city || receiver.city,
+                        state: req.body.state || receiver.state,
+                        zipCode: req.body.zipCode || receiver.zipCode
                     })
-                    .then(() => res.status(200).send(reciever))
+                    .then(() => res.status(200).send(receiver))
                     .catch((error) => res.status(400).send(error));
             })
             .catch( (error) => res.status(400).send(error));
     },
     destroy(req, res) {
-        return Reciever
-          .findById(req.params.recieverId)
-          .then(reciever => {
-            if (!reciever) {
+        return Receiver
+          .findById(req.params.receiverId)
+          .then(receiver => {
+            if (!receiver) {
               return res.status(400).send({
-                message: 'Reciever Not Found',
+                message: 'Receiver Not Found',
               });
             }
-            return reciever
+            return receiver
               .destroy()
               .then(() => res.status(204).send({
-                  message: 'Reciever Successfully removed'
+                  message: 'Receiver Successfully removed'
               }))
               .catch(error => res.status(400).send(error));
           })

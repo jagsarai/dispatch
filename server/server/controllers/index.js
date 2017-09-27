@@ -2,7 +2,7 @@ const users = require('./users');
 const loads = require('./loads');
 const trucks = require('./trucks');
 const shippers = require('./shippers');
-const recievers = require('./recievers');
+const receivers = require('./receivers');
 
 
 module.exports = {
@@ -10,5 +10,5 @@ module.exports = {
     loads,
     trucks,
     shippers,
-    recievers
+    receivers
 };

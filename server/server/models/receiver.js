@@ -1,6 +1,6 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
-  const Reciever = sequelize.define('Reciever', {
+  const Receiver = sequelize.define('Receiver', {
     name: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -39,9 +39,9 @@ module.exports = (sequelize, DataTypes) => {
     },        
   });
 
-  Reciever.associate = (models) =>{
-    Reciever.hasMany(models.Load, {
+  Receiver.associate = (models) =>{
+    Receiver.hasMany(models.Load, {
     })
   }
-  return Reciever;
+  return Receiver;
 };

@@ -5,10 +5,10 @@ module.exports = {
     create(req, res) {
         return Load
             .create({
-                UserId: parseInt(req.params.userId),
-                TruckId: req.params.truckId,
-                ShipperId: req.params.shipperId,
-                RecieverId: req.params.recieverId,
+                UserId: req.body.userId,
+                TruckId: req.body.truckId,
+                ShipperId: req.body.shipperId,
+                ReceiverId: req.body.receiverId,
             })
             .then(load => res.status(201).send(load))
             .catch(error => res.status(400).send(error))
@@ -33,7 +33,7 @@ module.exports = {
                         message: 'Load Not Found'
                     });
                 }
-                return res.status(200).send(laod);
+                return res.status(200).send(load);
             })
             .catch(error => res.status(400).send(error));
     },
@@ -51,10 +51,10 @@ module.exports = {
                     .update({
                         UserId: req.body.userId || load.UserId,
                         ShipperId: req.body.shipperId || load.ShipperId,
-                        RecieverId: req.body.recieverId || load.RecieverId,
+                        ReceiverId: req.body.receiverId || load.ReceiverId,
                         TruckId: req.body.truckId || load.TruckId,
                     })
-                    .then(() => res.status(200).send(todo))
+                    .then(() => res.status(200).send(load))
                     .catch((error) => res.status(400).send(error));
             })
             .catch( (error) => res.status(400).send(error));
@@ -68,7 +68,7 @@ module.exports = {
                 message: 'Load Not Found',
               });
             }
-            return Load
+            return load
               .destroy()
               .then(() => res.status(204).send({
                   message: 'Load Successfully removed'

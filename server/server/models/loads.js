@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
         as: 'userId'
       },
+      allowNull: false
     },
     ShipperId: {
       type: DataTypes.INTEGER,
@@ -16,14 +17,16 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
         as: 'shipperId'
       },
+      allowNull: false
     },
-    RecieverId: {
+    ReceiverId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Recievers',
+        model: 'Receivers',
         key: 'id',
-        as: 'recieverId'
+        as: 'receiverId'
       },
+      allowNull: false
     },
     TruckId: {
       type: DataTypes.INTEGER,
@@ -32,6 +35,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
         as: 'truckId'
       },
+      allowNull: false
     }
   });
 

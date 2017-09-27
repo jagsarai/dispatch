@@ -17,7 +17,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 
 
-
 db.sequelize.sync().then(() => {
     console.log("Nice! Database looks fine")
 }).catch((err) => {

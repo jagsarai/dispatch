@@ -2,7 +2,7 @@ const usersController = require('../controllers').users;
 const loadsController = require('../controllers').loads;
 const trucksController = require('../controllers').trucks;
 const shippersController = require('../controllers').shippers;
-const recieversController = require('../controllers').recievers;
+const receiversController = require('../controllers').receivers;
 const AuthenticationController = require('../controllers/authentication');
 const passportService = require('../config/passport');
 const passport = require('passport');
@@ -16,8 +16,8 @@ module.exports = (app) => {
     }));
 
     
-    app.get('api/protected', requireAuth, function(req, res){
-        res.send({ content: 'Success'});
+    app.get('/api/protected', requireAuth, function(req, res){
+        res.status(200).send({ content: 'Success'});
     });
 
     app.post('/api/register', AuthenticationController.register);
@@ -28,7 +28,7 @@ module.exports = (app) => {
     app.put('/api/users/:userId', requireAuth, usersController.update);
     app.delete('/api/users/:userId', requireAuth, usersController.destroy);
 
-    app.post('/api/loads/:userId/:truckId/:shipperId/:recieverId/create', requireAuth, loadsController.create);
+    app.post('/api/loads/', requireAuth, loadsController.create);
     app.get('/api/loads', requireAuth, loadsController.list);
     app.get('/api/loads/:loadId', requireAuth, loadsController.retrive);
     app.put('/api/loads/:loadId', requireAuth, loadsController.update);
@@ -46,9 +46,9 @@ module.exports = (app) => {
     app.put('/api/shippers/:shipperId', requireAuth, shippersController.update);
     app.delete('/api/shippers/:shipperId', requireAuth, shippersController.destroy);
 
-    app.post('/api/recievers', requireAuth, recieversController.create);
-    app.get('/api/recievers', requireAuth, recieversController.list);
-    app.get('/api/recievers/:recieverId', requireAuth, recieversController.retrive);
-    app.put('/api/recievers/:recieverId', requireAuth, recieversController.update);
-    app.delete('/api/recievers/:recieverId', requireAuth, recieversController.destroy);
+    app.post('/api/receivers', requireAuth, receiversController.create);
+    app.get('/api/receivers', requireAuth, receiversController.list);
+    app.get('/api/receivers/:receiverId', requireAuth, receiversController.retrive);
+    app.put('/api/receivers/:receiverId', requireAuth, receiversController.update);
+    app.delete('/api/receivers/:receiverId', requireAuth, receiversController.destroy);
 }

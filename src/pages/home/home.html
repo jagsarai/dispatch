@@ -5,14 +5,43 @@
   Ionic pages and navigation.
 -->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>Welcome</ion-title>
-  </ion-navbar>
-
+    <ion-navbar color="primary">
+      <ion-title>
+        Load Board
+      </ion-title>
+      <ion-buttons end>
+        <button ion-button icon-only (click)="addLoadDetail()"><ion-icon name="create"></ion-icon></button>
+      </ion-buttons>
+      <ion-buttons start>
+        <button ion-button icon-only (click)="logout()"><ion-icon name="power"></ion-icon></button>
+      </ion-buttons>
+    </ion-navbar>
 </ion-header>
-
-
+    
 <ion-content padding>
-  <p>Welcome to the home page where we will layout all of the load informaiton for our user</p>
+  
+  <ion-list no-lines *ngFor="let load of loads">
+
+    <ion-card>
+      <ion-card-content>
+        <ion-item (click)="showLoadDetail(load)">
+          <ion-icon name="document"></ion-icon>
+          Load # {{load.id}}
+        </ion-item>
+        <ion-item>
+          <button ion-button-small (click)="deleteLoad(load)">
+              <ion-icon name="trash" color="danger"></ion-icon>
+              Delete
+            </button>
+
+            <button ion-button-small  (click)="showLoadEdit(load)">
+              <ion-icon name="build" color="primary"></ion-icon>
+              Edit
+            </button>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
+    
+  </ion-list>
+
 </ion-content>
