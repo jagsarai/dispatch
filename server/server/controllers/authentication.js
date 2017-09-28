@@ -52,13 +52,13 @@ exports.register = function(req, res, next){
     var name = req.body.name;
     var phone =  parseInt(req.body.phone);
  
-    // if(!email){
-    //     return res.status(422).send({error: 'You must enter an email address'});
-    // }
+    if(!email){
+        return res.status(422).send({error: 'You must enter an email address'});
+    }
  
-    // if(!password){
-    //     return res.status(422).send({error: 'You must enter a password'});
-    // }
+    if(!password){
+        return res.status(422).send({error: 'You must enter a password'});
+    }
 
     User.findOne({
         where: {

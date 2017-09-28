@@ -43,7 +43,6 @@ module.exports = (sequelize, DataTypes) => {
     Load.belongsTo(models.User, {
       as: 'driver',
       foreignKey: 'UserId',
-      unique: true
     })
   }
 

@@ -22,7 +22,7 @@ export class AuthProvider {
         //Load token if exists
         this.storage.get('token').then((value) => {
             
-            this.token = 'Bearer ' + this.tokenValue(value);
+            this.token = value;
             console.log("This Token: " + this.token);
             let headers = new Headers();
             headers.append('Authorization', this.token);
@@ -56,8 +56,14 @@ export class AuthProvider {
             response = res;
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
-            console.log("Token in login " + this.token);
-            this.storage.set('token', data.token);
+
+            this.storage.set('token', this.token);
+            this.storage.set('id', data.user.id);
+            console.log("userId inside register: " + data.user.id);
+            this.storage.set('role', data.user.role);
+            console.log("role inside register: " + data.user.role);
+            this.storage.set('email', data.user.email);
+            console.log("user email inside register: " + data.user.email);
             resolve(data);
 
           },(err) => {
@@ -80,7 +86,14 @@ export class AuthProvider {
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
             console.log("Token in login " + this.token);
-            this.storage.set('token', data.token);
+
+            this.storage.set('token', this.token);
+            this.storage.set('id', data.user.id);
+            console.log("userId inside login: " + data.user.id);
+            this.storage.set('role', data.user.role);
+            console.log("role inside login: " + data.user.role);
+            this.storage.set('email', data.user.email);
+            console.log("user email inside login: " + data.user.email);
             resolve(data);
 
             resolve(res.json());
