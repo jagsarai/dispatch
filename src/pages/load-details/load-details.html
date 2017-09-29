@@ -14,18 +14,64 @@
 
 
 <ion-content padding>
-  <ion-list no-lines>
-      <ion-item>
-          Shipper: {{load.ShipperId}}
-      </ion-item>
-      <ion-item>
-          Receiver: {{load.ReceiverId}}
-      </ion-item>
-      <ion-item>
-          Truck: {{load.TruckId}}
-      </ion-item>
-      <ion-item>
-          Driver: {{load.driver.name}}
-      </ion-item>
-  </ion-list>
+    <ion-list no-lines>
+            <ion-item *ngFor="let truck of trucks">
+            <ion-icon name="speedometer"></ion-icon>
+            Truck: {{truck.number}}
+        </ion-item>
+
+        <ion-item>
+            <ion-icon name="person"></ion-icon>
+            Driver: {{load.driver.name}}
+        </ion-item>
+
+        <ion-item>
+            <ion-icon name="call"></ion-icon>
+            Driver Ph: {{load.driver.phone}}
+        </ion-item>
+
+        <ion-item *ngFor="let shipper of shippers">
+            <ion-card>
+                <ion-card-header>
+                    <ion-icon name="map"></ion-icon>
+                    Shipper
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-list>
+                        <ion-item>
+                            {{shipper.name}}
+                            <br>
+                            {{shipper.address}}
+                            <br>
+                            {{shipper.city}}, {{shipper.state}}
+                            <br>
+                            {{shipper.zip}}
+                        </ion-item>
+                    </ion-list>
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+
+        <ion-item *ngFor="let receiver of receivers">
+            <ion-card>
+                <ion-card-header>
+                    <ion-icon name="map"></ion-icon>
+                    Receiver
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-list>
+                        <ion-item>
+                            {{receiver.name}}
+                            <br>
+                            {{receiver.address}}
+                            <br>
+                            {{receiver.city}}, {{receiver.state}}
+                            <br>
+                            {{receiver.zip}}
+                        </ion-item>
+                    </ion-list>
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-list>
 </ion-content>

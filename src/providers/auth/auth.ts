@@ -7,6 +7,10 @@ import 'rxjs/add/operator/map';
 export class AuthProvider {
 
   token: any;
+  role: any;
+  email: any;
+  id: any;
+
   tokenValue = (value) => {
     value = value.replace(/[A-Z][A-Z][A-Z]\s/g, "");
     console.log("New Value is: " + value);
@@ -25,6 +29,10 @@ export class AuthProvider {
             this.token = value;
             console.log("This Token: " + this.token);
             let headers = new Headers();
+            this.storage.get("role").then((role) => {
+              this.role = role;
+              console.log("Role inside checkAuth", this.role);
+            });
             headers.append('Authorization', this.token);
 
             this.http.get('http://localhost:8000/api/protected', {headers: headers})
@@ -56,14 +64,17 @@ export class AuthProvider {
             response = res;
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
+            this.role = data.user.role;
+            this.id = data.user.id;
+            this.email = data.user.email;
 
             this.storage.set('token', this.token);
-            this.storage.set('id', data.user.id);
-            console.log("userId inside register: " + data.user.id);
-            this.storage.set('role', data.user.role);
-            console.log("role inside register: " + data.user.role);
-            this.storage.set('email', data.user.email);
-            console.log("user email inside register: " + data.user.email);
+            this.storage.set('id', this.id);
+            console.log("userId inside register: " + this.id);
+            this.storage.set('role', this.role);
+            console.log("role inside register: " + this.role);
+            this.storage.set('email', this.email);
+            console.log("user email inside register: " + this.email);
             resolve(data);
 
           },(err) => {
@@ -86,14 +97,17 @@ export class AuthProvider {
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
             console.log("Token in login " + this.token);
+            this.role = data.user.role;
+            this.id = data.user.id;
+            this.email = data.user.email;
 
             this.storage.set('token', this.token);
-            this.storage.set('id', data.user.id);
-            console.log("userId inside login: " + data.user.id);
-            this.storage.set('role', data.user.role);
-            console.log("role inside login: " + data.user.role);
-            this.storage.set('email', data.user.email);
-            console.log("user email inside login: " + data.user.email);
+            this.storage.set('id', this.id);
+            console.log("userId inside login: " + this.id);
+            this.storage.set('role', this.role);
+            console.log("role inside login: " + this.role);
+            this.storage.set('email', this.email);
+            console.log("user email inside login: " + this.email);
             resolve(data);
 
             resolve(res.json());

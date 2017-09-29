@@ -3,6 +3,7 @@ import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 
 
+
 /**
  * Generated class for the LoginPage page.
  *
@@ -43,7 +44,8 @@ export class LoginPage {
       this.authService.login(credentials).then((result) => {
           this.loading.dismiss();
           console.log(result);
-          this.navCtrl.setRoot('HomePage');
+          
+              this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage');  
       }, (err) => {
           this.loading.dismiss();
           console.log(err);

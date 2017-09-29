@@ -20,28 +20,28 @@
     
 <ion-content padding>
   
-  <ion-list no-lines *ngFor="let load of loads">
 
-    <ion-card>
+    <ion-card *ngFor="let load of loads">
       <ion-card-content>
-        <ion-item (click)="showLoadDetail(load)">
-          <ion-icon name="document"></ion-icon>
-          Load # {{load.id}}
-        </ion-item>
         <ion-item>
-          <button ion-button-small (click)="deleteLoad(load)">
+          
+          <div (click)="showLoadDetail(load)">
+              <ion-icon name="document"></ion-icon>
+              Load # {{load.id}}
+          </div>
+         
+          <button ion-button (click)="deleteLoad(load)" class="home-button">
               <ion-icon name="trash" color="danger"></ion-icon>
               Delete
             </button>
 
-            <button ion-button-small  (click)="showLoadEdit(load)">
-              <ion-icon name="build" color="primary"></ion-icon>
+            <button ion-button  (click)="showLoadEdit(load)" class="home-button">
+              <ion-icon name="build" color="secondary"></ion-icon>
               Edit
             </button>
         </ion-item>
       </ion-card-content>
     </ion-card>
-    
-  </ion-list>
+
 
 </ion-content>

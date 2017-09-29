@@ -10,6 +10,9 @@ import { AuthProvider } from '../providers/auth/auth';
 import { LoadProvider } from '../providers/load/load';
 import { FormsModule } from '@angular/forms';
 import { EqualValidator } from '../directives/equal-validator.directive';
+import { ShipperProvider } from '../providers/shipper/shipper';
+import { ReceiverProvider } from '../providers/receiver/receiver';
+import { TruckProvider } from '../providers/truck/truck';
 
 
 @NgModule({
@@ -33,7 +36,10 @@ import { EqualValidator } from '../directives/equal-validator.directive';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider,
-    LoadProvider
+    LoadProvider,
+    ShipperProvider,
+    ReceiverProvider,
+    TruckProvider
   ]
 })
 export class AppModule {}

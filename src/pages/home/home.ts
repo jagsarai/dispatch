@@ -4,6 +4,8 @@ import { LoadProvider } from '../../providers/load/load';
 import { AuthProvider } from '../../providers/auth/auth';
 
 
+
+
 @IonicPage()
 @Component({
   selector: 'page-home',
@@ -18,12 +20,15 @@ export class HomePage {
     public alertCtrl: AlertController, public authService: AuthProvider, public loadingCtrl: LoadingController) {
   }
 
+
   ionViewDidLoad(){
     
+    this.authService.role !== "admin" && this.authService.role !== null ? this.navCtrl.setRoot("LandingPage") : console.log ("User is admin and authorized");
+
     this.loadService.getLoads().then((data) => {
           this.loads = data;
     }, (err) => {
-        console.log("not allowed");
+        console.log("This user is not allowed");
     });
   }
     
@@ -75,9 +80,6 @@ export class HomePage {
       buttons:[
         {
           text: 'Cancel',
-          handler: () => {
-            this.navCtrl.setRoot("HomePage");
-          }
         },
         {
           text: 'Yes',

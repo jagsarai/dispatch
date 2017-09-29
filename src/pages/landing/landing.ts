@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the LandingPage page.
@@ -19,7 +18,7 @@ export class LandingPage {
 
   loading: any;
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public authService: AuthProvider, public storage: Storage) {
+  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public authService: AuthProvider) {
   }
 
   sendToLogin(){
@@ -38,8 +37,8 @@ export class LandingPage {
       this.authService.checkAuthentication().then((res) => {
           console.log("Already authorized");
           this.loading.dismiss();
-          this.storage.get("role").then()
-          this.navCtrl.setRoot('HomePage');
+          
+            this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage'); 
       }, (err) => {
           console.log("Not already authorized");
           this.loading.dismiss();

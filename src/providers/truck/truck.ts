@@ -4,26 +4,26 @@ import { AuthProvider } from '../auth/auth';
 import 'rxjs/add/operator/map';
 
 /*
-  Generated class for the LoadProvider provider.
+  Generated class for the TruckProvider provider.
 
   See https://angular.io/guide/dependency-injection for more info on providers
   and Angular DI.
 */
 @Injectable()
-export class LoadProvider {
+export class TruckProvider {
 
   constructor(public http: Http, public authService: AuthProvider) {
-    console.log('Inside LoadProvider');
+    console.log('Hello TruckProvider Provider');
   }
 
-  getLoads() {
+  getTrucks(){
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       let token = this.authService.token;
       console.log(token);
       headers.append('Authorization', token);
 
-      this.http.get('http://localhost:8000/api/loads', {headers: headers})
+      this.http.get('http://localhost:8000/api/trucks', {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -33,7 +33,24 @@ export class LoadProvider {
     });
   }
 
-  createLoad(load){
+  retriveTruck(id){
+    return new Promise((resolve, reject) => {
+      let headers = new Headers();
+      let token = this.authService.token;
+      console.log(token);
+      headers.append('Authorization', token);
+
+      this.http.get('http://localhost:8000/api/trucks/' + id, {headers: headers})
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
+  createTruck(truck){
     
     return new Promise((resolve, reject) => {
 
@@ -42,7 +59,7 @@ export class LoadProvider {
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
-      this.http.post('http://localhost:8000/api/loads', JSON.stringify(load), {headers: headers})
+      this.http.post('http://localhost:8000/api/trucks', JSON.stringify(truck), {headers: headers})
         .map(res => res.json())
         .subscribe(res => {
           resolve(res);
@@ -52,15 +69,14 @@ export class LoadProvider {
     });
   }
 
-  updateLoad(load){
-
+  updateTruck(truck){
     return new Promise((resolve, reject) => {
 
       let headers = new Headers();
       let token = this.authService.token;
       headers.append('Authorization', token);
 
-      this.http.put('http://localhost:8000/api/loads/' + load.id, JSON.stringify(load), {headers: headers}).subscribe((res) => {
+      this.http.put('http://localhost:8000/api/trucks/' + truck.id, JSON.stringify(truck), {headers: headers}).subscribe((res) => {
         resolve(res);
       }, (err) => {
         reject(err);
@@ -68,7 +84,7 @@ export class LoadProvider {
     });
   }
 
-  deleteLoad(id){
+  deleteTruck(id){
     
     return new Promise((resolve, reject) => {
 
@@ -76,7 +92,7 @@ export class LoadProvider {
         let token = this.authService.token;
         headers.append('Authorization', token);
 
-        this.http.delete('http://localhost:8000/api/loads/' + id, {headers: headers}).subscribe((res) => {
+        this.http.delete('http://localhost:8000/api/trucks/' + id, {headers: headers}).subscribe((res) => {
             resolve(res);
         }, (err) => {
             reject(err);

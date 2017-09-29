@@ -20,7 +20,7 @@ module.exports = {
             .catch(error => res.status(400).send(error))
     },
     retrive(req, res) {
-        return receiver
+        return Receiver
             .findById(req.params.receiverId, {
             })
             .then(receiver => {

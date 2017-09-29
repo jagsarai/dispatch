@@ -3,6 +3,7 @@ import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 
 
+
 @IonicPage()
 @Component({
   selector: 'page-register',
@@ -35,7 +36,8 @@ export class RegisterPage {
     this.authService.createAccount(details).then((result) => {
       this.loading.dismiss();
       console.log(result);
-      this.navCtrl.setRoot('HomePage');
+      
+        this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot("DriverHomePage");     
     }, (err) => {
         this.loading.dismiss();
         alert("There was an error with the form request, Please try again");
