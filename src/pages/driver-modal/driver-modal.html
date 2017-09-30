@@ -1,22 +1,116 @@
-<!--
-  Generated template for the DriverModalPage page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
     
-  <ion-navbar>
+  <ion-navbar color="primary">
     <ion-title>Add Driver</ion-title>
     <ion-buttons end>
       <button ion-button (click)="closeDriverModal()">Close</button>
     </ion-buttons>
   </ion-navbar>
-    
+
 </ion-header>
-
-
+    
+    
 <ion-content padding>
 
-</ion-content>
+  <ion-buttons *ngIf="createToggle; else showAltAddButton">
+      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
+        <div>
+          <ion-icon name="build"></ion-icon>
+          Create New Driver
+        </div>
+      </button>
+  </ion-buttons>
+  <ng-template #showAltAddButton>
+      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
+          <div>
+            <ion-icon name="add-circle"></ion-icon>
+            Add Existing Driver
+          </div>
+      </button>
+  </ng-template>
+  
+  <div *ngIf="createToggle; else showForm">
+    <ion-searchbar [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearchInput()"></ion-searchbar>
 
+    <div *ngIf="searching" class="spinner-container">
+        <ion-spinner name="bubbles"></ion-spinner>
+    </div>
+
+    <ion-list no-lines>
+      <ion-card *ngFor="let driver of drivers">
+        <ion-card-content>
+          <ion-item >
+            <div (click)="addExistingDriver(driver)">
+                <ion-icon name="people"></ion-icon>
+                  {{driver.name}} 
+                  <br>
+                <ion-icon name="mail"></ion-icon>
+                  {{driver.email}}
+            </div>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+      
+    </ion-list>
+  </div>
+
+  <ng-template #showForm>
+    <div>
+      <form #f="ngForm" novalidate (ngSubmit)="addNewDriver()">
+        <ion-card>
+          <ion-card-content>
+
+              <ion-item>
+                  <ion-label floating>Name</ion-label>
+                  <ion-input type="text" name="name" [(ngModel)]="driverName" required minLength="3" #name="ngModel"></ion-input>
+              </ion-item>
+    
+              <div padding *ngIf="name.invalid && (name.dirty || name.touched)">
+                  <span class="global__input-error">Name is required (minimum of 3 characters).</span>
+              </div>
+
+              <ion-item>
+                  <ion-label floating>Phone</ion-label>
+                  <ion-input type="tel" [formControl]="driverPhoneConfirmControl" [(ngModel)]="driverPhone" required minlength="10" maxlength="10" ></ion-input>
+              </ion-item>
+  
+              <div padding *ngIf="driverPhoneConfirmControl.invalid && (driverPhoneConfirmControl.dirty || driverPhoneConfirmControl.touched)">
+                  <span class="global__input-error">Please provide a valid 10 digit phone number (1234567890).</span>
+              </div>
+
+              <div padding *ngIf="driverPhoneMatch">
+                  <span class="global__input-error">This phone number is already taken</span>
+              </div>
+
+              <ion-item>
+                  <ion-label floating>Email</ion-label>
+                  <ion-input type="email" [formControl]="driverEmailConfirmControl" [(ngModel)]="driverEmail" required pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"></ion-input>
+              </ion-item>
+  
+              <div padding *ngIf="driverEmailConfirmControl.invalid && (driverEmailConfirmControl.dirty || driverEmailConfirmControl.touched)">
+                  <span class="global__input-error">Email is requierd and format should be like <i>john@doe.com</i></span>
+              </div>
+  
+              <div padding *ngIf="driverEmailMatch">
+                  <span class="global__input-error">This email is already taken</span>
+              </div>
+            
+
+            <ion-item>
+                <ion-label floating>Driver Temp Password</ion-label>
+                <ion-input type="text" name="password" [(ngModel)]="driverTempPassword" required pattern="(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}$" #password="ngModel"></ion-input>
+            </ion-item>
+
+            <div padding *ngIf="password.invalid && (password.dirty || password.touched)">
+                <span class="global__input-error">Password must have 6 to 16 characters and 1 special character</span>
+            </div>
+
+            <button ion-button color="secondary" type="submit" [disabled]="f.invalid || driverEmailMatch || driverPhoneMatch" class="global__modal-add-button">Add</button>
+          </ion-card-content>
+        </ion-card>
+      </form>
+    </div>
+  </ng-template>
+
+</ion-content>
+    

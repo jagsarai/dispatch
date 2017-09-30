@@ -20,6 +20,9 @@ module.exports = (app) => {
         res.status(200).send({ content: 'Success'});
     });
 
+    app.get('/api/drivers', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.listDrivers);
+    app.post('/api/drivers/register', requireAuth, AuthenticationController.roleAuthorization(['admin']), AuthenticationController.register);
+
     app.post('/api/register', AuthenticationController.register);
     app.post('/api/login', requireLogin, AuthenticationController.login);
 

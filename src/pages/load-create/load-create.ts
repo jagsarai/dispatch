@@ -46,15 +46,23 @@ export class LoadCreatePage {
 
     truckModal.present();
     truckModal.onDidDismiss((truck) => {
-      this.truck = truck;
-      this.truckModalReturned = true;
-    })
+      if(truck){
+        this.truck = truck;
+        this.truckModalReturned = true
+      }
+    });
   }
 
   showDriverModal(){
     const driverModal:Modal = this.modalCtrl.create('DriverModalPage',) 
 
     driverModal.present();
+    driverModal.onDidDismiss((driver) => {
+      if(driver){
+        this.driver = driver;
+        this.driverModalReturned = true;
+      }
+    });
   }
 
   showShipperModal(){

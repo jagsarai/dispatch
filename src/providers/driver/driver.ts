@@ -16,13 +16,13 @@ export class DriverProvider {
     console.log('Hello DriverProvider Provider');
   }
 
-  getDrivers(role){
+  getDrivers(){
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       let token = this.authService.token;
       headers.append('Authorization', token);
 
-      this.http.get('http://localhoast:8000/api/users/' + role, {headers: headers})
+      this.http.get('http://localhost:8000/api/drivers/', {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -33,12 +33,15 @@ export class DriverProvider {
   }
 
   createDriver(driver){
+    console.log("driver inside createDriver func", driver);
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       let token = this.authService.token;
+      
       headers.append('Authorization', token);
+      headers.append('Content-Type', 'application/json');
 
-      this.http.post('http://localhoast:8000/api/users/', JSON.stringify(driver), {headers: headers})
+      this.http.post('http://localhost:8000/api/drivers/register/', JSON.stringify(driver), {headers: headers})
         .map(res => res.json())
         .subscribe(res => {
           resolve(res);
@@ -54,7 +57,7 @@ export class DriverProvider {
       let token = this.authService.token;
       headers.append('Authorization', token);
 
-      this.http.put('http://localhoast:8000/api/users/' + driver.id, JSON.stringify(driver), {headers: headers}).subscribe(res => {
+      this.http.put('http://localhost:8000/api/users/' + driver.id, JSON.stringify(driver), {headers: headers}).subscribe(res => {
           resolve(res);
         }, (err) =>{
           reject(err);
@@ -68,7 +71,7 @@ export class DriverProvider {
       let token = this.authService.token;
       headers.append('Authorization', token);
 
-      this.http.delete('http://localhoast:8000/api/users/' + id, {headers: headers}).subscribe(res => {
+      this.http.delete('http://localhost:8000/api/users/' + id, {headers: headers}).subscribe(res => {
           resolve(res);
         }, (err) =>{
           reject(err);

@@ -17,6 +17,22 @@ module.exports = {
             })
             .catch(error => res.status(400).send(error))
     },
+    listDrivers(req, res) {
+        console.log("Inside user.listDrivers");
+        return User
+            .findAll({
+                where: {
+                    role: 'driver'
+                }
+            })
+            .then(drivers => {
+                drivers.map((driver) => {
+                    driver.password = "hidden";
+                });
+                res.status(200).send(drivers)
+            })
+            .catch(error => res.status(400).send(error))
+    },
     retrive(req, res) {
         return User
             .findById(req.params.userId, {

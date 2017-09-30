@@ -27,10 +27,17 @@
       </ng-template>
 
       <ion-item *ngIf="driverModalReturned; else noDriverAdded">
-          <ion-icon name="person"></ion-icon>
-          Driver {{driver.name}}
-          Ph. {{driver.phonef}}
-          <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="add"></ion-icon></button>
+        <div>
+            <ion-icon name="person"></ion-icon>
+            Driver {{driver.name}}
+            <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="add"></ion-icon></button>
+        </div>
+        <br>
+        <div>
+            <ion-icon name="call"></ion-icon>
+            Ph. {{driver.phone}}
+        </div>
+          
       </ion-item>
 
       <ng-template #noDriverAdded>

@@ -46,7 +46,6 @@ export class TruckModalPage {
       console.log("There was an error with the request");
     });
     this.truckConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
-      this.searchingTruckNumbers = false;
       this.checkTruckNumberCreateInput();
     })
 
@@ -74,6 +73,9 @@ export class TruckModalPage {
   }
 
   closeTruckModal(){
+    // const truck = {
+    //   name: ""
+    // }
     this.viewCtrl.dismiss();
   }
 
