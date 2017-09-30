@@ -14,7 +14,7 @@
                     <ion-input type="text"  name="name" [(ngModel)]="userName" required minlength="3" #name="ngModel"></ion-input>
                 </ion-item>
 
-                <div padding *ngIf="name.invalid && name.dirty">
+                <div padding *ngIf="name.invalid && (name.dirty || name.touched)">
                     <span class="global__input-error">Name is required (minimum 3 characters).</span>
                 </div>
                 
@@ -24,7 +24,7 @@
                     <ion-input type='tel'  minlength="10" maxlength="10" name="phone" [(ngModel)]="userPhone" #phone="ngModel"></ion-input>
                 </ion-item>
 
-                <div padding *ngIf="phone.invalid && phone.dirty">
+                <div padding *ngIf="phone.invalid && (phone.dirty || phone.touched)">
                     <span class="global__input-error">Please provide a valid 10 digit phone number (1234567890).</span>
                 </div>
                 
@@ -34,7 +34,7 @@
                     <ion-input type="email"  name="email" [(ngModel)]="userEmail" required  #email="ngModel" pattern="^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$"></ion-input>
                 </ion-item>
 
-                <div padding *ngIf="email.invalid && email.dirty">
+                <div padding *ngIf="email.invalid && (email.dirty || email.touched)">
                     <span class="global__input-error">Email is requierd and format should be like <i>john@doe.com</i></span>
                 </div>
                 
@@ -44,7 +44,7 @@
                     <ion-input type="password" name="password" [(ngModel)]="userPassword" required validateEqual="confirmPassword" reverse="true" #password="ngModel"></ion-input>
                 </ion-item>
 
-                <div padding *ngIf="password.invalid && password.dirty">
+                <div padding *ngIf="password.invalid && (password.dirty || password.touched)">
                     <span class="global__input-error">Password is requierd</span>
                 </div>
                 
@@ -54,7 +54,7 @@
                     <ion-input type="password" name="confirmPassword" [(ngModel)]="userConfPassword" required validEqual="password" reverse="false" #confirmPassword="ngModel"></ion-input>
                 </ion-item>
 
-                <div padding *ngIf="confirmPassword.invalid && confirmPassword.dirty">
+                <div padding *ngIf="confirmPassword.invalid && (confirmPassword.dirty || confirmPassword.touched)">
                     <span class="global__input-error">Password mismatch</span>
                 </div>
                 

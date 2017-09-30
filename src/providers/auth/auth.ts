@@ -119,6 +119,9 @@ export class AuthProvider {
     
   logout(){
     this.storage.set('token', '');
+    this.storage.set('role', '');
+    this.storage.set('email', '');
+    this.storage.set('id', '');
   }
     
 }

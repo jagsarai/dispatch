@@ -20,7 +20,12 @@ module.exports = {
                     all: true
                 }]
             })
-            .then(loads => res.status(200).send(loads))
+            .then(loads => {
+                loads.map((load) => {
+                    load.driver.password = "hidden"
+                });
+                res.status(200).send(loads)
+            })
             .catch(error => res.status(400).send(error))
     },
     retrive(req, res) {
@@ -33,6 +38,7 @@ module.exports = {
                         message: 'Load Not Found'
                     });
                 }
+                load.driver.password = "hidden";
                 return res.status(200).send(load);
             })
             .catch(error => res.status(400).send(error));

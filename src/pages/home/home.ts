@@ -32,45 +32,45 @@ export class HomePage {
     });
   }
     
-  addLoad(){
+  // addLoad(){
     
-    let prompt = this.alertCtrl.create({
-      title: 'Add Load',
-      message: 'Please enter the following information:',
-      inputs: [
-        {
-          name: 'title'
-        }
-      ],
-      buttons: [
-        {
-          text: 'Cancel'
-        },
-        {
-          text: 'Save',
-          handler: load => {
+  //   let prompt = this.alertCtrl.create({
+  //     title: 'Add Load',
+  //     message: 'Please enter the following information:',
+  //     inputs: [
+  //       {
+  //         name: 'title'
+  //       }
+  //     ],
+  //     buttons: [
+  //       {
+  //         text: 'Cancel'
+  //       },
+  //       {
+  //         text: 'Save',
+  //         handler: load => {
 
-            if(load){
+  //           if(load){
 
-              this.showLoader();
+  //             this.showLoader();
 
-              this.loadService.createLoad(load).then((result) => {
-                  this.loading.dismiss();
-                  this.loads = result;
-                  console.log("load created");
-              }, (err) => {
-                  this.loading.dismiss();
-                  console.log("not allowed");
-              });
-            }
-          }
-        }
-      ]
-    });
+  //             this.loadService.createLoad(load).then((result) => {
+  //                 this.loading.dismiss();
+  //                 this.loads = result;
+  //                 console.log("load created");
+  //             }, (err) => {
+  //                 this.loading.dismiss();
+  //                 console.log("not allowed");
+  //             });
+  //           }
+  //         }
+  //       }
+  //     ]
+  //   });
 
-    prompt.present();
+  //   prompt.present();
 
-  }
+  // }
     
   deleteLoad(load){
 

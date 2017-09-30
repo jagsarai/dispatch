@@ -9,7 +9,12 @@ module.exports = {
         console.log("Inside user.list");
         return User
             .findAll()
-            .then(users => res.status(200).send(users))
+            .then(users => {
+                users.map((user) => {
+                    user.password = "hidden";
+                });
+                res.status(200).send(users)
+            })
             .catch(error => res.status(400).send(error))
     },
     retrive(req, res) {
@@ -22,6 +27,7 @@ module.exports = {
                         message: 'User Not Found'
                     });
                 }
+                user.password = "hidden";
                 return res.status(200).send(user);
             })
             .catch(error => res.status(400).send(error));

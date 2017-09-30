@@ -13,6 +13,7 @@ import { EqualValidator } from '../directives/equal-validator.directive';
 import { ShipperProvider } from '../providers/shipper/shipper';
 import { ReceiverProvider } from '../providers/receiver/receiver';
 import { TruckProvider } from '../providers/truck/truck';
+import { DriverProvider } from '../providers/driver/driver';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { TruckProvider } from '../providers/truck/truck';
     LoadProvider,
     ShipperProvider,
     ReceiverProvider,
-    TruckProvider
+    TruckProvider,
+    DriverProvider
   ]
 })
 export class AppModule {}

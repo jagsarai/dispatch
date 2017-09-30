@@ -1,7 +1,9 @@
 <ion-header>
 
   <ion-navbar color="primary">
-    <ion-title>Add New Load</ion-title>
+    <ion-title>
+      Create Load
+    </ion-title>
   </ion-navbar>
 
 </ion-header>
@@ -9,37 +11,95 @@
 
 <ion-content padding>
   <ion-list no-lines>
-      <ion-item>
-          Shipper
-          <div class="add-button">
-            <button ion-button small color="primary">
-                <ion-icon name="add"></ion-icon>
-            </button>
-          </div>
+    <ion-item>
+
+      <ion-item *ngIf="truckModalReturned; else noTruckAdded">
+          <ion-icon name="speedometer"></ion-icon>
+          Truck {{truck.number}}
+          <button ion-button class="create-add-button" (click)="showTruckModal()"><ion-icon name="add"></ion-icon></button>
       </ion-item>
-      <ion-item>
+      <ng-template #noTruckAdded>
+        <ion-item>
+            <ion-icon name="speedometer"></ion-icon>
+            Truck 
+            <button ion-button class="create-add-button" (click)="showTruckModal()"><ion-icon name="add"></ion-icon></button>
+        </ion-item>
+      </ng-template>
+
+      <ion-item *ngIf="driverModalReturned; else noDriverAdded">
+          <ion-icon name="person"></ion-icon>
+          Driver {{driver.name}}
+          Ph. {{driver.phonef}}
+          <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="add"></ion-icon></button>
+      </ion-item>
+
+      <ng-template #noDriverAdded>
+        <ion-item>
+          <ion-icon name="person"></ion-icon>
+          Driver
+          <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="add"></ion-icon></button>
+      </ion-item> 
+      </ng-template>
+
+    </ion-item>
+
+
+    <ion-item>
+      <ion-card>
+        <ion-card-header>
+            <ion-icon name="map"></ion-icon>
+              Shipper
+        </ion-card-header>
+        <ion-card-content>
+          <ion-list>
+
+            <ion-item *ngIf="shipperModalReturned; else noShipperAdded">
+              {{shipper.address}}
+              {{shipper.city}}, {{shipper.state}}
+            </ion-item>
+            <ng-template #noShipperAdded>
+                <ion-item>
+                </ion-item>
+            </ng-template>
+
+            <ion-item>
+                <button ion-button class="create-add-button" (click)="showShipperModal()"><ion-icon name="add"></ion-icon></button>
+            </ion-item>   
+
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+   </ion-item>
+
+    <ion-item>
+      <ion-card>
+        <ion-card-header>
+          <ion-icon name="map"></ion-icon>
           Receiver
-          <div class="add-button">
-            <button ion-button small color="primary">
-              <ion-icon name="add"></ion-icon>
-            </button> 
-          </div>
-      </ion-item>
-      <ion-item>
-          Truck
-          <div class="add-button">
-            <button ion-button small color="primary">
-              <ion-icon name="add"></ion-icon>
-            </button>
-          </div>
-      </ion-item>
-      <ion-item>
-          Driver 
-          <div class="add-button">
-            <button ion-button small color="primary">
-              <ion-icon name="add"></ion-icon>
-            </button>
-          </div>
-      </ion-item>
+        </ion-card-header>
+        <ion-card-content>
+            <ion-list>
+
+              <ion-item *ngIf="receiverModalReturned, else noReceiverAdded">
+                {{receiver.address}}
+                {{receiver.city}}, {{receiver.state}}
+              </ion-item>
+
+              <ng-template #noReceiverAdded>
+                <ion-item>
+                
+                </ion-item>
+              </ng-template>
+
+              <ion-item>
+                  <button ion-button class="create-add-button" (click)="showReceiverModal()"><ion-icon name="add"></ion-icon></button>
+              </ion-item>
+
+            </ion-list>
+        </ion-card-content>
+      </ion-card>         
+    </ion-item>
+    
   </ion-list>
+  <button ion-button class="create-save-button" color="secondary">Save</button>
 </ion-content>

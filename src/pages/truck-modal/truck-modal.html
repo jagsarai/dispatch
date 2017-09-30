@@ -1,0 +1,108 @@
+<!--
+  Generated template for the TruckModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Add Truck</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeTruckModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-buttons *ngIf="createToggle; else showAltAddButton">
+      <button ion-button  (click)="createToggle = !createToggle" class="truck-toggle-button">
+        <div>
+          <ion-icon name="build"></ion-icon>
+          Create New Truck
+        </div>
+      </button>
+  </ion-buttons>
+  <ng-template #showAltAddButton>
+      <button ion-button  (click)="createToggle = !createToggle" class="truck-toggle-button">
+          <div>
+            <ion-icon name="add-circle"></ion-icon>
+            Add Existing Truck
+          </div>
+      </button>
+  </ng-template>
+  
+  <div *ngIf="createToggle; else showForm">
+    <ion-searchbar [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearchInput()"></ion-searchbar>
+
+    <div *ngIf="searching" class="spinner-container">
+        <ion-spinner name="bubbles"></ion-spinner>
+    </div>
+
+    <ion-list no-lines>
+      <ion-item *ngFor="let truck of trucks">
+        <div (click)="addExistingTruck(truck)">
+            <ion-icon name="speedometer"></ion-icon>
+            Truck {{truck.number}} 
+        </div>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <ng-template #showForm>
+    <div>
+      <form #f="ngForm" novalidate (ngSubmit)="addNewTruck()">
+        <ion-card>
+          <ion-card-content>
+
+              <ion-item>
+                  <ion-label floating>Number</ion-label>
+                  <ion-input type="text"[formControl]="truckConfirmControl" [(ngModel)]="truckNumber" required maxLength="6" pattern="[0-9][0-9]?[0-9]?[0-9]?[0-9]?[0-9]?"></ion-input>
+              </ion-item>
+  
+              <div padding *ngIf="truckConfirmControl.invalid && (truckConfirmControl.dirty || truckConfirmControl.touched)">
+                  <span class="global__input-error">Truck number cannot have any letters and is required.</span>
+              </div>
+  
+              <div padding *ngIf="truckNumberMatch">
+                  <span class="global__input-error">Truck number already exists.</span>
+              </div>
+
+            <ion-item>
+              <ion-label floating>Year</ion-label>
+              <ion-input type="text" name="year" [(ngModel)]="truckYear" required minLength="4" maxLength="4" pattern="[0-9][0-9][0-9][0-9]" #year="ngModel"></ion-input>
+            </ion-item>
+
+            <div padding *ngIf="year.invalid && (year.dirty || year.touched)">
+                <span class="global__input-error">Year is required (minimum 4 numbers).</span>
+            </div>
+
+            <ion-item>
+                <ion-label floating>Make</ion-label>
+                <ion-input type="text" name="make" [(ngModel)]="truckMake" required minLength="3" maxLength="15" #make="ngModel" ></ion-input>
+            </ion-item>
+
+            <div padding *ngIf="make.invalid && (make.dirty || make.touched)">
+                <span class="global__input-error">Truck Make is required.</span>
+            </div>
+
+            <ion-item>
+                <ion-label floating>Model</ion-label>
+                <ion-input type="text" name="model" [(ngModel)]="truckModel" required minLength="2" maxLength="15" #model="ngModel"></ion-input>
+            </ion-item>
+
+            <div padding *ngIf="model.invalid && (model.dirty || model.touched)">
+                <span class="global__input-error">Truck Model is required.</span>
+            </div>
+
+            <button ion-button color="secondary" type="submit" [disabled]="f.invalid || truckNumberMatch" class="global__modal-add-button">Add</button>
+          </ion-card-content>
+        </ion-card>
+      </form>
+    </div>
+  </ng-template>
+
+</ion-content>

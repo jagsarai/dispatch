@@ -11,10 +11,26 @@ import 'rxjs/add/operator/map';
 */
 @Injectable()
 export class TruckProvider {
+  trucks: any;
+  truckNumbers: any;
 
   constructor(public http: Http, public authService: AuthProvider) {
     console.log('Hello TruckProvider Provider');
   }
+
+  // mapTruckNumbers(truckData){
+  //   return truckData.map((truck) => {
+  //      return {
+  //        number: truck.number.toString()
+  //      }
+  //   });
+  // }
+
+  // filterTruckNumbers(searchTerm){
+  //   return this.truckNumbers.filter((truck) => {
+  //       return truck.number.indexOf(searchTerm) > -1;
+  //   });    
+  // }
 
   getTrucks(){
     return new Promise((resolve, reject) => {
@@ -26,6 +42,7 @@ export class TruckProvider {
       this.http.get('http://localhost:8000/api/trucks', {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
+          // this.truckNumbers = this.mapTruckNumbers(data);
           resolve(data);
         }, (err) => {
           reject(err);

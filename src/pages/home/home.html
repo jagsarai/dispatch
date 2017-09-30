@@ -24,10 +24,9 @@
     <ion-card *ngFor="let load of loads">
       <ion-card-content>
         <ion-item>
-          
-          <div (click)="showLoadDetail(load)">
+          <div>
               <ion-icon name="document"></ion-icon>
-              Load # {{load.id}}
+              <a (click)="showLoadDetail(load)">Load # {{load.id}}</a>
           </div>
          
           <button ion-button (click)="deleteLoad(load)" class="home-button">

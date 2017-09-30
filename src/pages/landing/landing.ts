@@ -38,7 +38,7 @@ export class LandingPage {
           console.log("Already authorized");
           this.loading.dismiss();
           
-            this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage'); 
+            this.authService.role === "admin" && this.authService.role !== null ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage'); 
       }, (err) => {
           console.log("Not already authorized");
           this.loading.dismiss();
