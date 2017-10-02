@@ -9,6 +9,10 @@ module.exports = {
                 TruckId: req.body.truckId,
                 ShipperId: req.body.shipperId,
                 ReceiverId: req.body.receiverId,
+                pickupDate: req.body.pickupDate,
+                pickupTime: req.body.pickupTime,
+                deliveryDate: req.body.deliveryDate,
+                deliveryTime: req.body.deliveryTime
             })
             .then(load => res.status(201).send(load))
             .catch(error => res.status(400).send(error))
@@ -19,7 +23,7 @@ module.exports = {
                 include: [{
                     all: true
                 }],
-                order:['createdAt']
+                order:['id']
             })
             .then(loads => {
                 loads.map((load) => {
@@ -64,6 +68,11 @@ module.exports = {
                         ShipperId: req.body.shipperId || load.ShipperId,
                         ReceiverId: req.body.receiverId || load.ReceiverId,
                         TruckId: req.body.truckId || load.TruckId,
+                        pickupDate: req.body.pickupDate || load.pickupDate,
+                        pickupTime: req.body.pickupTime || load.pickupTime,
+                        deliveryDate: req.body.deliveryDate || load.deliveryDate,
+                        deliveryTime: req.body.deliveryTime || load.deliveryTime,
+                        status: req.body.status || load.status
                     })
                     .then(() => res.status(200).send(load))
                     .catch((error) => res.status(400).send(error));

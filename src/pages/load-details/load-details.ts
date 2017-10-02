@@ -51,9 +51,14 @@ export class LoadDetailsPage {
         driver: this.load.driver,
         shipper: this.shippers[0],
         receiver: this.receivers[0],
-        truck: this.trucks[0]
+        truck: this.trucks[0],
+        pickupDate: this.load.pickupDate,
+        pickupTime: this.load.pickupTime,
+        deliveryDate: this.load.deliveryDate,
+        deliveryTime: this.load.deliveryTime,
+        status: this.load.status
       }
-    })
+    });
   }
 
   deleteLoad(){

@@ -1,0 +1,31 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Add {{calledFrom.event}} Date</ion-title>
+    <ion-buttons end>
+        <button ion-button (click)="closeDateModal()">Close</button>
+      </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label>{{calledFrom.event}} Date</ion-label>
+      <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="event.date"></ion-datetime>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label>{{calledFrom.event}} Time</ion-label>
+      <ion-datetime displayFormat="HH:mm" pickerFormat="HH mm" [(ngModel)]="event.time"></ion-datetime>
+    </ion-item>
+    <ion-buttons end>
+      <button ion-button color="secondary" (click)="saveDate()">
+        Save
+      </button>
+    </ion-buttons>
+  </ion-list>
+</ion-content>

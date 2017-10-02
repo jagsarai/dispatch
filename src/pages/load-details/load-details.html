@@ -16,37 +16,56 @@
         </button>
     </ion-buttons>
     <ion-list no-lines>
-            <ion-item *ngFor="let truck of trucks">
-            <ion-icon name="speedometer"></ion-icon>
-            Truck: {{truck.number}}
+        <ion-item>
+            <div>
+                <ion-icon name="bookmark" item-start></ion-icon>
+                Status: {{load.status}}
+            </div>
+        </ion-item>
+        
+        <ion-item *ngFor="let truck of trucks">
+            <div>
+                <ion-icon name="speedometer" item-start></ion-icon>
+                Truck: {{truck.number}}
+            </div>
         </ion-item>
 
         <ion-item>
             <div>
-                <ion-icon name="person"></ion-icon>
+                <ion-icon name="person" item-start></ion-icon>
                 Driver {{load.driver.name}}  
             </div>
             <br>
             <div>
-                <ion-icon name="call"></ion-icon>
+                <ion-icon name="call" item-start></ion-icon>
                 Ph. {{load.driver.phone}}
             </div>
             <br>
             <div>
-                <ion-icon name="mail"></ion-icon>
+                <ion-icon name="mail" item-start></ion-icon>
                 Email {{load.driver.email}}
             </div>  
         </ion-item>
 
-        <ion-item *ngFor="let shipper of shippers">
+        <ion-item>
             <ion-card>
                 <ion-card-header>
-                    <ion-icon name="map"></ion-icon>
-                    Shipper
+                    <ion-icon name="map" item-start></ion-icon>
+                    Pickup Details
                 </ion-card-header>
                 <ion-card-content>
+                    <ion-item>
+                        <div>
+                            <ion-icon name="calendar" item-start></ion-icon>
+                            {{load.pickupDate}}
+                        </div>
+                        <div>
+                            <ion-icon name="time" item-start></ion-icon>
+                            {{load.pickupTime}}
+                        </div>
+                    </ion-item>
                     <ion-list>
-                        <ion-item>
+                        <ion-item *ngFor="let shipper of shippers">
                             {{shipper.name}}
                             <br>
                             {{shipper.address}}
@@ -58,14 +77,24 @@
             </ion-card>
         </ion-item>
 
-        <ion-item *ngFor="let receiver of receivers">
+        <ion-item>
             <ion-card>
                 <ion-card-header>
-                    <ion-icon name="map"></ion-icon>
-                    Receiver
+                    <ion-icon name="map" item-start></ion-icon>
+                    Delivery Details
                 </ion-card-header>
                 <ion-card-content>
-                    <ion-list>
+                    <ion-item>
+                        <div>
+                            <ion-icon name="calendar" item-start></ion-icon>
+                            {{load.deliveryDate}}
+                        </div>
+                        <div>
+                            <ion-icon name="time" item-start></ion-icon>
+                            {{load.deliveryTime}}
+                        </div>
+                    </ion-item>
+                    <ion-list *ngFor="let receiver of receivers">
                         <ion-item>
                             {{receiver.name}}
                             <br>

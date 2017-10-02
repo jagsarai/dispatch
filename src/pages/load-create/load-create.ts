@@ -13,11 +13,22 @@ export class LoadCreatePage {
   truck: any;
   shipper: any;
   receiver: any;
+  pickup = {
+    date: '',
+    time: ''
+  }
+  delivery = {
+    date: '',
+    time: ''
+  }
+
   truckModalReturned: any = false;
   driverModalReturned: any = false;
   shipperModalReturned: any = false;
   receiverModalReturned: any = false;
   createFormComplete: any = false;
+  pickupDateModalReturned: any = false;
+  deliveryDateModalReturned: any = false;
   loading: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadService: LoadProvider, public modalCtrl:ModalController, public alertCtrl: AlertController, public loadingCtrl:LoadingController) {
@@ -27,8 +38,45 @@ export class LoadCreatePage {
     this.checkValidForm();
   }
 
+  showPickupDateModal(){
+    const message = {
+      event: "Pickup"
+    }
+    const dateModal:Modal = this.modalCtrl.create('DateModalPage',{message: message})
+
+    dateModal.present();
+    dateModal.onDidDismiss((date) => {
+      if(date){
+        console.log("date returned from pickup", date);
+        this.pickup.date = date.date;
+        this.pickup.time = date.time;
+        this.pickupDateModalReturned = true;
+      }
+      this.checkValidForm();
+    });
+  }
+
+
+  showDeliveryDateModal(){
+    const message ={
+      event: "Delivery"
+    }
+    const dateModal:Modal = this.modalCtrl.create('DateModalPage', {message: message})
+
+    dateModal.present();
+    dateModal.onDidDismiss((date) => {
+      if(date){
+        console.log("date returned from delivery", date);
+        this.delivery.date = date.date;
+        this.delivery.time = date.time;
+        this.deliveryDateModalReturned = true;
+      }
+      this.checkValidForm();
+    });
+  }
+
   showTruckModal(){
-    const truckModal:Modal = this.modalCtrl.create('TruckModalPage',) 
+    const truckModal:Modal = this.modalCtrl.create('TruckModalPage') 
 
     truckModal.present();
     truckModal.onDidDismiss((truck) => {
@@ -41,7 +89,7 @@ export class LoadCreatePage {
   }
 
   showDriverModal(){
-    const driverModal:Modal = this.modalCtrl.create('DriverModalPage',) 
+    const driverModal:Modal = this.modalCtrl.create('DriverModalPage') 
 
     driverModal.present();
     driverModal.onDidDismiss((driver) => {
@@ -54,7 +102,7 @@ export class LoadCreatePage {
   }
 
   showShipperModal(){
-    const shipperModal:Modal = this.modalCtrl.create('ShipperModalPage',) 
+    const shipperModal:Modal = this.modalCtrl.create('ShipperModalPage') 
 
     shipperModal.present();
     shipperModal.onDidDismiss((shipper) => {
@@ -67,7 +115,7 @@ export class LoadCreatePage {
   }
 
   showReceiverModal(){
-    const receiverModal:Modal = this.modalCtrl.create('ReceiverModalPage',) 
+    const receiverModal:Modal = this.modalCtrl.create('ReceiverModalPage') 
 
     receiverModal.present();
     receiverModal.onDidDismiss((receiver) => {
@@ -89,7 +137,11 @@ export class LoadCreatePage {
       userId: this.driver.id,
       shipperId: this.shipper.id,
       receiverId: this.receiver.id,
-      truckId: this.truck.id
+      truckId: this.truck.id,
+      pickupDate: this.pickup.date,
+      pickupTime: this.pickup.time,
+      deliveryDate: this.delivery.date,
+      deliveryTime: this.delivery.time,
     }
 
     let prompt = this.alertCtrl.create({
@@ -123,7 +175,7 @@ export class LoadCreatePage {
   }
 
   checkValidForm(){
-    if(this.driver !== undefined && this.shipper !== undefined && this.receiver !== undefined && this.truck !== undefined){
+    if(this.driver !== undefined && this.shipper !== undefined && this.receiver !== undefined && this.truck !== undefined &&this.pickup.date !== '' && this.pickup.time !== '' && this.delivery.date !== '' && this.delivery.time !== ''){
       this.createFormComplete = true;
     }
   }
