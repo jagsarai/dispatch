@@ -36,6 +36,28 @@ module.exports = (sequelize, DataTypes) => {
         as: 'truckId'
       },
       allowNull: false
+    },
+    pickupDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    pickupTime: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    deliveryDate: {
+      type: DataTypes.DATEONLY,
+      allowNull: false
+    },
+    deliveryTime: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
+    status: {
+      type: DataTypes.ENUM,
+      values:['assigned', 'dispatched', 'at shipper', 'loaded', 'en route', 'at receiver', 'delivered' ], 
+      allowNull: false, 
+      defaultValue: 'assigned'
     }
   });
 

@@ -16,7 +16,7 @@ export class ReceiverProvider {
     console.log('Hello ReceiverProvider Provider');
   }
 
-  getRecievers(){
+  getReceivers(){
 
     return new Promise((resolve, reject) => {
       let headers = new Headers();

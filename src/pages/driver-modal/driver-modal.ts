@@ -4,13 +4,6 @@ import { FormControl } from '@angular/forms';
 import { DriverProvider } from '../../providers/driver/driver';
 import 'rxjs/add/operator/debounceTime';
 
-/**
- * Generated class for the DriverModalPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-driver-modal',
@@ -21,7 +14,6 @@ import 'rxjs/add/operator/debounceTime';
 export class DriverModalPage {
 
   driverData:any;
-  driverMapData:any;
   drivers:any;
   searchTerm:string = '';
   searchControl: FormControl;
@@ -34,8 +26,8 @@ export class DriverModalPage {
   driverPhoneMatch: any = false;
   loading: any;
   driverName:string;
-  driverPhone:string;
-  driverEmail:string;
+  driverPhone:string = '';
+  driverEmail:string = '';
   driverTempPassword:string = '';
 
   constructor(public viewCtrl: ViewController, public driverService:DriverProvider, public alertCtrl: AlertController, public loadingCtrl:LoadingController) {
@@ -66,9 +58,6 @@ export class DriverModalPage {
   }
 
   closeDriverModal(){
-    // const driver = {
-    //   name: ""
-    // }
     this.viewCtrl.dismiss();
   }
 
@@ -81,7 +70,7 @@ export class DriverModalPage {
   checkDriverEmailCreateInput(){
     console.log("checkDriverEmail function fired");
     for(let driver of this.drivers){
-      if(driver.email === this.driverEmail){
+      if(driver.email.toLowerCase() === this.driverEmail.toLowerCase()){
         return this.driverEmailMatch = true;
       }
       
@@ -150,7 +139,7 @@ export class DriverModalPage {
     // this.truck = truck
     let prompt = this.alertCtrl.create({
       title: 'Add Driver ' + driver.name,
-      message: 'Are you sure you want to create and add ' + driver.name + "?",
+      message: 'Are you sure you want to add ' + driver.name + "?",
       buttons:[
         {
           text: 'Cancel',

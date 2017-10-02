@@ -54,10 +54,14 @@ export class LoadProvider {
 
   updateLoad(load){
 
+    console.log("updateLoad inside loadProvider");
+    console.log("load inside updateLoad inside loadProvider", load);
+
     return new Promise((resolve, reject) => {
 
       let headers = new Headers();
       let token = this.authService.token;
+      headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
       this.http.put('http://localhost:8000/api/loads/' + load.id, JSON.stringify(load), {headers: headers}).subscribe((res) => {

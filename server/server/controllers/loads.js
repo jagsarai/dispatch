@@ -18,7 +18,8 @@ module.exports = {
             .findAll({
                 include: [{
                     all: true
-                }]
+                }],
+                order:['createdAt']
             })
             .then(loads => {
                 loads.map((load) => {
@@ -44,6 +45,10 @@ module.exports = {
             .catch(error => res.status(400).send(error));
     },
     update(req, res){
+        console.log("userid: ", req.body.userId);
+        console.log("shipperId: ", req.body.shipperId);
+        console.log("receiverId: ", req.body.receiverId);
+        console.log("truckId: ", req.body.truckId);
         return Load
             .findById(req.params.loadId, {  
             })

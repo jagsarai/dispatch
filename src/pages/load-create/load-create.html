@@ -37,14 +37,31 @@
             <ion-icon name="call"></ion-icon>
             Ph. {{driver.phone}}
         </div>
+        <br>
+        <div>
+          <ion-icon name="mail"></ion-icon>
+          Email {{driver.email}}
+        </div>
           
       </ion-item>
 
       <ng-template #noDriverAdded>
         <ion-item>
-          <ion-icon name="person"></ion-icon>
-          Driver
-          <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="add"></ion-icon></button>
+          <div>
+            <ion-icon name="person"></ion-icon>
+            Driver
+            <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="add"></ion-icon></button>
+          </div>
+          <br>
+          <div>
+            <ion-icon name="call"></ion-icon>
+            Ph.
+          </div>
+          <br>
+          <div>
+            <ion-icon name="mail"></ion-icon>
+            Email
+          </div>
       </ion-item> 
       </ng-template>
 
@@ -62,7 +79,8 @@
 
             <ion-item *ngIf="shipperModalReturned; else noShipperAdded">
               {{shipper.address}}
-              {{shipper.city}}, {{shipper.state}}
+              <br>
+              {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
             </ion-item>
             <ng-template #noShipperAdded>
                 <ion-item>
@@ -89,7 +107,8 @@
 
               <ion-item *ngIf="receiverModalReturned, else noReceiverAdded">
                 {{receiver.address}}
-                {{receiver.city}}, {{receiver.state}}
+                <br>
+                {{receiver.city}}, {{receiver.state}} {{receiver.zipCode}}
               </ion-item>
 
               <ng-template #noReceiverAdded>
@@ -108,5 +127,5 @@
     </ion-item>
     
   </ion-list>
-  <button ion-button class="create-save-button" color="secondary">Save</button>
+  <button ion-button class="create-save-button" color="secondary" (click)="createLoad()" *ngIf="createFormComplete">Save</button>
 </ion-content>

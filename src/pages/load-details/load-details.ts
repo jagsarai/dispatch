@@ -1,16 +1,10 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
 import {  ReceiverProvider } from '../../providers/receiver/receiver';
 import {  ShipperProvider } from '../../providers/shipper/shipper';
 import {  TruckProvider } from '../../providers/truck/truck';
+import { LoadProvider } from '../../providers/load/load';
 
-
-/**
- * Generated class for the LoadDetailsPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -22,9 +16,10 @@ export class LoadDetailsPage {
   shippers: Array<any> = [];
   receivers: Array<any> = [];
   trucks: Array<any> = [];
+  loading: any;
   
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService: ShipperProvider, public receiverService: ReceiverProvider, public truckService: TruckProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService: ShipperProvider, public receiverService: ReceiverProvider, public truckService: TruckProvider, public alertCtrl:AlertController, public loadingCtrl: LoadingController, public loadService: LoadProvider) {
     this.load = navParams.get("Load");
   }
 
@@ -47,6 +42,56 @@ export class LoadDetailsPage {
     }, (err) => {
       console.log(err);
     })
+  }
+
+  showLoadEditPage(){
+    this.navCtrl.push('LoadEditPage',{
+      Load: {
+        id: this.load.id,
+        driver: this.load.driver,
+        shipper: this.shippers[0],
+        receiver: this.receivers[0],
+        truck: this.trucks[0]
+      }
+    })
+  }
+
+  deleteLoad(){
+    
+    let prompt = this.alertCtrl.create({
+      title: 'Confirm Delete',
+      message: 'Are you sure you want to delete this load?',
+      buttons:[
+        {
+          text: 'Cancel',
+        },
+        {
+          text: 'Yes',
+          handler: (load) => {
+            this.showLoader();
+                //Remove from database
+                this.loadService.deleteLoad(this.load.id).then((result) => {
+            
+                  this.loading.dismiss();
+                  
+                  this.navCtrl.setRoot('HomePage');
+            
+                }, (err) => {
+                  this.loading.dismiss();
+                    console.log("not allowed");
+                });
+          }
+        }
+      ]
+    });
+    prompt.present();
+  }
+
+  showLoader(){
+    this.loading = this.loadingCtrl.create({
+      content: 'Loading...'
+    });
+    this.loading.present();
   }
 
 }

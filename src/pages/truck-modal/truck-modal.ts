@@ -125,7 +125,7 @@ export class TruckModalPage {
     // this.truck = truck
     let prompt = this.alertCtrl.create({
       title: 'Add Truck# ' + truck.number,
-      message: 'Are you sure you want to create and add truck# ' + truck.number + "?",
+      message: 'Are you sure you want to add truck# ' + truck.number + "?",
       buttons:[
         {
           text: 'Cancel',

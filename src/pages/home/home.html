@@ -23,21 +23,11 @@
 
     <ion-card *ngFor="let load of loads">
       <ion-card-content>
-        <ion-item>
+        <ion-item (click)="showLoadDetail(load)">
           <div>
               <ion-icon name="document"></ion-icon>
-              <a (click)="showLoadDetail(load)">Load # {{load.id}}</a>
+              Load # {{load.id}}
           </div>
-         
-          <button ion-button (click)="deleteLoad(load)" class="home-button">
-              <ion-icon name="trash" color="danger"></ion-icon>
-              Delete
-            </button>
-
-            <button ion-button  (click)="showLoadEdit(load)" class="home-button">
-              <ion-icon name="build" color="secondary"></ion-icon>
-              Edit
-            </button>
         </ion-item>
       </ion-card-content>
     </ion-card>
