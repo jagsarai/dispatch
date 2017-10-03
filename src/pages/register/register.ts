@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-
+import { FormControl } from '@angular/forms';
+import 'rxjs/add/operator/debounceTime';
 
 
 @IonicPage()
@@ -13,13 +14,28 @@ export class RegisterPage {
   loading: any;
 
   userEmail: string;
-  userPassword: string;
+  userPassword: string = '';
   userRole: string;
   userName: string;
   userPhone: string;
-  userConfPassword: string;
+  userConfPassword: string = '';
+  passwordConfrimControl: FormControl;
+  passwordControl: FormControl;
+  passwordMissMatch: any = false;
+  userConfPasswordMissMatch: any = false;
 
   constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController) {
+    this.passwordConfrimControl = new FormControl();
+    this.passwordControl = new FormControl();
+  }
+
+  ionViewDidLoad(){
+    this.passwordConfrimControl.valueChanges.debounceTime(700).subscribe(search => {
+      this.checkPasswordMatch(this.userConfPassword);
+    });
+    this.passwordControl.valueChanges.debounceTime(700).subscribe(search => {
+      this.checkPasswordMatch(this.userPassword);
+    })
   }
 
   register(){
@@ -46,12 +62,23 @@ export class RegisterPage {
   }
     
   showLoader(){
-
     this.loading = this.loadingCtrl.create({
       content: 'Authenticating...'
     });
-
     this.loading.present();
+  }
+
+  checkPasswordMatch(password){
+    if(password !== this.userConfPassword){
+      this.passwordMissMatch = true;
+    }
+    else if(password !== this.userPassword){
+      this.userConfPasswordMissMatch = true;
+    }
+    else{
+      this.passwordMissMatch = false;
+      this.userConfPasswordMissMatch = false;
+    }
   }
     
 }
