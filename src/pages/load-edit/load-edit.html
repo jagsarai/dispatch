@@ -10,15 +10,25 @@
   <ion-list no-lines>
     <ion-item>
 
-      <ion-item>
+      <ion-item *ngIf="statusModalReturned; else noStatusUpdate">
           <div>
               <ion-icon name="bookmark" item-start></ion-icon>
-              Status: {{load.status}}
-              <button ion-button class="create-add-button"><ion-icon name="build"></ion-icon></button>
+              Status: {{status}}
+              <button ion-button class="create-add-button"><ion-icon name="build" (click)="showStatusModal()"></ion-icon></button>
           </div>
       </ion-item>
 
-      <ion-item *ngIf="truckModalReturned; else noTruckAdded">
+      <ng-template #noStatusUpdate>
+        <ion-item>
+          <div>
+              <ion-icon name="bookmark" item-start></ion-icon>
+              Status: {{status}}
+              <button ion-button class="create-add-button"><ion-icon name="build" (click)="showStatusModal()"></ion-icon></button>
+          </div>
+        </ion-item>
+      </ng-template>
+
+      <ion-item *ngIf="truckModalReturned; else noTruckUpdate">
         <div>
             <ion-icon name="speedometer" item-start></ion-icon>
             Truck {{truck.number}}
@@ -26,7 +36,7 @@
         </div>
 
       </ion-item>
-      <ng-template #noTruckAdded>
+      <ng-template #noTruckUpdate>
         <ion-item>
           <div>
               <ion-icon name="speedometer" item-start></ion-icon>
@@ -36,7 +46,7 @@
         </ion-item>
       </ng-template>
 
-      <ion-item *ngIf="driverModalReturned; else noDriverAdded">
+      <ion-item *ngIf="driverModalReturned; else noDriverUpdate">
         <div>
             <ion-icon name="person" item-start></ion-icon>
             Driver {{driver.name}}
@@ -55,7 +65,7 @@
           
       </ion-item>
 
-      <ng-template #noDriverAdded>
+      <ng-template #noDriverUpdate>
         <ion-item>
           <div>
             <ion-icon name="person" item-start></ion-icon>
@@ -97,7 +107,7 @@
               </div>
           </ion-item>
           <ion-list>
-            <ion-item *ngIf="shipperModalReturned; else noShipperAdded">
+            <ion-item *ngIf="shipperModalReturned; else noShipperUpdate">
               {{shipper.name}}
               <br>
               {{shipper.address}}
@@ -105,7 +115,7 @@
               {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
               <button ion-button class="create-add-button" (click)="showShipperModal()"><ion-icon name="build"></ion-icon></button>
             </ion-item>
-            <ng-template #noShipperAdded>
+            <ng-template #noShipperUpdate>
                 <ion-item>
                     {{shipper.name}}
                     <br>
@@ -140,7 +150,7 @@
             </ion-item>
 
             <ion-list>
-              <ion-item *ngIf="receiverModalReturned, else noReceiverAdded">
+              <ion-item *ngIf="receiverModalReturned, else noReceiverUpdate">
                 {{receiver.name}}
                 <br>
                 {{receiver.address}}
@@ -149,7 +159,7 @@
                 <button ion-button class="create-add-button" (click)="showReceiverModal()"><ion-icon name="build"></ion-icon></button>
               </ion-item>
 
-              <ng-template #noReceiverAdded>
+              <ng-template #noReceiverUpdate>
                 <ion-item>
                     {{receiver.name}}
                     <br>

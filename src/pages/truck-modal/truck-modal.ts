@@ -108,7 +108,8 @@ export class TruckModalPage {
         
               this.loading.dismiss();
               //Pass back to create load page
-              this.viewCtrl.dismiss(truck); 
+              console.log("truck created: ", result);
+              this.viewCtrl.dismiss(result); 
         
             }, (err) => {
               this.loading.dismiss();

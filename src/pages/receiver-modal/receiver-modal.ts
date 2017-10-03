@@ -116,7 +116,8 @@ export class ReceiverModalPage {
         
               this.loading.dismiss();
               //Pass back to create load page
-              this.viewCtrl.dismiss(receiver); 
+              console.log("receiver created: ", result);
+              this.viewCtrl.dismiss(result); 
         
             }, (err) => {
               this.loading.dismiss();

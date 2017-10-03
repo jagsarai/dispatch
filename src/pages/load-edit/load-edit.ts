@@ -28,11 +28,16 @@ export class LoadEditPage {
   receiverModalReturned: any = false;
   pickupDateModalReturned: any = false;
   deliveryDateModalReturned: any = false;
+  statusModalReturned: any = false;
   createFormComplete: any = false;
   loading: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public loadService: LoadProvider, public modalCtrl:ModalController, public alertCtrl: AlertController, public loadingCtrl:LoadingController){
-    this.load = navParams.get("Load");
+
+  }
+
+  ionViewWillLoad() {
+    this.load = this.navParams.get("Load");
     this.driver = this.load.driver;
     this.shipper = this.load.shipper;
     this.receiver = this.load.receiver;
@@ -42,14 +47,27 @@ export class LoadEditPage {
     this.delivery.date = this.load.deliveryDate;
     this.delivery.time = this.load.deliveryTime;
     this.status = this.load.status;
+    this.checkValidForm();
+    console.log(this.status);
   }
 
-  ionViewDidLoad() {
-    this.checkValidForm();
+  showStatusModal(){
+    const status = this.status;
+    console.log("inside show status", status);
+    const statusModal:Modal = this.modalCtrl.create('StatusModalPage', {status: status})
+
+    statusModal.present();
+    statusModal.onDidDismiss((status) => {
+      if(status){
+        this.status = status;
+        console.log("status after return", this.status);
+        this.statusModalReturned = true;
+      }
+    })
   }
 
   showTruckModal(){
-    const truckModal:Modal = this.modalCtrl.create('TruckModalPage',) 
+    const truckModal:Modal = this.modalCtrl.create('TruckModalPage') 
 
     truckModal.present();
     truckModal.onDidDismiss((truck) => {
@@ -62,7 +80,7 @@ export class LoadEditPage {
   }
 
   showDriverModal(){
-    const driverModal:Modal = this.modalCtrl.create('DriverModalPage',) 
+    const driverModal:Modal = this.modalCtrl.create('DriverModalPage') 
 
     driverModal.present();
     driverModal.onDidDismiss((driver) => {
@@ -75,7 +93,7 @@ export class LoadEditPage {
   }
 
   showShipperModal(){
-    const shipperModal:Modal = this.modalCtrl.create('ShipperModalPage',) 
+    const shipperModal:Modal = this.modalCtrl.create('ShipperModalPage') 
 
     shipperModal.present();
     shipperModal.onDidDismiss((shipper) => {
@@ -88,7 +106,7 @@ export class LoadEditPage {
   }
 
   showReceiverModal(){
-    const receiverModal:Modal = this.modalCtrl.create('ReceiverModalPage',) 
+    const receiverModal:Modal = this.modalCtrl.create('ReceiverModalPage') 
 
     receiverModal.present();
     receiverModal.onDidDismiss((receiver) => {
@@ -178,7 +196,8 @@ export class LoadEditPage {
       pickupDate: this.pickup.date, 
       pickupTime: this.pickup.time,
       deliveryDate: this.delivery.date,
-      deliveryTime: this.delivery.time
+      deliveryTime: this.delivery.time,
+      status: this.status
     }
 
     console.log("loadId inside updateLoad function", load.id);
@@ -190,6 +209,7 @@ export class LoadEditPage {
     console.log("pickupTime inside updateLoad function", load.pickupTime);
     console.log("deliveryDate inside updateLoad function", load.deliveryDate);
     console.log("deliveryTime inside updateLoad function", load.deliveryTime);
+    console.log("status inside updateLoad function", load.status);
 
     let prompt = this.alertCtrl.create({
       title: 'Update Load# ' + this.load.id,
@@ -228,4 +248,28 @@ export class LoadEditPage {
     });
     this.loading.present();
   }
+
+  // checkLoadStatus(status){
+  //   if(status === 'assgined'){
+  //     this.loadStatus.assigned = true;
+  //   }
+  //   if(status === 'dispatched'){
+  //     this.loadStatus.dispatched = true;
+  //   }
+  //   if(status === 'at shipper'){
+  //     this.loadStatus.atShipper = true;
+  //   }
+  //   if(status === 'loaded'){
+  //     this.loadStatus.loaded = true;
+  //   }
+  //   if(status === 'en route'){
+  //     this.loadStatus.enRoute = true;
+  //   }
+  //   if(status === 'at receiver'){
+  //     this.loadStatus.atReceiver = true;
+  //   }
+  //   if(status === 'delivered'){
+  //     this.loadStatus.delivered = true;
+  //   }
+  // }
 }

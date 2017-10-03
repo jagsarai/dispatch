@@ -1,0 +1,99 @@
+<!--
+  Generated template for the StatusModalPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Load Status</ion-title>
+    <ion-buttons end>
+        <button ion-button (click)="closeStatusModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+
+  <ion-list radio-group [(ngModel)]="status">
+
+    <ion-item *ngIf="assigned; else notAssigned">
+      <ion-label>Assigned</ion-label>
+      <ion-radio checked="true" value="assigned"></ion-radio>
+    </ion-item>
+
+    <ng-template #notAssigned>
+      <ion-item>
+        <ion-label>Assigned</ion-label>
+        <ion-radio value="assigned"></ion-radio>
+      </ion-item>
+    </ng-template>
+
+    <ion-item *ngIf="dispatched; else notDispatched">
+      <ion-label>Disptached</ion-label>
+      <ion-radio checked="true" value="dispatched"></ion-radio>
+    </ion-item>
+
+    <ng-template #notDispatched>
+      <ion-item>
+        <ion-label>Disptached</ion-label>
+        <ion-radio value="dispatched"></ion-radio>
+      </ion-item>
+    </ng-template>
+
+    <ion-item *ngIf="atShipper; else notAtShipper">
+      <ion-label>At Shipper</ion-label>
+      <ion-radio checked="true" value="at shipper"></ion-radio>
+    </ion-item>
+
+    <ng-template #notAtShipper>
+      <ion-item>
+        <ion-label>At Shipper</ion-label>
+        <ion-radio value="at shipper"></ion-radio>
+      </ion-item>
+    </ng-template>
+
+    <ion-item *ngIf="enRoute; else notEnRoute">
+      <ion-label>En Route</ion-label>
+      <ion-radio checked="true" value="en route"></ion-radio>
+    </ion-item>
+
+    <ng-template #notEnRoute>
+      <ion-item>
+        <ion-label>En Route</ion-label>
+        <ion-radio value="en route"></ion-radio>
+      </ion-item>
+    </ng-template>
+
+    <ion-item *ngIf="atReceiver; else notAtReceiver">
+      <ion-label>At Receiver</ion-label>
+      <ion-radio checked="true" value="at receiver"></ion-radio>
+    </ion-item>
+
+    <ng-template #notAtReceiver>
+      <ion-item>
+        <ion-label>At Receiver</ion-label>
+        <ion-radio value="at receiver"></ion-radio>
+      </ion-item>
+    </ng-template>
+
+    <ion-item *ngIf="delivered; else notDelivered">
+      <ion-label>Delivered</ion-label>
+      <ion-radio checked="true" value="delivered"></ion-radio>
+    </ion-item>
+
+    <ng-template #notDelivered>
+      <ion-item>
+        <ion-label>Delivered</ion-label>
+        <ion-radio value="delivered"></ion-radio>
+      </ion-item>
+    </ng-template>
+
+
+  </ion-list>
+
+
+</ion-content>

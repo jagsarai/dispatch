@@ -116,7 +116,8 @@ export class ShipperModalPage {
         
               this.loading.dismiss();
               //Pass back to create load page
-              this.viewCtrl.dismiss(shipper); 
+              console.log("shipper created: ", result);
+              this.viewCtrl.dismiss(result); 
         
             }, (err) => {
               this.loading.dismiss();

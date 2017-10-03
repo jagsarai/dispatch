@@ -94,7 +94,7 @@ export class LoadCreatePage {
     driverModal.present();
     driverModal.onDidDismiss((driver) => {
       if(driver){
-        this.driver = driver;
+        this.driver = driver.user;
         this.driverModalReturned = true;
       }
       this.checkValidForm();

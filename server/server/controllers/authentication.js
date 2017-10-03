@@ -23,6 +23,7 @@ function setUserInfo(request){
     console.log("request role: " + request.role);    
     return {
         id: request.id,
+        phone: request.phone,
         email: request.email,
         role: request.role
     };
@@ -45,24 +46,26 @@ exports.register = function(req, res, next){
     console.log(req.body.role);
     console.log(req.body.name);
     console.log(req.body.phone);
-
-    var email = req.body.email;
-    var password = bcypt.hashSync(req.body.password, salt);
-    var role = req.body.role;
-    var name = req.body.name;
-    var phone =  parseInt(req.body.phone);
+    var user = {
+        email: req.body.email,
+        password: bcypt.hashSync(req.body.password, salt),
+        role: req.body.role,
+        name: req.body.name,
+        phone:  parseInt(req.body.phone)
+    }
+   
  
-    if(!email){
+    if(!user.email){
         return res.status(422).send({error: 'You must enter an email address'});
     }
  
-    if(!password){
+    if(!user.password){
         return res.status(422).send({error: 'You must enter a password'});
     }
 
     User.findOne({
         where: {
-            email: email
+            email: user.email
         }
     }).then((existingUser) => {
 
@@ -72,18 +75,13 @@ exports.register = function(req, res, next){
             })
         }
 
-        User.create({
-            role: role,
-            phone: phone,
-            name: name,
-            email: email,
-            password: password
-        }).then((user) => {
+        User.create(user).then((user) => {
             var userInfo = setUserInfo(user);
-
+            user.password = "hidden"
             res.status(201).json({
                 token: 'JWT' + generateToken(userInfo),
-                user: userInfo
+                user: user,
+
             })
         })
         .catch(error => {

@@ -122,7 +122,8 @@ export class DriverModalPage {
          
                this.loading.dismiss();
                //Pass back to create load page
-               this.viewCtrl.dismiss(driver); 
+               console.log("driver created: ", result);
+               this.viewCtrl.dismiss(result); 
          
              }, (err) => {
                this.loading.dismiss();
