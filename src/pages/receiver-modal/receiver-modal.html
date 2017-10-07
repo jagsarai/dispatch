@@ -12,21 +12,25 @@
     
 <ion-content padding>
 
-  <ion-buttons *ngIf="createToggle; else showAltAddButton">
-      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
-        <div>
-          <ion-icon name="build"></ion-icon>
-          Create New Receiver
-        </div>
-      </button>
-  </ion-buttons>
+  <ion-list no-lines *ngIf="createToggle; else showAltAddButton">
+    <ion-item>
+        <button ion-button  (click)="createToggle = !createToggle">
+            <ion-icon color="title" item-start name="build"></ion-icon>
+            <!-- <ion-icon item-start></ion-icon>        -->
+                Create New Receiver
+        </button>
+    </ion-item>
+  </ion-list>
   <ng-template #showAltAddButton>
-      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
-          <div>
-            <ion-icon name="add-circle"></ion-icon>
-            Add Existing Receiver
-          </div>
-      </button>
+      <ion-list no-lines>
+        <ion-item>
+            <button ion-button  (click)="createToggle = !createToggle">
+                <ion-icon color="title" item-start name="add-circle"></ion-icon>
+                <!-- <ion-icon item-start></ion-icon>        -->
+                Add Existing Receiver
+            </button>
+        </ion-item>
+      </ion-list> 
   </ng-template>
   
   <div *ngIf="createToggle; else showForm">
@@ -39,13 +43,21 @@
     <ion-list no-lines>
       <ion-card *ngFor="let receiver of receivers">
         <ion-card-content>
-          <ion-item >
-            <div (click)="addExistingReceiver(receiver)">
-                  {{receiver.name}} 
-                  <br>
-                  {{receiver.address}}
-                  <br>
-                  {{receiver.city}},  {{receiver.state}} {{receiver.zipCode}}
+          <ion-item (click)="addExistingReceiver(receiver)">
+            <ion-icon  name="pin" color="title"></ion-icon>
+            <br>
+            <div>
+                <ion-icon item-start></ion-icon>
+                <ion-icon item-start></ion-icon>
+                {{receiver.name}}
+                <br>
+                <ion-icon item-start></ion-icon>
+                <ion-icon item-start></ion-icon>
+                {{receiver.address}}
+                <br>
+                <ion-icon item-start></ion-icon>
+                <ion-icon item-start></ion-icon>
+                {{receiver.city}}, {{receiver.state}} {{receiver.zipCode}}
             </div>
           </ion-item>
         </ion-card-content>

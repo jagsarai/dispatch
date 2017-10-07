@@ -12,7 +12,7 @@
 
       <ion-item *ngIf="statusModalReturned; else noStatusUpdate">
           <div>
-              <ion-icon name="bookmark" item-start></ion-icon>
+              <ion-icon name="bookmark" color="title" item-start></ion-icon>
               Status: {{status}}
               <button ion-button class="create-add-button"><ion-icon name="build" (click)="showStatusModal()"></ion-icon></button>
           </div>
@@ -21,7 +21,7 @@
       <ng-template #noStatusUpdate>
         <ion-item>
           <div>
-              <ion-icon name="bookmark" item-start></ion-icon>
+              <ion-icon name="bookmark" color="title" item-start></ion-icon>
               Status: {{status}}
               <button ion-button class="create-add-button"><ion-icon name="build" (click)="showStatusModal()"></ion-icon></button>
           </div>
@@ -30,7 +30,7 @@
 
       <ion-item *ngIf="truckModalReturned; else noTruckUpdate">
         <div>
-            <ion-icon name="speedometer" item-start></ion-icon>
+            <ion-icon name="speedometer" color="title" item-start></ion-icon>
             Truck {{truck.number}}
             <button ion-button class="create-add-button" (click)="showTruckModal()"><ion-icon name="build"></ion-icon></button>
         </div>
@@ -39,7 +39,7 @@
       <ng-template #noTruckUpdate>
         <ion-item>
           <div>
-              <ion-icon name="speedometer" item-start></ion-icon>
+              <ion-icon name="speedometer" color="title" item-start></ion-icon>
               Truck {{truck.number}}
               <button ion-button class="create-add-button" (click)="showTruckModal()"><ion-icon name="build"></ion-icon></button>
           </div>
@@ -48,18 +48,18 @@
 
       <ion-item *ngIf="driverModalReturned; else noDriverUpdate">
         <div>
-            <ion-icon name="person" item-start></ion-icon>
+            <ion-icon name="person" color="title" item-start></ion-icon>
             Driver {{driver.name}}
             <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="build"></ion-icon></button>
         </div>
         <br>
         <div>
-            <ion-icon name="call" item-start></ion-icon>
+            <ion-icon name="call" color="title" item-start></ion-icon>
             Ph. {{driver.phone}}
         </div>
         <br>
         <div>
-          <ion-icon name="mail" item-start></ion-icon>
+          <ion-icon name="mail" color="title" item-start></ion-icon>
           Email {{driver.email}}
         </div>
           
@@ -68,18 +68,18 @@
       <ng-template #noDriverUpdate>
         <ion-item>
           <div>
-            <ion-icon name="person" item-start></ion-icon>
+            <ion-icon name="person" color="title" item-start></ion-icon>
             Driver {{driver.name}}
             <button ion-button class="create-add-button" (click)="showDriverModal()"><ion-icon name="build"></ion-icon></button>
           </div>
           <br>
           <div>
-            <ion-icon name="call" item-start></ion-icon>
+            <ion-icon name="call" color="title" item-start></ion-icon>
             Ph. {{driver.phone}}
           </div>
           <br>
           <div>
-            <ion-icon name="mail" item-start></ion-icon>
+            <ion-icon name="mail" color="title" item-start></ion-icon>
             Email {{driver.email}}
           </div>
       </ion-item> 
@@ -91,38 +91,60 @@
     <ion-item>
       <ion-card>
         <ion-card-header>
-            <ion-icon name="map" item-start></ion-icon>
+            <ion-icon name="map" color="title" item-start></ion-icon>
               Pickup Details
         </ion-card-header>
         <ion-card-content>
+          
           <ion-item>
               <div>
-                  <ion-icon name="calendar" item-start></ion-icon>
+                  <ion-icon name="calendar" color="title" item-start></ion-icon>
                   {{pickup.date}}
                   <button ion-button class="create-add-button" (click)="showPickupDateModal()"><ion-icon name="build"></ion-icon></button>
               </div>
               <div>
-                  <ion-icon name="time" item-start></ion-icon>
+                  <ion-icon name="time" color="title" item-start></ion-icon>
                   {{pickup.time}}
               </div>
           </ion-item>
+
           <ion-list>
             <ion-item *ngIf="shipperModalReturned; else noShipperUpdate">
-              {{shipper.name}}
-              <br>
-              {{shipper.address}}
-              <br>
-              {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
-              <button ion-button class="create-add-button" (click)="showShipperModal()"><ion-icon name="build"></ion-icon></button>
+                <ion-icon  name="pin" color="title"></ion-icon>
+                <button ion-button class="create-add-button" (click)="showShipperModal()"><ion-icon name="build"></ion-icon></button>
+                <br>
+                <div>
+                    <ion-icon item-start></ion-icon>
+                    <ion-icon item-start></ion-icon>
+                    {{shipper.name}}
+                    <br>
+                    <ion-icon item-start></ion-icon>
+                    <ion-icon item-start></ion-icon>
+                    {{shipper.address}}
+                    <br>
+                    <ion-icon item-start></ion-icon>
+                    <ion-icon item-start></ion-icon>
+                    {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
+                </div>
             </ion-item>
             <ng-template #noShipperUpdate>
                 <ion-item>
-                    {{shipper.name}}
-                    <br>
-                    {{shipper.address}}
-                    <br>
-                    {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
+                    <ion-icon  name="pin" color="title"></ion-icon>
                     <button ion-button class="create-add-button" (click)="showShipperModal()"><ion-icon name="build"></ion-icon></button>
+                    <br>
+                    <div>
+                        <ion-icon item-start></ion-icon>
+                        <ion-icon item-start></ion-icon>
+                        {{shipper.name}}
+                        <br>
+                        <ion-icon item-start></ion-icon>
+                        <ion-icon item-start></ion-icon>
+                        {{shipper.address}}
+                        <br>
+                        <ion-icon item-start></ion-icon>
+                        <ion-icon item-start></ion-icon>
+                        {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
+                    </div>
                 </ion-item>
             </ng-template>
           </ion-list>
@@ -133,40 +155,60 @@
     <ion-item>
       <ion-card>
         <ion-card-header>
-          <ion-icon name="map" item-start></ion-icon>
+          <ion-icon name="map" color="title" item-start></ion-icon>
           Delivery Details
         </ion-card-header>
         <ion-card-content>
             <ion-item>
                 <div>
-                    <ion-icon name="calendar" item-start></ion-icon>
+                    <ion-icon name="calendar" color="title" item-start></ion-icon>
                     {{delivery.date}}
                     <button ion-button class="create-add-button" (click)="showDeliveryDateModal()"><ion-icon name="build"></ion-icon></button>
                 </div>
                 <div>
-                    <ion-icon name="time" item-start></ion-icon>
+                    <ion-icon name="time" color="title" item-start></ion-icon>
                     {{delivery.time}}
                 </div>
             </ion-item>
 
             <ion-list>
               <ion-item *ngIf="receiverModalReturned, else noReceiverUpdate">
-                {{receiver.name}}
-                <br>
-                {{receiver.address}}
-                <br>
-                {{receiver.city}}, {{receiver.state}} {{receiver.zipCode}}
-                <button ion-button class="create-add-button" (click)="showReceiverModal()"><ion-icon name="build"></ion-icon></button>
+                  <ion-icon  name="pin" color="title"></ion-icon>
+                  <button ion-button class="create-add-button" (click)="showReceiverModal()"><ion-icon name="build"></ion-icon></button>
+                  <br>
+                  <div>
+                      <ion-icon item-start></ion-icon>
+                      <ion-icon item-start></ion-icon>
+                      {{receiver.name}}
+                      <br>
+                      <ion-icon item-start></ion-icon>
+                      <ion-icon item-start></ion-icon>
+                      {{receiver.address}}
+                      <br>
+                      <ion-icon item-start></ion-icon>
+                      <ion-icon item-start></ion-icon>
+                      {{receiver.city}}, {{receiver.state}} {{receiver.zipCode}}
+                  </div>
               </ion-item>
 
               <ng-template #noReceiverUpdate>
                 <ion-item>
-                    {{receiver.name}}
-                    <br>
-                    {{receiver.address}}
-                    <br>
-                    {{receiver.city}}, {{receiver.state}} {{receiver.zipCode}}
+                    <ion-icon  name="pin" color="title"></ion-icon>
                     <button ion-button class="create-add-button" (click)="showReceiverModal()"><ion-icon name="build"></ion-icon></button>
+                    <br>
+                    <div>
+                        <ion-icon item-start></ion-icon>
+                        <ion-icon item-start></ion-icon>
+                        {{receiver.name}}
+                        <br>
+                        <ion-icon item-start></ion-icon>
+                        <ion-icon item-start></ion-icon>
+                        {{receiver.address}}
+                        <br>
+                        <ion-icon item-start></ion-icon>
+                        <ion-icon item-start></ion-icon>
+                        {{receiver.city}}, {{receiver.state}} {{receiver.zipCode}}
+                    </div>
                 </ion-item>
               </ng-template>
             </ion-list>

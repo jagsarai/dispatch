@@ -12,21 +12,25 @@
     
 <ion-content padding>
 
-  <ion-buttons *ngIf="createToggle; else showAltAddButton">
-      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
-        <div>
-          <ion-icon name="build"></ion-icon>
-          Create New Driver
-        </div>
-      </button>
-  </ion-buttons>
+  <ion-list no-lines *ngIf="createToggle; else showAltAddButton">
+    <ion-item>
+        <button ion-button  (click)="createToggle = !createToggle">
+            <ion-icon color="title" item-start name="build"></ion-icon>
+            <!-- <ion-icon item-start></ion-icon>        -->
+                Create New Driver
+        </button>
+    </ion-item>
+  </ion-list>
   <ng-template #showAltAddButton>
-      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
-          <div>
-            <ion-icon name="add-circle"></ion-icon>
-            Add Existing Driver
-          </div>
-      </button>
+      <ion-list no-lines>
+        <ion-item>
+            <button ion-button  (click)="createToggle = !createToggle">
+                <ion-icon color="title" item-start name="add-circle"></ion-icon>
+                <!-- <ion-icon item-start></ion-icon>        -->
+                Add Existing Driver
+            </button>
+        </ion-item>
+      </ion-list> 
   </ng-template>
   
   <div *ngIf="createToggle; else showForm">
@@ -41,11 +45,14 @@
         <ion-card-content>
           <ion-item >
             <div (click)="addExistingDriver(driver)">
-                <ion-icon name="people"></ion-icon>
+                <ion-icon name="people" item-start></ion-icon>
                   {{driver.name}} 
                   <br>
-                <ion-icon name="mail"></ion-icon>
+                <ion-icon name="mail" item-start></ion-icon>
                   {{driver.email}}
+                  <br>
+                <ion-icon name="call" item-start></ion-icon>
+                  {{driver.phone}}
             </div>
           </ion-item>
         </ion-card-content>

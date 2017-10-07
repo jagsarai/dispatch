@@ -11,5 +11,71 @@
 
 
 <ion-content padding>
-  <p>This has been filetered for the driver</p>
+  <ion-card>
+      <ion-card-header>Current Loads</ion-card-header>
+    <ion-card-content>
+      <ion-searchbar [(ngModel)]="currentLoadSearchTerm" [formControl]="currentLoadSearchControl" (ionInput)="onCurrentLoadSearchInput()" placeholder="Pickup Date"></ion-searchbar>
+
+      <div *ngIf="currentLoadSearching" class="spinner-container">
+          <ion-spinner name="bubbles"></ion-spinner>
+      </div>
+
+      <ion-item *ngFor="let load of filteredCurrentDriverLoads">
+        <div (click)="showLoadDetail(load)">
+            <ion-icon name="document" item-start color="title"></ion-icon>
+            Load # {{load.id}}
+            <small><ion-icon name="alert" color="danger"></ion-icon></small>
+            <br>
+            <small class="driver-view-load-status">
+                <ion-icon name="bookmark" color="danger"></ion-icon>
+               {{load.status}}
+               <!-- <ion-icon item-start></ion-icon>
+               <ion-icon name="speedometer" color="primary"></ion-icon>
+               Truck # {{load.TruckId}} -->
+               <ion-icon item-start></ion-icon>
+               <ion-icon name="calendar" color="secondary"></ion-icon>
+               {{load.pickupDate}}
+             </small>
+        </div>
+        <div class="upload-button">
+            <small>
+                <button ion-button>
+                  Upload
+                  <ion-icon item-start></ion-icon>
+                  <ion-icon name="folder" color="secondary"></ion-icon>
+                  <!-- <ion-icon item-start></ion-icon> -->
+                </button>
+            </small>
+        </div>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+      <ion-card-header>Past Loads</ion-card-header>
+    <ion-card-content>
+      <ion-searchbar [(ngModel)]="pastLoadSearchTerm" [formControl]="pastLoadSearchControl" (ionInput)="onPastLoadSearchInput()" placeholder="Pickup Date"></ion-searchbar>
+
+      <div *ngIf="pastLoadSearching" class="spinner-container">
+          <ion-spinner name="bubbles"></ion-spinner>
+      </div>
+
+      <ion-item *ngFor="let load of filteredPastDriverLoads" (click)="showLoadDetail(load)">
+        <div>
+            <ion-icon name="document" item-start color="title"></ion-icon>
+            Load # {{load.id}}
+        </div>
+        <small class="driver-view-load-status">
+          <ion-icon name="bookmark" color="danger"></ion-icon>
+          {{load.status}}
+          <!-- <ion-icon item-start></ion-icon>
+          <ion-icon name="speedometer" color="primary"></ion-icon>
+          Truck # {{load.TruckId}} -->
+          <ion-icon item-start></ion-icon>
+          <ion-icon name="calendar" color="secondary"></ion-icon>
+          {{load.pickupDate}}
+        </small>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
 </ion-content>

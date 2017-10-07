@@ -12,21 +12,25 @@
     
 <ion-content padding>
 
-  <ion-buttons *ngIf="createToggle; else showAltAddButton">
-      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
-        <div>
-          <ion-icon name="build"></ion-icon>
-          Create New Shipper
-        </div>
-      </button>
-  </ion-buttons>
+  <ion-list no-lines *ngIf="createToggle; else showAltAddButton">
+    <ion-item>
+        <button ion-button  (click)="createToggle = !createToggle">
+            <ion-icon color="title" item-start name="build"></ion-icon>
+            <!-- <ion-icon item-start></ion-icon>        -->
+                Create New Shipper
+        </button>
+    </ion-item>
+  </ion-list>
   <ng-template #showAltAddButton>
-      <button ion-button  (click)="createToggle = !createToggle" class="driver-toggle-button">
-          <div>
-            <ion-icon name="add-circle"></ion-icon>
-            Add Existing Shipper
-          </div>
-      </button>
+      <ion-list no-lines>
+        <ion-item>
+            <button ion-button  (click)="createToggle = !createToggle">
+                <ion-icon color="title" item-start name="add-circle"></ion-icon>
+                <!-- <ion-icon item-start></ion-icon>        -->
+                Add Existing Shipper
+            </button>
+        </ion-item>
+      </ion-list> 
   </ng-template>
   
   <div *ngIf="createToggle; else showForm">
@@ -39,13 +43,21 @@
     <ion-list no-lines>
       <ion-card *ngFor="let shipper of shippers">
         <ion-card-content>
-          <ion-item >
-            <div (click)="addExistingShipper(shipper)">
-                  {{shipper.name}} 
-                  <br>
-                  {{shipper.address}}
-                  <br>
-                  {{shipper.city}},  {{shipper.state}} {{shipper.zipCode}}
+          <ion-item (click)="addExistingShipper(shipper)">
+            <ion-icon  name="pin" color="title"></ion-icon>
+            <br>
+            <div>
+                <ion-icon item-start></ion-icon>
+                <ion-icon item-start></ion-icon>
+                {{shipper.name}}
+                <br>
+                <ion-icon item-start></ion-icon>
+                <ion-icon item-start></ion-icon>
+                {{shipper.address}}
+                <br>
+                <ion-icon item-start></ion-icon>
+                <ion-icon item-start></ion-icon>
+                {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
             </div>
           </ion-item>
         </ion-card-content>

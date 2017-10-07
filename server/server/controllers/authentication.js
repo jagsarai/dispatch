@@ -97,7 +97,7 @@ exports.register = function(req, res, next){
 exports.roleAuthorization = function(roles){
     console.log("Inside the role auth function");
     return function(req, res, next){
-        console.log("user inside the role auth: " + req.user)
+        console.log("user inside the role auth: " + req.user.role)
         var user = req.user;
 
         User.findById(user.id)

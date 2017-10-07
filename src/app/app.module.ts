@@ -15,6 +15,12 @@ import { ReceiverProvider } from '../providers/receiver/receiver';
 import { TruckProvider } from '../providers/truck/truck';
 import { DriverProvider } from '../providers/driver/driver';
 
+import { File } from '@ionic-native/file';
+import { Transfer } from '@ionic-native/transfer';
+import { FilePath } from '@ionic-native/file-path';
+import { Camera } from '@ionic-native/camera';
+
+
 
 @NgModule({
   declarations: [
@@ -41,7 +47,11 @@ import { DriverProvider } from '../providers/driver/driver';
     ShipperProvider,
     ReceiverProvider,
     TruckProvider,
-    DriverProvider
+    DriverProvider,
+    Transfer,
+    Camera,
+    FilePath,
+    File
   ]
 })
 export class AppModule {}

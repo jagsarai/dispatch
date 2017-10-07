@@ -23,6 +23,7 @@ module.exports = (app) => {
     app.get('/api/drivers', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.listDrivers);
     app.post('/api/drivers/register', requireAuth, AuthenticationController.roleAuthorization(['admin']), AuthenticationController.register);
 
+
     app.post('/api/register', AuthenticationController.register);
     app.post('/api/login', requireLogin, AuthenticationController.login);
 
@@ -33,9 +34,10 @@ module.exports = (app) => {
 
     app.post('/api/loads/', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.create);
     app.get('/api/loads', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.list);
-    app.get('/api/loads/:loadId', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.retrive);
-    app.put('/api/loads/:loadId', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.update);
+    app.get('/api/loads/:loadId', requireAuth, AuthenticationController.roleAuthorization(['admin', 'driver']), loadsController.retrive);
+    app.put('/api/loads/:loadId', requireAuth, AuthenticationController.roleAuthorization(['admin', 'driver']), loadsController.update);
     app.delete('/api/loads/:loadId', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.destroy);
+    app.post('/api/loads/driver', requireAuth, AuthenticationController.roleAuthorization(['admin', 'driver']), loadsController.getDriverLoads);
 
     app.post('/api/trucks', requireAuth, AuthenticationController.roleAuthorization(['admin']), trucksController.create);
     app.get('/api/trucks', requireAuth, AuthenticationController.roleAuthorization(['admin']), trucksController.list);
@@ -45,13 +47,13 @@ module.exports = (app) => {
 
     app.post('/api/shippers', requireAuth, AuthenticationController.roleAuthorization(['admin']), shippersController.create);
     app.get('/api/shippers', requireAuth, AuthenticationController.roleAuthorization(['admin']), shippersController.list);
-    app.get('/api/shippers/:shipperId', requireAuth, AuthenticationController.roleAuthorization(['admin']), shippersController.retrive);
+    app.get('/api/shippers/:shipperId', requireAuth, AuthenticationController.roleAuthorization(['admin', 'driver']), shippersController.retrive);
     app.put('/api/shippers/:shipperId', requireAuth, AuthenticationController.roleAuthorization(['admin']), shippersController.update);
     app.delete('/api/shippers/:shipperId', requireAuth, AuthenticationController.roleAuthorization(['admin']), shippersController.destroy);
 
     app.post('/api/receivers', requireAuth, AuthenticationController.roleAuthorization(['admin']), receiversController.create);
     app.get('/api/receivers', requireAuth, AuthenticationController.roleAuthorization(['admin']), receiversController.list);
-    app.get('/api/receivers/:receiverId', requireAuth, AuthenticationController.roleAuthorization(['admin']), receiversController.retrive);
+    app.get('/api/receivers/:receiverId', requireAuth, AuthenticationController.roleAuthorization(['admin', 'driver']), receiversController.retrive);
     app.put('/api/receivers/:receiverId', requireAuth, AuthenticationController.roleAuthorization(['admin']), receiversController.update);
     app.delete('/api/receivers/:receiverId', requireAuth, AuthenticationController.roleAuthorization(['admin']), receiversController.destroy);
 }

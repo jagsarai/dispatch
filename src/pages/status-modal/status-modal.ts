@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavParams, AlertController, ViewController } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 
 /**
  * Generated class for the StatusModalPage page.
@@ -23,18 +24,22 @@ export class StatusModalPage {
   enRoute: any =  false;
   atReceiver: any =  false;
   delivered: any =  false;
+  userIsAdmin: any = false;
 
-  constructor(public alertCtnrl: AlertController, public navParams: NavParams, public viewCtrl:ViewController) {
+  constructor(public alertCtnrl: AlertController, public navParams: NavParams, public viewCtrl:ViewController, public storage:Storage) {
   }
 
   ionViewWillLoad() {
+    this.storage.get('role').then((role) => {
+      console.log("Role inside status modal ", role);
+      this.checkRole(role);
+    })
     this.checkLoadStatus(this.navParams.get("status"));
     console.log("Inside the status modal", this.status);
   }
 
   closeStatusModal(){
-    console.log(this.status);
-    this.viewCtrl.dismiss(this.status);
+    this.viewCtrl.dismiss();
   }
 
   checkLoadStatus(status){
@@ -66,6 +71,17 @@ export class StatusModalPage {
       this.status = 'delivered';
       this.delivered = true;
     }
+  }
+
+  checkRole(role){
+    if(role === "admin"){
+      this.userIsAdmin = true;
+    }
+  }
+
+  saveStatusModal(){
+    console.log(this.status);
+    this.viewCtrl.dismiss(this.status);
   }
 
 

@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, LoadingController, ModalController } from 'ionic-angular';
 import { LoadProvider } from '../../providers/load/load';
 import { AuthProvider } from '../../providers/auth/auth';
+// import { SlicePipe } from '@angular/common';
 
 @IonicPage()
 @Component({
@@ -18,7 +19,7 @@ export class HomePage {
   }
 
 
-  ionViewDidLoad(){
+  ionViewWillLoad(){
     
     this.authService.role !== "admin" && this.authService.role !== null ? this.navCtrl.setRoot("LandingPage") : console.log ("User is admin and authorized");
 

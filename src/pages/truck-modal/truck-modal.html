@@ -12,23 +12,26 @@
 
 <ion-content padding>
 
-  <ion-buttons *ngIf="createToggle; else showAltAddButton">
-      <button ion-button  (click)="createToggle = !createToggle" class="truck-toggle-button">
-        <div>
-          <ion-icon name="build"></ion-icon>
-          Create New Truck
-        </div>
-      </button>
-  </ion-buttons>
+  <ion-list no-lines *ngIf="createToggle; else showAltAddButton">
+    <ion-item>
+        <button ion-button  (click)="createToggle = !createToggle">
+            <ion-icon color="title" item-start name="build"></ion-icon>
+            <!-- <ion-icon item-start></ion-icon>        -->
+                Create New Truck
+        </button>
+    </ion-item>
+  </ion-list>
   <ng-template #showAltAddButton>
-      <button ion-button  (click)="createToggle = !createToggle" class="truck-toggle-button">
-          <div>
-            <ion-icon name="add-circle"></ion-icon>
-            Add Existing Truck
-          </div>
-      </button>
+      <ion-list no-lines>
+        <ion-item>
+            <button ion-button  (click)="createToggle = !createToggle">
+                <ion-icon color="title" item-start name="add-circle"></ion-icon>
+                <!-- <ion-icon item-start></ion-icon>        -->
+                Add Existing Truck
+            </button>
+        </ion-item>
+      </ion-list> 
   </ng-template>
-  
   <div *ngIf="createToggle; else showForm">
     <ion-searchbar [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearchInput()"></ion-searchbar>
 
@@ -39,7 +42,7 @@
     <ion-list no-lines>
       <ion-item *ngFor="let truck of trucks">
         <div (click)="addExistingTruck(truck)">
-            <ion-icon name="speedometer"></ion-icon>
+            <ion-icon color="title" item-start name="speedometer"></ion-icon>
             Truck {{truck.number}} 
         </div>
       </ion-item>

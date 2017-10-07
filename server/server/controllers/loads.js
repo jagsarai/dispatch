@@ -33,6 +33,27 @@ module.exports = {
             })
             .catch(error => res.status(400).send(error))
     },
+    getDriverLoads(req, res) {
+        console.log("Inside load.getDriverLoads", req.body.driverId);
+        return Load
+            .findAll({
+                where: {
+                    UserId: req.body.driverId,
+                    status: ['dispatched', 'at shipper', 'loaded', 'en route', 'at receiver', 'delivered']
+                },
+                include: [{
+                    all: true
+                }]
+            })
+            .then(loads => {
+                console.log("loads are: ", loads);
+                loads.map((load) => {
+                    load.driver.password = "hidden";
+                });
+                res.status(200).send(loads)
+            })
+            .catch(error => res.status(400).send(error))
+    },
     retrive(req, res) {
         return Load
             .findById(req.params.loadId, {

@@ -1,0 +1,108 @@
+<ion-header>
+
+  <ion-navbar color="primary" *ngIf="statusModalReturned; else statusNotUpdated" hideBackButton="true">
+    <ion-title>Load # {{load.id}}</ion-title>
+  </ion-navbar>
+
+  <ng-template #statusNotUpdated>
+      <ion-navbar color="primary">
+          <ion-title>Load # {{load.id}}</ion-title>
+      </ion-navbar>
+  </ng-template>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list no-lines>
+    <ion-item>
+        <div>
+            <ion-icon name="bookmark" color="title" item-start></ion-icon>
+            Status: {{status}}
+            <button ion-button class="create-add-button" *ngIf="showStatusEditButton" (click)="showStatusModal()"><ion-icon name="build"></ion-icon></button>
+        </div>
+    </ion-item>
+
+    <ion-item>
+        <ion-card>
+            <ion-card-header>
+                <ion-icon name="map" color="title" item-start></ion-icon>
+                Pickup Details
+            </ion-card-header>
+            <ion-card-content>
+                <ion-item>
+                    <div>
+                        <ion-icon name="calendar" color="title" item-start></ion-icon>
+                        {{load.pickupDate}}
+                    </div>
+                    <div>
+                        <ion-icon name="time" color="title" item-start></ion-icon>
+                        {{load.pickupTime}}
+                    </div>
+                </ion-item>
+
+                <ion-list *ngFor="let shipper of shippers">
+                    <ion-item>
+                        <ion-icon  name="pin" color="title"></ion-icon>
+                        <br>
+                        <div>
+                            <ion-icon item-start></ion-icon>
+                            <ion-icon item-start></ion-icon>
+                            {{shipper.name}}
+                            <br>
+                            <ion-icon item-start></ion-icon>
+                            <ion-icon item-start></ion-icon>
+                            {{shipper.address}}
+                            <br>
+                            <ion-icon item-start></ion-icon>
+                            <ion-icon item-start></ion-icon>
+                            {{shipper.city}}, {{shipper.state}} {{shipper.zipCode}}
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>
+    </ion-item>
+
+    <ion-item>
+        <ion-card>
+            <ion-card-header>
+                <ion-icon name="map" color="title" item-start></ion-icon>
+                Delivery Details
+            </ion-card-header>
+            <ion-card-content>
+                <ion-item>
+                    <div>
+                        <ion-icon name="calendar" color="title" item-start></ion-icon>
+                        {{load.deliveryDate}}
+                    </div>
+                    <div>
+                        <ion-icon name="time" color="title" item-start></ion-icon>
+                        {{load.deliveryTime}}
+                    </div>
+                </ion-item>
+                <ion-list *ngFor="let receiver of receivers">
+                    <ion-item>
+                        <ion-icon  name="pin" color="title"></ion-icon>
+                        <br>
+                        <div>
+                            <ion-icon item-start></ion-icon>
+                            <ion-icon item-start></ion-icon>
+                            {{receiver.name}}
+                            <br>
+                            <ion-icon item-start></ion-icon>
+                            <ion-icon item-start></ion-icon>
+                            {{receiver.address}}
+                            <br>
+                            <ion-icon item-start></ion-icon>
+                            <ion-icon item-start></ion-icon>
+                            {{receiver.city}}, {{receiver.state}} {{receiver.zipCode}}
+                        </div>
+                    </ion-item>
+                </ion-list>
+            </ion-card-content>
+        </ion-card>
+    </ion-item>
+  </ion-list>
+  <button ion-button class="create-save-button" color="secondary" (click)="updateLoad()" *ngIf="statusModalReturned">Save</button>
+</ion-content>

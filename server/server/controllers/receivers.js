@@ -10,13 +10,13 @@ module.exports = {
                 state: req.body.state,    
                 zipCode: req.body.zipCode
             })
-            .then(user => res.status(201).send(user))
+            .then(receiver => res.status(201).send(receiver))
             .catch(error => res.status(400).send(error))
     },
     list(req, res) {
         return Receiver
             .findAll()
-            .then(users => res.status(200).send(users))
+            .then(receivers => res.status(200).send(receivers))
             .catch(error => res.status(400).send(error))
     },
     retrive(req, res) {

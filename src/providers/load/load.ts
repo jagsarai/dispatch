@@ -33,6 +33,25 @@ export class LoadProvider {
     });
   }
 
+  getDriverLoads(driverId){
+    console.log('getDriverLoads inside loadProvider fired', driverId);
+    return new Promise((resolve, reject) => {
+      let headers = new Headers();
+      let token = this.authService.token;
+      console.log(token);
+      headers.append('Content-Type', 'application/json');
+      headers.append('Authorization', token);
+
+      this.http.post('http://localhost:8000/api/loads/driver', JSON.stringify({driverId: driverId}), {headers: headers})
+        .map(res => res.json())
+        .subscribe(data => {
+          resolve(data);
+        }, (err) => {
+          reject(err);
+        });
+    });
+  }
+
   createLoad(load){
     
     return new Promise((resolve, reject) => {
