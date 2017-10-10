@@ -23,7 +23,7 @@ export class ShipperProvider {
       console.log(token);
       headers.append('Authorization', token);
 
-      this.http.get('http://localhost:8000/api/shippers', {headers: headers})
+      this.http.get('http://172.20.10.5:8000/api/shippers', {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -40,7 +40,7 @@ export class ShipperProvider {
       console.log(token);
       headers.append('Authorization', token);
 
-      this.http.get('http://localhost:8000/api/shippers/' + id, {headers: headers})
+      this.http.get('http://172.20.10.5:8000/api/shippers/' + id, {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -59,7 +59,7 @@ export class ShipperProvider {
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
-      this.http.post('http://localhost:8000/api/shippers', JSON.stringify(shipper), {headers: headers})
+      this.http.post('http://172.20.10.5:8000/api/shippers', JSON.stringify(shipper), {headers: headers})
         .map(res => res.json())
         .subscribe(res => {
           resolve(res);
@@ -76,7 +76,7 @@ export class ShipperProvider {
       let token = this.authService.token;
       headers.append('Authorization', token);
 
-      this.http.put('http://localhost:8000/api/shippers/' + shipper.id, JSON.stringify(shipper), {headers: headers}).subscribe((res) => {
+      this.http.put('http://172.20.10.5:8000/api/shippers/' + shipper.id, JSON.stringify(shipper), {headers: headers}).subscribe((res) => {
         resolve(res);
       }, (err) => {
         reject(err);
@@ -92,7 +92,7 @@ export class ShipperProvider {
         let token = this.authService.token;
         headers.append('Authorization', token);
 
-        this.http.delete('http://localhost:8000/api/shippers/' + id, {headers: headers}).subscribe((res) => {
+        this.http.delete('http://172.20.10.5:8000/api/shippers/' + id, {headers: headers}).subscribe((res) => {
             resolve(res);
         }, (err) => {
             reject(err);

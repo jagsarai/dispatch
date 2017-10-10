@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, ViewController, AlertController, } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, ViewController, AlertController, ModalController, Modal} from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LoadProvider } from '../../providers/load/load';
 import { Storage } from '@ionic/storage';
@@ -26,7 +26,7 @@ export class DriverHomePage {
   currentLoadSearchTerm:string = '';
   pastLoadSearchTerm:string = '';
 
-  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadService: LoadProvider, public storage: Storage, public viewCtrl: ViewController, public alertCtrl: AlertController, public loadingCtrl:LoadingController) {
+  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadService: LoadProvider, public storage: Storage, public viewCtrl: ViewController, public alertCtrl: AlertController, public loadingCtrl:LoadingController, public modalCtrl:ModalController) {
     this.currentLoadSearchControl = new FormControl();
     this.pastLoadSearchControl = new FormControl();
   }
@@ -102,6 +102,12 @@ export class DriverHomePage {
     this.navCtrl.push('DriverLoadDetailsPage', {
       Load: load
     });
+  }
+
+  uploadDocs(){
+    const uploadModal:Modal = this.modalCtrl.create('UploadModalPage')
+
+    uploadModal.present();
   }
 
 
