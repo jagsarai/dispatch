@@ -39,7 +39,7 @@ export class TruckProvider {
       console.log(token);
       headers.append('Authorization', token);
 
-      this.http.get('http://172.20.10.5:8000/api/trucks', {headers: headers})
+      this.http.get('http://localhost:8000/api/trucks', {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           // this.truckNumbers = this.mapTruckNumbers(data);
@@ -57,7 +57,7 @@ export class TruckProvider {
       console.log(token);
       headers.append('Authorization', token);
 
-      this.http.get('http://172.20.10.5:8000/api/trucks/' + id, {headers: headers})
+      this.http.get('http://localhost:8000/api/trucks/' + id, {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -76,7 +76,7 @@ export class TruckProvider {
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
-      this.http.post('http://172.20.10.5:8000/api/trucks', JSON.stringify(truck), {headers: headers})
+      this.http.post('http://localhost:8000/api/trucks', JSON.stringify(truck), {headers: headers})
         .map(res => res.json())
         .subscribe(res => {
           resolve(res);
@@ -93,7 +93,7 @@ export class TruckProvider {
       let token = this.authService.token;
       headers.append('Authorization', token);
 
-      this.http.put('http://172.20.10.5:8000/api/trucks/' + truck.id, JSON.stringify(truck), {headers: headers}).subscribe((res) => {
+      this.http.put('http://localhost:8000/api/trucks/' + truck.id, JSON.stringify(truck), {headers: headers}).subscribe((res) => {
         resolve(res);
       }, (err) => {
         reject(err);
@@ -109,7 +109,7 @@ export class TruckProvider {
         let token = this.authService.token;
         headers.append('Authorization', token);
 
-        this.http.delete('http://172.20.10.5:8000/api/trucks/' + id, {headers: headers}).subscribe((res) => {
+        this.http.delete('http://localhost:8000/api/trucks/' + id, {headers: headers}).subscribe((res) => {
             resolve(res);
         }, (err) => {
             reject(err);

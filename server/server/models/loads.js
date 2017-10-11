@@ -58,6 +58,14 @@ module.exports = (sequelize, DataTypes) => {
       values:['assigned', 'dispatched', 'at shipper', 'loaded', 'en route', 'at receiver', 'delivered' ], 
       allowNull: false, 
       defaultValue: 'assigned'
+    },
+    filesUploaded:{
+      type: DataTypes.BOOLEAN,
+      defaultValue: false 
+    },
+    filesData:{
+      type: DataTypes.ARRAY(DataTypes.STRING),
+      allowNull: true
     }
   });
 
