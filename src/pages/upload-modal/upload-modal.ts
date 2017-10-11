@@ -4,7 +4,7 @@ import { File } from '@ionic-native/file';
 import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
-import { storage, initializeApp} from 'firebase';
+import { storage} from 'firebase';
 import { FIREBASE_CONFIG } from '../../app/firebase.config';
 
 declare var cordova: any;
@@ -18,17 +18,19 @@ declare var cordova: any;
 export class UploadModalPage {
 
   images:any = [];
+  dataUrlImages: any;
   lastImage: string = null;
   loading: Loading;
   duplicateImage:Boolean = false;
+  load: any;
+  downloadUrl:any = [];
 
-  constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public viewCtrl: ViewController) { 
-    initializeApp(FIREBASE_CONFIG);
+  constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public viewCtrl: ViewController, public navParams: NavParams) { 
   }
   
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad UploadModalPage');
+    this.load = this.navParams.get('load');
   }
 
   public presentActionSheet() {
@@ -88,35 +90,45 @@ export class UploadModalPage {
       });  
    }
 
-  // public async takePicture(sourceType){
-  //   try{
-  //     var options = {
-  //       quality: 100,
-  //       sourceType: sourceType,
-  //       saveToPhotoAlbum: false,
-  //       correctOrientation: true,
-  //       destinationType: this.camera.DestinationType.DATA_URL,
-  //       encodingType: this.camera.EncodingType.JPEG,
-  //       mediaType: this.camera.MediaType.PICTURE
-  //     };
-
-  //     const result = await this.camera.getPicture(options);
-
-  //     const pictures = storage().ref('/loads/');
-  //     const image = `data:image/jpeg;base64,${result}`;
-
-  //     pictures.putString(image, 'data_url')
-  //   }
-  //   catch(e){
-  //     console.error(e);
-  //   }
-  // }
 
   // Create a new name for the image
   private createFileName() {
     var d = new Date(),
-    n = d.getHours() + '' + d.getMinutes() + '' + d.getSeconds(),
+    month = (d) => {
+      if(d.getMonth() < 9){
+        return '0' + (d.getMonth() + 1).toString();
+      }
+      else{
+        return (d.getMonth() + 1).toString();
+      }
+    },
+    hour = (d) => {
+      if(d.getHours() < 10){
+        return '0' + d.getHours().toString();
+      }
+      else{
+        return d.getHours().toString()
+      }
+    },
+    minutes = (d) => {
+      if(d.getMinutes() < 10){
+        return '0' + d.getMinutes().toString();
+      }
+      else{
+        return d.getMinutes().toString();
+      }
+    },
+    seconds = (d) => {
+      if(d.getSeconds() < 10){
+        return '0' + d.getMonth().toString()
+      }
+      else{
+        return d.getSeconds().toString();
+      }
+    }, 
+    n = d.getFullYear().toString() + month(d) + hour(d) + minutes(d) + seconds(d),
     newFileName =  n + ".jpg";
+    console.log("This is the new file name " +  newFileName);
     return newFileName;
   }
  
@@ -151,73 +163,97 @@ export class UploadModalPage {
     }
   }
 
-  // public uploadImage() {
-  //   // Destination URL
-  //   var url = "gs://simpledispatch-a02d7.appspot.com/";
+  // public async uploadImage(){
+  //   try{
+  //     console.log("This is the image name " + this.lastImage);
+  //     this.loading = this.loadingCtrl.create({
+  //       content: 'Uploading...',
+  //      });
+
+  //     this.loading.present();
+
+      
+  //     const image = await this.file.readAsDataURL(cordova.file.dataDirectory, this.lastImage);
+
+  //     console.log("This is the file " + image);
+
+  
+  //     const storageRef = storage().ref('/loads/' + 'load' + this.load.id.toString() + "/" + this.lastImage);
+      
+  //     storageRef.putString(image, 'data_url');
+
+
+  //     this.images = [];
+  //     this.loading.dismiss();
+  //     this.presentToast("Upload successful");
+  //   }
    
-  //   // File for Upload
-  //   var targetPath = this.pathForImage(this.lastImage);
-   
-  //   // File name only
-  //   var filename = this.lastImage;
-   
-  //   var options = {
-  //     fileKey: "file",
-  //     fileName: filename,
-  //     chunkedMode: false,
-  //     mimeType: "multipart/form-data",
-  //     params : {'fileName': filename}
-  //   };
-   
-  //   const fileTransfer: TransferObject = this.transfer.create();
-   
-  //   this.loading = this.loadingCtrl.create({
-  //     content: 'Uploading...',
-  //   });
-  //   this.loading.present();
-   
-  //   // Use the FileTransfer to upload the image
-  //   fileTransfer.upload(targetPath, url, options).then(data => {
-  //     this.loading.dismiss()
-  //     this.presentToast('Image succesfully uploaded.');
-  //   }, err => {
-  //     this.loading.dismiss()
-  //     this.presentToast('Error while uploading file.');
-  //   });
+  //   catch(e){
+  //     this.loading.dismiss();
+  //     this.presentToast("Upload failed, please try again");
+  //     console.error(e);
+  //   }
+        
   // }
 
   public async uploadImage(){
-    try{
-      console.log("This is the image name " + this.lastImage);
+    try {
       this.loading = this.loadingCtrl.create({
         content: 'Uploading...',
-       });
-
+      });
       this.loading.present();
 
-      const image = await this.file.readAsDataURL(cordova.file.dataDirectory, this.lastImage);
-
-      console.log("This is the file " + image);
-  
-      const storageRef = storage().ref('/loads/' + this.lastImage);
-      
-      storageRef.putString(image, 'data_url');
-
-
-      this.images = [];
-      this.loading.dismiss();
-      this.presentToast("Upload successfull");
+      await this.images.map((image) => {
+        this.imagesToDataUrlUpload(image);
+      });
     }
-   
     catch(e){
-      this.loading.dismiss();
-      this.presentToast("Upload failed, please try again");
-      console.error(e);
+      this.loading.dismiss(this.presentToast("Upload error"));
+      console.error("There was an error with the request");
     }
-        
   }
-  
+
+  imagesToDataUrlUpload(imageName){
+    this.file.readAsDataURL(cordova.file.dataDirectory, imageName).then((result)=>{
+      console.log("getting results");
+      const image = result;
+      // const storageRef = storage().ref('/loads/' + this.load.id + '/' + imageName);          
+      const storageRef = storage().ref('/loads/' + imageName);
+      const uploadTask = storageRef.putString(image, 'data_url');
+
+      uploadTask.on('state_changed', (snapshot) => {
+        // Observe state change events such as progress, pause, and resume
+        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+        var progress = (uploadTask.snapshot.bytesTransferred / uploadTask.snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+        switch (uploadTask.snapshot.state) {
+          case firebase.storage.TaskState.PAUSED: // or 'paused'
+            console.log('Upload is paused');
+            break;
+          case firebase.storage.TaskState.RUNNING: // or 'running'
+            console.log('Upload is running');
+            break;
+        }
+      }, (err) => {
+        this.loading.dismiss(this.presentToast("Upload was not completed"));
+        console.error(err);
+      }, () => {
+        this.images = [];
+        this.loading.dismiss(this.presentToast("Upload successful"));
+        // Handle successful uploads on complete
+        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+        this.downloadUrl.push(uploadTask.snapshot.downloadURL);
+
+        console.log(this.downloadUrl);
+      });
+    }, (err) => {
+      this.loading.dismiss(this.presentToast("Upload error"));
+      console.error(err);
+    });
+  }
+
   closeUploadModal(){
     this.viewCtrl.dismiss();
   }
+
 }

@@ -104,8 +104,8 @@ export class DriverHomePage {
     });
   }
 
-  uploadDocs(){
-    const uploadModal:Modal = this.modalCtrl.create('UploadModalPage')
+  uploadDocs(load){
+    const uploadModal:Modal = this.modalCtrl.create('UploadModalPage', {load: load})
 
     uploadModal.present();
   }

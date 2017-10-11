@@ -23,7 +23,7 @@ export class LoadProvider {
       console.log(token);
       headers.append('Authorization', token);
 
-      this.http.get('http://172.20.10.5:8000/api/loads', {headers: headers})
+      this.http.get('http://localhost:8000/api/loads', {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -42,7 +42,7 @@ export class LoadProvider {
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
-      this.http.post('http://172.20.10.5:8000/api/loads/driver', JSON.stringify({driverId: driverId}), {headers: headers})
+      this.http.post('http://localhost:8000/api/loads/driver', JSON.stringify({driverId: driverId}), {headers: headers})
         .map(res => res.json())
         .subscribe(data => {
           resolve(data);
@@ -61,7 +61,7 @@ export class LoadProvider {
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
-      this.http.post('http://172.20.10.5:8000/api/loads', JSON.stringify(load), {headers: headers})
+      this.http.post('http://localhost:8000/api/loads', JSON.stringify(load), {headers: headers})
         .map(res => res.json())
         .subscribe(res => {
           resolve(res);
@@ -83,7 +83,7 @@ export class LoadProvider {
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
-      this.http.put('http://172.20.10.5:8000/api/loads/' + load.id, JSON.stringify(load), {headers: headers}).subscribe((res) => {
+      this.http.put('http://localhost:8000/api/loads/' + load.id, JSON.stringify(load), {headers: headers}).subscribe((res) => {
         resolve(res);
       }, (err) => {
         reject(err);
@@ -99,7 +99,7 @@ export class LoadProvider {
         let token = this.authService.token;
         headers.append('Authorization', token);
 
-        this.http.delete('http://172.20.10.5:8000/api/loads/' + id, {headers: headers}).subscribe((res) => {
+        this.http.delete('http://localhost:8000/api/loads/' + id, {headers: headers}).subscribe((res) => {
             resolve(res);
         }, (err) => {
             reject(err);

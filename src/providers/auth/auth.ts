@@ -35,7 +35,7 @@ export class AuthProvider {
             });
             headers.append('Authorization', this.token);
 
-            this.http.get('http://172.20.10.5:8000/api/protected', {headers: headers})
+            this.http.get('http://localhost:8000/api/protected', {headers: headers})
                 .subscribe(res => {
                     resolve(res);
                 }, (err) => {
@@ -59,7 +59,7 @@ export class AuthProvider {
         
         headers.append('Content-Type', 'application/json');
         //to test on ios device we must link to local database with ip address
-        this.http.post('http://172.20.10.5:8000/api/register', JSON.stringify(details), {headers: headers})
+        this.http.post('http://localhost:8000/api/register', JSON.stringify(details), {headers: headers})
           .subscribe(res => {
             response = res;
             let data = res.json();
@@ -91,7 +91,7 @@ export class AuthProvider {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        this.http.post('http://172.20.10.5:8000/api/login', JSON.stringify(credentials), {headers: headers})
+        this.http.post('http://localhost:8000/api/login', JSON.stringify(credentials), {headers: headers})
           .subscribe(res => {
 
             let data = res.json();
