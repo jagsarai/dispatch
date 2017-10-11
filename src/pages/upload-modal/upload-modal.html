@@ -10,9 +10,9 @@
 </ion-header>
 
 <ion-content padding>
-<div *ngFor="let img of images">
-    <img src="{{pathForImage(img)}}" style="width: 25%" [hidden]="img === null">
-    <h3 [hidden]="img !== null">Load Doc Image</h3>
+<div>
+    <img *ngFor="let img of images" src="{{pathForImage(img)}}" style="width: 50%" [hidden]="img === null">
+    <!-- <h3 [hidden]="img !== null">Load Doc Image</h3> -->
 </div>
 
 </ion-content>
