@@ -55,7 +55,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.ENUM,
-      values:['assigned', 'dispatched', 'at shipper', 'loaded', 'en route', 'at receiver', 'delivered' ], 
+      values:['assigned', 'dispatched', 'at shipper', 'loaded', 'en route', 'at receiver', 'delivered', 'completed' ], 
       allowNull: false, 
       defaultValue: 'assigned'
     },
@@ -65,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     filesData:{
       type: DataTypes.ARRAY(DataTypes.STRING),
-      allowNull: true
+      defaultValue: [],
     }
   });
 

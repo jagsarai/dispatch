@@ -24,6 +24,7 @@ export class StatusModalPage {
   enRoute: any =  false;
   atReceiver: any =  false;
   delivered: any =  false;
+  completed: any = false;
   userIsAdmin: any = false;
 
   constructor(public alertCtnrl: AlertController, public navParams: NavParams, public viewCtrl:ViewController, public storage:Storage) {
@@ -70,6 +71,10 @@ export class StatusModalPage {
     if(status === 'delivered'){
       this.status = 'delivered';
       this.delivered = true;
+    }
+    if(status === 'completed'){
+      this.status = 'completed';
+      this.completed = true;
     }
   }
 

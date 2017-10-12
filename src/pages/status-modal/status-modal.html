@@ -92,6 +92,18 @@
       </ion-item>
     </ng-template>
 
+    <ion-item *ngIf="completed; else notCompleted">
+      <ion-label>Completed</ion-label>
+      <ion-radio checked="true" value="completed"></ion-radio>
+    </ion-item>
+
+    <ng-template #notCompleted>
+      <ion-item>
+        <ion-label>Completed</ion-label>
+        <ion-radio value="completed"></ion-radio>
+      </ion-item>
+    </ng-template>
+
 
   </ion-list>
 

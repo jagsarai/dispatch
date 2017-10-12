@@ -31,6 +31,7 @@ export class UploadModalPage {
 
   ionViewDidLoad() {
     this.load = this.navParams.get('load');
+    console.log("Load information " + this.load);
   }
 
   public presentActionSheet() {
@@ -102,6 +103,14 @@ export class UploadModalPage {
         return (d.getMonth() + 1).toString();
       }
     },
+    day = (d) => {
+      if(d.getDate() < 10){
+        return '0' + d.getDate().toString();
+      }
+      else{
+        return d.getDate().toString();
+      }
+    },
     hour = (d) => {
       if(d.getHours() < 10){
         return '0' + d.getHours().toString();
@@ -126,7 +135,7 @@ export class UploadModalPage {
         return d.getSeconds().toString();
       }
     }, 
-    n = d.getFullYear().toString() + month(d) + hour(d) + minutes(d) + seconds(d),
+    n = d.getFullYear().toString() + month(d) + day(d) +  hour(d) + minutes(d) + seconds(d),
     newFileName =  n + ".jpg";
     console.log("This is the new file name " +  newFileName);
     return newFileName;
@@ -217,8 +226,8 @@ export class UploadModalPage {
     this.file.readAsDataURL(cordova.file.dataDirectory, imageName).then((result)=>{
       console.log("getting results");
       const image = result;
-      // const storageRef = storage().ref('/loads/' + this.load.id + '/' + imageName);          
-      const storageRef = storage().ref('/loads/' + imageName);
+      const storageRef = storage().ref(`/loads/${this.load.id}/${imageName}`);          
+      // const storageRef = storage().ref('/loads/' + imageName);
       const uploadTask = storageRef.putString(image, 'data_url');
 
       uploadTask.on('state_changed', (snapshot) => {
@@ -238,13 +247,11 @@ export class UploadModalPage {
         this.loading.dismiss(this.presentToast("Upload was not completed"));
         console.error(err);
       }, () => {
-        this.images = [];
-        this.loading.dismiss(this.presentToast("Upload successful"));
-        // Handle successful uploads on complete
-        // For instance, get the download URL: https://firebasestorage.googleapis.com/...
         this.downloadUrl.push(uploadTask.snapshot.downloadURL);
-
-        console.log(this.downloadUrl);
+        if(this.images.length === this.downloadUrl.length){
+          this.images = [];
+          this.loading.dismiss(this.presentToast("Upload successful"));
+        }
       });
     }, (err) => {
       this.loading.dismiss(this.presentToast("Upload error"));
@@ -253,7 +260,14 @@ export class UploadModalPage {
   }
 
   closeUploadModal(){
-    this.viewCtrl.dismiss();
+    console.log("Download url inside modal close " + this.downloadUrl)
+    if(this.downloadUrl.length === 0){
+      this.viewCtrl.dismiss();
+    }
+    else{
+      this.viewCtrl.dismiss(this.downloadUrl);
+    }
+   
   }
 
 }

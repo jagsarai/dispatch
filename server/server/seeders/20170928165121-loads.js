@@ -14,7 +14,6 @@ module.exports = {
         "deliveryTime": "00:02",
         "status": "assigned",
         "filesUploaded": false,
-        "filesData": null,
         "createdAt": new Date(),
         "updatedAt": new Date()
       },
@@ -29,7 +28,6 @@ module.exports = {
         "deliveryTime": "00:02",
         "status": "assigned",
         "filesUploaded": false,
-        "filesData": null,
         "createdAt": new Date(),
         "updatedAt": new Date()
       },
@@ -44,7 +42,6 @@ module.exports = {
         "deliveryTime": "00:02",
         "status": "assigned",
         "filesUploaded": false,
-        "filesData": null,
         "createdAt": new Date(),
         "updatedAt": new Date()
       },
@@ -59,7 +56,6 @@ module.exports = {
         "deliveryTime": "00:02",
         "status": "assigned",
         "filesUploaded": false,
-        "filesData": null,
         "createdAt": new Date(),
         "updatedAt": new Date()
       }

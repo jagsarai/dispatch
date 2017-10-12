@@ -15,6 +15,7 @@ import 'rxjs/add/operator/debounceTime';
 export class DriverHomePage {
 
   driverLoads:any;
+  driverId: any;
   currentDriverLoads:any;
   filteredCurrentDriverLoads:any;
   pastDriverLoads:any;
@@ -25,6 +26,8 @@ export class DriverHomePage {
   pastLoadSearching: any = false;
   currentLoadSearchTerm:string = '';
   pastLoadSearchTerm:string = '';
+  loading:any;
+
 
   constructor(public navCtrl: NavController, public authService: AuthProvider, public loadService: LoadProvider, public storage: Storage, public viewCtrl: ViewController, public alertCtrl: AlertController, public loadingCtrl:LoadingController, public modalCtrl:ModalController) {
     this.currentLoadSearchControl = new FormControl();
@@ -35,7 +38,8 @@ export class DriverHomePage {
       this.authService.role !== "driver" && this.authService.role !== null ? this.navCtrl.setRoot("LandingPage") : console.log("User is driver");
 
       this.storage.get("id").then((id) => {
-        this.loadService.getDriverLoads(id).then((loads) => {
+        this.driverId = id;
+        this.loadService.getDriverLoads(this.driverId).then((loads) => {
             console.log("loads inside driver home", loads);
             this.driverLoads = loads;
             this.currentDriverLoads = this.filterCurrentLoads(this.driverLoads);
@@ -87,13 +91,13 @@ export class DriverHomePage {
 
   filterCurrentLoads(loads){
     return loads.filter((load) => {
-      return load.status !== 'delivered';
+      return load.status !== 'completed';
     })
   }
 
   filterPastLoads(loads){
     return loads.filter((load) => {
-      return load.status === 'delivered';
+      return load.status === 'completed';
     })
   }
 
@@ -104,10 +108,56 @@ export class DriverHomePage {
     });
   }
 
-  uploadDocs(load){
+  showUploadDocsModal(load){
     const uploadModal:Modal = this.modalCtrl.create('UploadModalPage', {load: load})
 
     uploadModal.present();
+    uploadModal.onDidDismiss((downloadUrl) => {
+      console.log(downloadUrl);
+      if(downloadUrl){
+
+        downloadUrl.map((urlString) => {
+          return load.filesData.push(urlString);
+        })
+
+        load.filesUploaded = true;
+
+        this.loading = this.loadingCtrl.create({
+          content: 'Loading...',
+        });
+        this.loading.present();
+        
+        this.loadService.updateLoad(load).then((updateLoad) => {
+          this.areDocumentsUploaded(updateLoad);
+          load = updateLoad;
+        }, (err) => {
+          this.loading.dismiss();
+          console.error("There was a problem with the request ");
+        });
+
+        this.loadService.getDriverLoads(this.driverId).then((loads) => {
+          console.log("loads inside driver home", loads);
+          this.driverLoads = loads;
+          this.currentDriverLoads = this.filterCurrentLoads(this.driverLoads);
+          this.pastDriverLoads = this.filterPastLoads(this.driverLoads);
+          console.log("CurrentDriverLoad ", this.currentDriverLoads)          
+          this.loading.dismiss();
+          }, (err) => {
+            this.loading.dismiss();
+            console.log("There was an error with the request");
+        });
+      }
+    })
+  }
+
+  areDocumentsUploaded(load){
+    // if(load.status === 'delivered' && load.filesUploaded === true && load.filesData.length > 0){
+    //   return true;
+    // }
+    // else{
+    //   return false;
+    // }
+    return false;
   }
 
 

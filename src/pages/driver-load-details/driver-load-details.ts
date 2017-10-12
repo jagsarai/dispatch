@@ -38,7 +38,7 @@ export class DriverLoadDetailsPage {
       console.log(err);
     });
 
-    this.isLoadDelivered();
+    this.isLoadCompleted();
   }
 
   showStatusModal(){
@@ -113,8 +113,8 @@ export class DriverLoadDetailsPage {
     this.loading.present();
   }
 
-  isLoadDelivered(){
-    if(this.load.status === 'delivered'){
+  isLoadCompleted(){
+    if(this.load.status === 'completed'){
       this.showStatusEditButton = false;
     }
   }
