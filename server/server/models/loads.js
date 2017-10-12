@@ -64,8 +64,8 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: false 
     },
     filesData:{
-      type: DataTypes.ARRAY(DataTypes.STRING),
-      defaultValue: [],
+      type: DataTypes.ARRAY(DataTypes.JSON),
+      defaultValue: [{}],
     }
   });
 

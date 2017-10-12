@@ -19,11 +19,12 @@ export class UploadModalPage {
 
   images:any = [];
   dataUrlImages: any;
-  lastImage: string = null;
+  // lastImage: string = null;
   loading: Loading;
   duplicateImage:Boolean = false;
   load: any;
   downloadUrl:any = [];
+  image: any;
 
   constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public viewCtrl: ViewController, public navParams: NavParams) { 
   }
@@ -148,7 +149,7 @@ export class UploadModalPage {
       console.log("Copy event fired");
       console.log("Success storing in local folder " +  cordova.file.dataDirectory + " " + newFileName);
       this.images.push(newFileName);
-      this.lastImage  = this.images[this.images.length - 1];
+      // this.lastImage  = this.images[this.images.length - 1];
     }, error => {
       this.presentToast('Error while storing file.');
     });
@@ -223,6 +224,7 @@ export class UploadModalPage {
   }
 
   imagesToDataUrlUpload(imageName){
+  
     this.file.readAsDataURL(cordova.file.dataDirectory, imageName).then((result)=>{
       console.log("getting results");
       const image = result;
@@ -247,7 +249,11 @@ export class UploadModalPage {
         this.loading.dismiss(this.presentToast("Upload was not completed"));
         console.error(err);
       }, () => {
-        this.downloadUrl.push(uploadTask.snapshot.downloadURL);
+        var key = imageName;
+        var downloadUrlObject = {};
+        downloadUrlObject[key] = uploadTask.snapshot.downloadURL;
+
+        this.downloadUrl.push(downloadUrlObject);
         if(this.images.length === this.downloadUrl.length){
           this.images = [];
           this.loading.dismiss(this.presentToast("Upload successful"));

@@ -116,8 +116,8 @@ export class DriverHomePage {
       console.log(downloadUrl);
       if(downloadUrl){
 
-        downloadUrl.map((urlString) => {
-          return load.filesData.push(urlString);
+        downloadUrl.map((urlObject) => {
+          return load.filesData.push(urlObject);
         })
 
         load.filesUploaded = true;

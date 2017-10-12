@@ -83,7 +83,8 @@ module.exports = {
                         message: "Load not Found"
                     })
                 }
-                // load.filesData = []
+                // load.filesData = [];
+                // load.filesData.shift();
                 return load
                     .update({
                         UserId: req.body.userId || load.UserId,
@@ -96,7 +97,8 @@ module.exports = {
                         deliveryTime: req.body.deliveryTime || load.deliveryTime,
                         status: req.body.status || load.status,
                         filesUploaded: req.body.filesUploaded || load.filesUploaded,
-                        filesData: req.body.filesData || load.filesData 
+                        filesData: req.body.filesData || load.filesData
+                        // filesData: load.filesData 
                     })
                     .then(() => res.status(200).send(load))
                     .catch((error) => {
