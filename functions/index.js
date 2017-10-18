@@ -5,7 +5,7 @@ const _ = require('lodash');
 const path = require('path');
 const os = require('os');
 
-exports.generateThumbnail = functions.storage.object('uploads/{imageId}').onChange(event => {
+exports.generateThumbnail = functions.storage.object().onChange(event => {
 
   const object = event.data; // The Storage object.
 
@@ -31,7 +31,6 @@ exports.generateThumbnail = functions.storage.object('uploads/{imageId}').onChan
 
 
   const fileName = filePath.split('/').pop();
-  const loadId = filePath.split('/')[0];
   const bucket = gcs.bucket(fileBucket);
   const tempFilePath = path.join(os.tmpdir(), fileName);
 
@@ -43,7 +42,7 @@ exports.generateThumbnail = functions.storage.object('uploads/{imageId}').onChan
 
       let newFileName = `${fileName}_${size}_thumb.png`
       let newFileTemp = path.join(os.tmpdir(), newFileName);
-      let newFilePath = `loads/${loadId}/${newFileName}`
+      let newFilePath = filePath.replace(fileName, newFileName);
 
       sharp(tempFilePath)
         .resize(size, null)
