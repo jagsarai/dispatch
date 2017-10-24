@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, ViewController, NavController, NavParams, ActionSheetController, ToastController, Platform, LoadingController, Loading } from 'ionic-angular';
 import { File } from '@ionic-native/file';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
+// import { Transfer, TransferObject } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
 import { storage} from 'firebase';
@@ -26,7 +26,7 @@ export class UploadModalPage {
   downloadUrl:any = [];
   image: any;
 
-  constructor(public navCtrl: NavController, private camera: Camera, private transfer: Transfer, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public viewCtrl: ViewController, public navParams: NavParams) { 
+  constructor(public navCtrl: NavController, private camera: Camera, private file: File, private filePath: FilePath, public actionSheetCtrl: ActionSheetController, public toastCtrl: ToastController, public platform: Platform, public loadingCtrl: LoadingController, public viewCtrl: ViewController, public navParams: NavParams) { 
   }
   
 
@@ -63,7 +63,7 @@ export class UploadModalPage {
   public takePicture(sourceType) {
   // Create options for the Camera Dialog
     var options = {
-        quality: 100,
+        quality: 50,
         sourceType: sourceType,
         saveToPhotoAlbum: false,
         correctOrientation: true,

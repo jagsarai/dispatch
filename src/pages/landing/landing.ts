@@ -1,13 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-
-/**
- * Generated class for the LandingPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { CallNumber } from '@ionic-native/call-number';
 
 @IonicPage()
 @Component({
@@ -18,7 +12,7 @@ export class LandingPage {
 
   loading: any;
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public authService: AuthProvider) {
+  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public authService: AuthProvider, private callNumber:CallNumber) {
   }
 
   sendToLogin(){
@@ -53,5 +47,13 @@ export class LandingPage {
 
     this.loading.present();
   }
+
+  // call(){
+  //   this.callNumber.callNumber('1234567890', true).then(() => {
+  //     console.log("dailer fired")
+  //   }).catch(() => {
+  //     console.log("dailer failed")
+  //   })
+  // }
 
 }

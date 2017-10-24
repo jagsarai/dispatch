@@ -8,7 +8,21 @@
 
 <ion-content padding>
     <ion-buttons end>
-        <button ion-button  (click)="showLoadEditPage()">
+        <button ion-button (click)="callDriver()" color="secondary">
+            <ion-icon name="call"></ion-icon>
+        </button>
+        <button ion-button (click)="emailDriver()" color="secondary">
+                <ion-icon name="mail"></ion-icon>
+            </button>
+        <button ion-button (click)="showLoadDownlaodPage()" color="secondary" *ngIf="imagesLoaded; else disabledButton">
+            <ion-icon name="download"></ion-icon>
+        </button>
+        <ng-template #disabledButton>
+            <button ion-button disabled="true" color="secondary">
+                <ion-icon name="download"></ion-icon>
+            </button>
+        </ng-template>
+        <button ion-button  (click)="showLoadEditPage()" color="secondary">
                 <ion-icon name="build"></ion-icon>
         </button>
         <button ion-button (click)="deleteLoad()" color="danger">

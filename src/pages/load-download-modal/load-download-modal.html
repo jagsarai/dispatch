@@ -1,0 +1,25 @@
+<ion-header>
+
+  <ion-navbar color="primary">
+    <ion-title>Download Load Docs</ion-title>
+    <ion-buttons end>
+      <button ion-button (click)="closeDownloadModal()">Close</button>
+    </ion-buttons>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-card *ngFor="let image of images">
+    <ion-card-header>
+      {{image.name}}
+    </ion-card-header>
+    <ion-card-content>
+      <ion-item>
+        <a href="{{image.url}}" download="{{image.name}}.jpg"> 
+          <img src="{{image.thumbnailUrl}}">
+        </a>
+      </ion-item>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

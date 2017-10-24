@@ -19,6 +19,8 @@ import { File } from '@ionic-native/file';
 import { Transfer } from '@ionic-native/transfer';
 import { FilePath } from '@ionic-native/file-path';
 import { Camera } from '@ionic-native/camera';
+import { CallNumber } from '@ionic-native/call-number';
+import { EmailComposer } from '@ionic-native/email-composer';
 
 
 
@@ -51,6 +53,8 @@ import { Camera } from '@ionic-native/camera';
     Transfer,
     Camera,
     FilePath,
+    CallNumber,
+    EmailComposer,
     File
   ]
 })

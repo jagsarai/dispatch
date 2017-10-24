@@ -2,12 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavParams, AlertController, ViewController } from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 
-/**
- * Generated class for the StatusModalPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({

@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, ModalController, Modal } from 'ionic-angular';
 import {  ReceiverProvider } from '../../providers/receiver/receiver';
 import {  ShipperProvider } from '../../providers/shipper/shipper';
 import {  TruckProvider } from '../../providers/truck/truck';
 import { LoadProvider } from '../../providers/load/load';
+import { CallNumber } from '@ionic-native/call-number';
+import { EmailComposer } from '@ionic-native/email-composer';
+
 
 
 @IonicPage()
@@ -17,13 +20,20 @@ export class LoadDetailsPage {
   receivers: Array<any> = [];
   trucks: Array<any> = [];
   loading: any;
+  imagesLoaded:boolean = false;
+  email:any;
   
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService: ShipperProvider, public receiverService: ReceiverProvider, public truckService: TruckProvider, public alertCtrl:AlertController, public loadingCtrl: LoadingController, public loadService: LoadProvider) {
-    this.load = navParams.get("Load");
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService: ShipperProvider, public receiverService: ReceiverProvider, public truckService: TruckProvider, public alertCtrl:AlertController, public loadingCtrl: LoadingController, public loadService: LoadProvider, public modalCtrl:ModalController, private callNumber: CallNumber, private emailComposer: EmailComposer) {
+    this.load = this.navParams.get("Load");
   }
 
   ionViewDidLoad() {
+    
+    this.load.filesData.length > 0 ? this.imagesLoaded = true : this.imagesLoaded = false;
+
+    console.log("images not laoded ",  this.imagesLoaded);
+
     this.shipperService.retriveShipper(this.load.ShipperId).then((shipper) => {
       this.shippers.push(shipper);
       console.log("Shipper is", shipper);
@@ -92,11 +102,72 @@ export class LoadDetailsPage {
     prompt.present();
   }
 
+  showLoadDownlaodPage(){
+    const load = this.load
+    const downloadModal:Modal = this.modalCtrl.create('LoadDownloadModalPage', {load: load})
+
+    downloadModal.present();
+  }
+
   showLoader(){
     this.loading = this.loadingCtrl.create({
       content: 'Loading...'
     });
     this.loading.present();
+  }
+
+  callDriver(){
+    let phone = this.load.driver.phone.toString(); 
+    console.log("This is phone number", phone);
+    this.callNumber.callNumber(phone, true).then(() => {
+      console.log("Dailer launched")
+    }).catch(() => {
+      let prompt = this.alertCtrl.create({
+        title: 'Call denied',
+        message: 'The call feature is not avaliable for this device',
+        buttons: [
+          {
+            text: 'Ok'
+          }
+        ]
+      })
+      prompt.present();
+      console.log("Dailer failed")
+    })
+  }
+
+  emailDriver(){
+    let email = {
+      to: this.load.driver.email,
+      cc: 'admin@gmail.com',
+      subject: `Load# ${this.load.id}`,
+      body: `Hi ${this.load.driver.email}`,
+      isHtml: true
+    };
+    this.emailComposer.requestPermission().then((permission:boolean) => {
+      if(permission){
+        this.emailComposer.open(email)
+      }
+      else{
+        this.emailComposer.requestPermission().then((permission:boolean) => {
+          if(permission){
+            this.emailComposer.open(email);
+          }
+          else{
+            let prompt = this.alertCtrl.create({
+              title: 'Permission Denied',
+              message: 'Permission to send email was denied by user',
+              buttons: [
+                {
+                  text: 'Ok'
+                }
+              ]
+            })
+            prompt.present();
+          }
+        })
+      }
+    })
   }
 
 }
