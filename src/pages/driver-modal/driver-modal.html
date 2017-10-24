@@ -13,23 +13,23 @@
 <ion-content padding>
 
   <ion-list no-lines *ngIf="createToggle; else showAltAddButton">
-    <ion-item>
+    <ion-buttons end>
         <button ion-button  (click)="createToggle = !createToggle">
             <ion-icon color="title" item-start name="build"></ion-icon>
             <!-- <ion-icon item-start></ion-icon>        -->
                 Create New Driver
         </button>
-    </ion-item>
+    </ion-buttons>
   </ion-list>
   <ng-template #showAltAddButton>
       <ion-list no-lines>
-        <ion-item>
+        <ion-buttons end>
             <button ion-button  (click)="createToggle = !createToggle">
                 <ion-icon color="title" item-start name="add-circle"></ion-icon>
                 <!-- <ion-icon item-start></ion-icon>        -->
                 Add Existing Driver
             </button>
-        </ion-item>
+        </ion-buttons>
       </ion-list> 
   </ng-template>
   
@@ -45,13 +45,13 @@
         <ion-card-content>
           <ion-item >
             <div (click)="addExistingDriver(driver)">
-                <ion-icon name="people" item-start></ion-icon>
+                <ion-icon name="people" color="title" item-start></ion-icon>
                   {{driver.name}} 
                   <br>
-                <ion-icon name="mail" item-start></ion-icon>
+                <ion-icon name="mail" color="title" item-start></ion-icon>
                   {{driver.email}}
                   <br>
-                <ion-icon name="call" item-start></ion-icon>
+                <ion-icon name="call" color="title" item-start></ion-icon>
                   {{driver.phone}}
             </div>
           </ion-item>

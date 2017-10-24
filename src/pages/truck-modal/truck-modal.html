@@ -13,23 +13,23 @@
 <ion-content padding>
 
   <ion-list no-lines *ngIf="createToggle; else showAltAddButton">
-    <ion-item>
+    <ion-buttons end>
         <button ion-button  (click)="createToggle = !createToggle">
             <ion-icon color="title" item-start name="build"></ion-icon>
             <!-- <ion-icon item-start></ion-icon>        -->
                 Create New Truck
         </button>
-    </ion-item>
+    </ion-buttons>
   </ion-list>
   <ng-template #showAltAddButton>
       <ion-list no-lines>
-        <ion-item>
+        <ion-buttons end>
             <button ion-button  (click)="createToggle = !createToggle">
                 <ion-icon color="title" item-start name="add-circle"></ion-icon>
                 <!-- <ion-icon item-start></ion-icon>        -->
                 Add Existing Truck
             </button>
-        </ion-item>
+        </ion-buttons>
       </ion-list> 
   </ng-template>
   <div *ngIf="createToggle; else showForm">
