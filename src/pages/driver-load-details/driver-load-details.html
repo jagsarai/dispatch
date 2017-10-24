@@ -15,13 +15,29 @@
 
 <ion-content padding>
   <ion-list no-lines>
-    <ion-item>
+    <ion-item *ngIf="load.loadAccepted; else loadNotAccepted">
         <div>
             <ion-icon name="bookmark" color="title" item-start></ion-icon>
             Status: {{status}}
             <button ion-button class="create-add-button" *ngIf="showStatusEditButton" (click)="showStatusModal()"><ion-icon name="build"></ion-icon></button>
         </div>
     </ion-item>
+    <ng-template #loadNotAccepted>
+        <ion-item>
+            <div>
+            <ion-buttons end>
+                <button ion-button color="secondary" (click)="acceptLoad()">
+                    <ion-icon name="checkmark-circle" color="white" item-start></ion-icon>
+                    Accept
+                </button>
+                <button ion-button color="danger" (click)="rejectLoad()">
+                    <ion-icon name="close-circle" color="white" item-start></ion-icon>
+                    Reject
+                </button> 
+            </ion-buttons>
+            </div>
+        </ion-item>
+    </ng-template>
 
     <ion-item>
         <ion-card>

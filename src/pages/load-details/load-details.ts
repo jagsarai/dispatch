@@ -144,7 +144,7 @@ export class LoadDetailsPage {
       body: `Hi ${this.load.driver.email}`,
       isHtml: true
     };
-    this.emailComposer.requestPermission().then((permission:boolean) => {
+    this.emailComposer.hasPermission().then((permission:boolean) => {
       if(permission){
         this.emailComposer.open(email)
       }

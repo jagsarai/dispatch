@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController, ViewController, AlertController, ModalController, Modal} from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, ViewController, AlertController, ModalController, Modal, NavParams} from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { LoadProvider } from '../../providers/load/load';
 import { Storage } from '@ionic/storage';
@@ -27,9 +27,10 @@ export class DriverHomePage {
   currentLoadSearchTerm:string = '';
   pastLoadSearchTerm:string = '';
   loading:any;
+  loadAccepted:boolean = false;
 
 
-  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadService: LoadProvider, public storage: Storage, public viewCtrl: ViewController, public alertCtrl: AlertController, public loadingCtrl:LoadingController, public modalCtrl:ModalController) {
+  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadService: LoadProvider, public storage: Storage, public viewCtrl: ViewController, public alertCtrl: AlertController, public loadingCtrl:LoadingController, public modalCtrl:ModalController, public navParams:NavParams) {
     this.currentLoadSearchControl = new FormControl();
     this.pastLoadSearchControl = new FormControl();
   }
@@ -44,7 +45,19 @@ export class DriverHomePage {
             this.driverLoads = loads;
             this.currentDriverLoads = this.filterCurrentLoads(this.driverLoads);
             this.pastDriverLoads = this.filterPastLoads(this.driverLoads);
-            console.log("CurrentDriverLoad ", this.currentDriverLoads)            
+            console.log("CurrentDriverLoad ", this.currentDriverLoads)       
+            if(this.checkAssignedLoads(this.driverLoads).length > 0){
+              let prompt = this.alertCtrl.create({
+                title:'New Loads',
+                message: 'You have new assigned loads, please accept or decline',
+                buttons:[
+                  {
+                    text: 'Ok'
+                  }
+                ]
+              });
+              prompt.present();
+            }
             }, (err) => {
               console.log("There was an error with the request");
             });
@@ -101,6 +114,12 @@ export class DriverHomePage {
     })
   }
 
+  checkAssignedLoads(loads){
+    return loads.filter((load) => {
+      return load.status === 'dispatched' && load.loadAccepted === false;
+    })
+  }
+
   showLoadDetail(load){
     console.log(load);
     this.navCtrl.push('DriverLoadDetailsPage', {
@@ -128,7 +147,7 @@ export class DriverHomePage {
         this.loading.present();
         
         this.loadService.updateLoad(load).then((updateLoad) => {
-          this.areDocumentsUploaded(updateLoad);
+          this.isLoadAccepted(updateLoad);
           load = updateLoad;
         }, (err) => {
           this.loading.dismiss();
@@ -150,15 +169,25 @@ export class DriverHomePage {
     })
   }
 
-  areDocumentsUploaded(load){
-    // if(load.status === 'delivered' && load.filesUploaded === true && load.filesData.length > 0){
-    //   return true;
-    // }
-    // else{
-    //   return false;
-    // }
-    return false;
+  isLoadAccepted(load){
+    if(load.status !== 'dispatched' && load.loadAccepted === true){
+      return true;
+    }
+    else{
+      return false;
+    }
   }
+
+  isLoadAssigned(load){
+    if(load.status === 'dispatched' && load.loadAccepted === false){
+        return true;
+      }
+    else{
+      return false
+    }
+  }
+
+  
 
 
 }

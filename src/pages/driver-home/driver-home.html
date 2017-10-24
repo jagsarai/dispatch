@@ -25,6 +25,10 @@
             <ion-icon name="document" item-start color="title"></ion-icon>
             Load # {{load.id}}
             <small *ngIf="!load.filesUploaded"><ion-icon name="alert" color="danger"></ion-icon></small>
+            <small *ngIf="isLoadAssigned(load)">
+                <ion-icon name="bulb" color="title"></ion-icon>
+                New
+            </small>
             <br>
             <small class="driver-view-load-status">
                 <ion-icon name="bookmark" color="danger"></ion-icon>
@@ -37,7 +41,19 @@
                {{load.pickupDate}}
              </small>
         </div>
-        <div class="upload-button" *ngIf="!areDocumentsUploaded(load)">
+        <!-- <div *ngIf="isLoadAssigned(load)">
+          <small>
+            <button ion-button color="secondary">
+                <ion-icon name="checkmark-circle" color="white"></ion-icon>
+            </button>
+          </small>
+          <small>
+            <button ion-button color="danger">
+                <ion-icon name="close-circle" color="white"></ion-icon>
+            </button> 
+          </small>
+        </div> -->
+        <div class="upload-button" *ngIf="isLoadAccepted(load)">
             <small>
                 <button ion-button (click)="showUploadDocsModal(load)">
                   Upload

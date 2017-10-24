@@ -17,10 +17,12 @@ export class DriverLoadDetailsPage {
   statusModalReturned:any = false;
   loading:any;
   showStatusEditButton: any = true;
+  loadAccepted:boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService:ShipperProvider, public receiverService:ReceiverProvider, public modalCtrl:ModalController, public alertCtrl:AlertController, public loadingCtrl:LoadingController, public loadService:LoadProvider) {
     this.load = navParams.get("Load");
     this.status = this.load.status;
+    this.loadAccepted = this.load.loadAccepted;
   }
 
   ionViewDidLoad() {
@@ -64,30 +66,45 @@ export class DriverLoadDetailsPage {
   }
 
   updateLoad(){
-    let status = {
+    let updateWord = 'update'
+    if(this.status === 'assigned' && this.loadAccepted === false){
+      updateWord = 'reject'
+    }
+    if(this.status !== 'assigned' && this.loadAccepted === true){
+      updateWord = 'accept'
+    }
+
+    let updatedStatus = {
       id: this.load.id,
-      status: this.status
+      status: this.status,
+      loadAccepted: this.loadAccepted
     }
 
     let prompt = this.alertCtrl.create({
-      title: 'Update Load# ' + this.load.id,
-      message: 'Are you sure you want to update this load?',
+      title: `${updateWord} load#${this.load.id}`,
+      message: `Are you sure you want to ${updateWord} this load?`,
       buttons:[
         {
           text: 'Cancel',
+          handler:() => {
+            this.status = this.load.status
+            this.loadAccepted = this.load.loadAccepted
+          }
         },
         {
           text: 'Yes',
           handler:() => {
-            console.log("Load inside of handlder", status);
+            console.log("Load inside of handlder", updatedStatus);
             this.isLoadUpdated();
             this.showLoader();
             //Update to the database
-            this.loadService.updateLoad(status).then((result) => {
+            this.loadService.updateLoad(updatedStatus).then((result) => {
         
               this.loading.dismiss();
               //Pass back to home page
-              this.navCtrl.setRoot('DriverHomePage');
+              this.navCtrl.setRoot('DriverHomePage', {
+                loadAccepted: this.loadAccepted
+              });
         
             }, (err) => {
               this.loading.dismiss();
@@ -101,8 +118,10 @@ export class DriverLoadDetailsPage {
   }
 
   isLoadUpdated(){
-    if(this.status === this.load.status){
-        this.navCtrl.setRoot("DriverHomePage");
+    if(this.status === this.load.status && this.loadAccepted === this.load.loadAccepted){
+        this.navCtrl.setRoot("DriverHomePage", {
+          loadAccepted: this.loadAccepted 
+        });
       }
   }
   
@@ -118,5 +137,18 @@ export class DriverLoadDetailsPage {
       this.showStatusEditButton = false;
     }
   }
+
+  rejectLoad(){
+    this.status = 'assigned';
+    this.loadAccepted = false;
+    this.updateLoad();
+  }
+  
+  acceptLoad(){
+    this.loadAccepted = true;
+    this.updateLoad();
+  }
+
+
 }
   
