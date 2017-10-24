@@ -13,7 +13,7 @@ import 'rxjs/add/operator/debounceTime';
 export class TruckModalPage {
 
   trucksData:any;
-  truckMapData:any;
+  // truckMapData:any;
   trucks:any;
   searchTerm:string = '';
   searchControl: FormControl;

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, AlertController, LoadingController, ModalController } from 'ionic-angular';
 import { LoadProvider } from '../../providers/load/load';
 import { AuthProvider } from '../../providers/auth/auth';
-// import { SlicePipe } from '@angular/common';
+import { FormControl } from '@angular/forms';
+import 'rxjs/add/operator/debounceTime';
 
 @IonicPage()
 @Component({
@@ -13,21 +14,42 @@ export class HomePage {
 
   loading: any;
   loads: any;
+  loadsData:any;
+  searchControl: FormControl;
+  searchTerm:string = '';
+  searching: any = false;
+  
 
   constructor(public navCtrl: NavController, public loadService: LoadProvider, public modalCtrl: ModalController, 
     public alertCtrl: AlertController, public authService: AuthProvider, public loadingCtrl: LoadingController) {
+      this.searchControl = new FormControl();
   }
 
 
-  ionViewWillLoad(){
+  ionViewDidLoad(){
     
     this.authService.role !== "admin" && this.authService.role !== null ? this.navCtrl.setRoot("LandingPage") : console.log ("User is admin and authorized");
 
     this.loadService.getLoads().then((data) => {
-          this.loads = data;
+      this.loadsData = data;
+      this.filterLoadNumbers();
+      this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
+        this.searching = false;
+        this.filterLoadNumbers();
+      })
     }, (err) => {
         console.log("This user is not allowed");
     });
+  }
+
+  filterLoadNumbers(){
+    this.loads = this.loadsData.filter((load) => {
+      return load.id.toString().indexOf(this.searchTerm) > -1;
+    })
+  }
+
+  onSearchInput(){
+    this.searching = true;
   }
     
   deleteLoad(load){

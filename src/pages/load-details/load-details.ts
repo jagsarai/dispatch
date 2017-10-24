@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, LoadingController, ModalController, Modal } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, LoadingController, ModalController, Modal, Platform } from 'ionic-angular';
 import {  ReceiverProvider } from '../../providers/receiver/receiver';
 import {  ShipperProvider } from '../../providers/shipper/shipper';
 import {  TruckProvider } from '../../providers/truck/truck';
@@ -22,13 +22,18 @@ export class LoadDetailsPage {
   loading: any;
   imagesLoaded:boolean = false;
   email:any;
+  browser:boolean = false;
   
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService: ShipperProvider, public receiverService: ReceiverProvider, public truckService: TruckProvider, public alertCtrl:AlertController, public loadingCtrl: LoadingController, public loadService: LoadProvider, public modalCtrl:ModalController, private callNumber: CallNumber, private emailComposer: EmailComposer) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService: ShipperProvider, public receiverService: ReceiverProvider, public truckService: TruckProvider, public alertCtrl:AlertController, public loadingCtrl: LoadingController, public loadService: LoadProvider, public modalCtrl:ModalController, private callNumber: CallNumber, private emailComposer: EmailComposer, public platform: Platform) {
     this.load = this.navParams.get("Load");
   }
 
   ionViewDidLoad() {
+    console.log("Platform is ", this.platform)
+    if(this.platform.is('core')){
+      this.browser = true;
+    }
     
     this.load.filesData.length > 0 ? this.imagesLoaded = true : this.imagesLoaded = false;
 

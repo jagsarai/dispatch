@@ -14,16 +14,20 @@
 </ion-header>
     
 <ion-content padding>
-  <ion-buttons end>
+  <!-- <ion-buttons end>
       <button ion-button color="primary">Active</button>
       <button ion-button color="primary">Completed</button>
   </ion-buttons>
-    
+     -->
   <ion-card>
     <ion-card-content>
       <ion-card-header>
       </ion-card-header>
-      <ion-searchbar></ion-searchbar>
+
+      <ion-searchbar [(ngModel)]="searchTerm" [formControl]="searchControl" (ionInput)="onSearchInput()" placeholder="Search by Load #"></ion-searchbar>
+      <div *ngIf="searching" class="spinner-container">
+        <ion-spinner name="bubbles"></ion-spinner>
+      </div>
       <ion-item (click)="showLoadDetail(load)" *ngFor='let load of loads | slice:0:10' no-lines>
         <div>
           <ion-icon name="document" color="title" item-start></ion-icon>
