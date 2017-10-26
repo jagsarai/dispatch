@@ -9,7 +9,7 @@ let salt = bcypt.genSalt(saltNum,(err, salt) => {
     return salt;
 })
 
- 
+//create a json token to attach with user
 let generateToken = (user) => {
     return jwt.sign(user, authConfig.secret, {
         expiresIn: 10080
@@ -39,6 +39,7 @@ let setUserInfo = (request) => {
 //     next(req.user);
 // }
 
+//set log in cerdentials after passing passport login test
 exports.login = (user) => {
     var userInfo = setUserInfo(user);
     return {
@@ -46,7 +47,8 @@ exports.login = (user) => {
         user: userInfo
     }
 }
- 
+
+//handle incoming request to register user.
 exports.register = (req, res, next) => {
     console.log("inside register function");
     console.log(req.body.email);
@@ -116,7 +118,8 @@ exports.register = (req, res, next) => {
     })
 
 }
- 
+
+//authorize the users role
 exports.roleAuthorization = (roles) => {
     console.log("Inside the role auth function");
     return function(req, res, next){
