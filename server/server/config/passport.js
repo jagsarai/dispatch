@@ -15,10 +15,8 @@ var localLogin = new LocalStrategy(localOptions, (email, password, done) => {
             email: email
         }
     }).then((user) => { 
-        console.log("this is the user:", user);
         if(!user){
-            console.log("there is no user ");
-            return done(null, false, {error: 'Login failed. Please try again.'})
+            return done(null, false, {error: 'Email does not match. Please try again.'})
         }
         User.comparePassword (password, user, (err, isMatch) => {
             if(err){
@@ -28,14 +26,14 @@ var localLogin = new LocalStrategy(localOptions, (email, password, done) => {
 
             if(!isMatch){
                 console.log("This failed");
-                return done(null, false, {error: 'Login failed. Please try again.'});
+                return done(null, false, {error: 'Password does not match. Please try again.'});
             }
-            console.log("User is in")
+            console.log("User is in: ", user)
             return done(null, user);
         });
     })
     .catch((err) => {
-        return done(err);
+        return done(err)
     })
 });
 

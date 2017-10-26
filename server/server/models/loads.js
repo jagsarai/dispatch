@@ -65,10 +65,14 @@ module.exports = (sequelize, DataTypes) => {
     },
     filesData:{
       type: DataTypes.ARRAY(DataTypes.JSON),
-      defaultValue: [{}],
+      defaultValue: [],
     },
     loadAccepted:{
       type: DataTypes.BOOLEAN,
+      defaultValue: false
+    },
+    loadRejected:{
+      type:DataTypes.BOOLEAN,
       defaultValue: false
     }
   });

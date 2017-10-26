@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, AlertController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 import { FormControl } from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
@@ -24,7 +24,7 @@ export class RegisterPage {
   passwordMissMatch: any = false;
   userConfPasswordMissMatch: any = false;
 
-  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl:AlertController) {
     this.passwordConfrimControl = new FormControl();
     this.passwordControl = new FormControl();
   }
@@ -51,12 +51,21 @@ export class RegisterPage {
 
     this.authService.createAccount(details).then((result) => {
       this.loading.dismiss();
-      console.log(result);
       
         this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot("DriverHomePage");     
-    }, (err) => {
+    }).catch((err) => {
         this.loading.dismiss();
-        alert("There was an error with the form request, Please try again");
+        console.log(err);
+        let prompt = this.alertCtrl.create({
+          title: 'Registration Failed!',
+          message: err,
+          buttons:[
+              {
+              text: 'Ok'
+              }
+          ]
+        })
+        prompt.present();
     });
 
   }

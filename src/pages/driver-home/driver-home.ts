@@ -186,8 +186,4 @@ export class DriverHomePage {
       return false
     }
   }
-
-  
-
-
 }

@@ -32,9 +32,12 @@
         <div>
           <ion-icon name="document" color="title" item-start></ion-icon>
           Load # {{load.id}}
+          <small *ngIf="load.loadRejected">
+            <ion-icon name="alert" color="danger"></ion-icon>
+            Load Rejected!!
+          </small>
           <br>
           <small>
-            <!-- <ion-icon item-start></ion-icon> -->
             <ion-icon name="person" color="primary"></ion-icon>
             {{load.driver.name}} 
             <ion-icon item-start></ion-icon>

@@ -45,7 +45,7 @@ export class HomePage {
   filterLoadNumbers(){
     this.loads = this.loadsData.filter((load) => {
       return load.id.toString().indexOf(this.searchTerm) > -1;
-    })
+    }).reverse()
   }
 
   onSearchInput(){
@@ -92,16 +92,17 @@ export class HomePage {
   }
 
   showLoadDetail(load){
+    console.log("this is the load: ", load);
     this.navCtrl.push('LoadDetailsPage', {
       Load: load
     });
   }
 
-  showLoadEdit(load){
-    this.navCtrl.push('LoadEditPage', {
-      Load: load
-    });
-  }
+  // showLoadEdit(load){
+  //   this.navCtrl.push('LoadEditPage', {
+  //     Load: load
+  //   });
+  // }
 
   showLoader(){
     this.loading = this.loadingCtrl.create({

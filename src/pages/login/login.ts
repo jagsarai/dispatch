@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, LoadingController, AlertController} from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
 
 
@@ -22,7 +22,7 @@ export class LoginPage {
   userPassword: string;
   loading: any;
 
-  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController) {
+  constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl:AlertController) {
   }
 
   ionViewDidLoad() {
@@ -45,16 +45,36 @@ export class LoginPage {
           this.loading.dismiss();
           console.log(result);
           
-              this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage');  
-      }, (err) => {
-          this.loading.dismiss();
-          console.log(err);
+          this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage');  
+      }).catch((err) => {
+            this.loading.dismiss();
+            console.log("loginError: ", err)
+            if(err.status === 401){
+                let prompt = this.alertCtrl.create({
+                    title: 'Login Failed',
+                    message: err.json().error,
+                    buttons:[
+                        {
+                        text: 'Ok'
+                        }
+                    ]
+                })
+                prompt.present();
+            }
+            else{
+                let prompt = this.alertCtrl.create({
+                    title: 'Something Went Wrong',
+                    message: 'Something went wrong while logging you in, please try again later.',
+                    buttons:[
+                        {
+                        text: 'Ok'
+                        }
+                    ]
+                })
+                prompt.present();
+            }
       });
 
-    }
-    
-    launchSignup(){
-        this.navCtrl.push("RegisterPage");
     }
     
     showLoader(){

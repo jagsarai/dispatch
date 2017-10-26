@@ -74,6 +74,7 @@ module.exports = {
         console.log("receiverId: ", req.body.receiverId);
         console.log("truckId: ", req.body.truckId);
         console.log("filesData ", req.body.filesData);
+        console.log("loadAccepted", req.body.loadAccepted);
         return Load
             .findById(req.params.loadId, {  
             })
@@ -98,7 +99,8 @@ module.exports = {
                         status: req.body.status || load.status,
                         filesUploaded: req.body.filesUploaded || load.filesUploaded,
                         filesData: req.body.filesData || load.filesData,
-                        loadAccepted: req.body.loadAccepted || load.loadAccepted
+                        loadAccepted: req.body.loadAccepted || load.loadAccepted,
+                        loadRejected: req.body.loadRejected || load.loadRejected
                         // filesData: load.filesData 
                     })
                     .then(() => res.status(200).send(load))

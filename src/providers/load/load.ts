@@ -75,6 +75,7 @@ export class LoadProvider {
 
     console.log("updateLoad inside loadProvider");
     console.log("load inside updateLoad inside loadProvider", load);
+    console.log("loadAccepted inside loadProvider: ", load.loadAccepted);
 
     return new Promise((resolve, reject) => {
 

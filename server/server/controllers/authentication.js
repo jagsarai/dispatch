@@ -4,19 +4,19 @@ var authConfig = require('../config/auth');
 var bcypt = require('bcrypt-node');
 var saltNum = require('../config/salt').SALT_WORK_FACTOR;
 
-var salt = bcypt.genSalt(saltNum,(err, salt) => {
+let salt = bcypt.genSalt(saltNum,(err, salt) => {
     console.log("salt is " + salt);
     return salt;
 })
 
  
-function generateToken(user){
+let generateToken = (user) => {
     return jwt.sign(user, authConfig.secret, {
         expiresIn: 10080
     });
 }
  
-function setUserInfo(request){
+let setUserInfo = (request) => {
     console.log("inside setUserInfo");
     console.log("request id: " + request.id);
     console.log("request email: " + request.email);
@@ -29,24 +29,32 @@ function setUserInfo(request){
     };
 }
  
-exports.login = function(req, res, next){
-    console.log("Request info: " + req.user);
-    var userInfo = setUserInfo(req.user);
-    res.status(200).json({
+// exports.login = function(req, res, next){
+//     console.log("Request info: " + req);
+//     var userInfo = setUserInfo(req.user);
+//     res.status(200).json({
+//         token: 'JWT ' + generateToken(userInfo),
+//         user: userInfo
+//     });
+//     next(req.user);
+// }
+
+exports.login = (user) => {
+    var userInfo = setUserInfo(user);
+    return {
         token: 'JWT ' + generateToken(userInfo),
         user: userInfo
-    });
-    next(req.user);
+    }
 }
  
-exports.register = function(req, res, next){
+exports.register = (req, res, next) => {
     console.log("inside register function");
     console.log(req.body.email);
     console.log(req.body.password);
     console.log(req.body.role);
     console.log(req.body.name);
     console.log(req.body.phone);
-    var user = {
+    let user = {
         email: req.body.email,
         password: bcypt.hashSync(req.body.password, salt),
         role: req.body.role,
@@ -71,30 +79,45 @@ exports.register = function(req, res, next){
 
         if(existingUser){
             return res.status(400).send({
-                error: "That Email address is already is use"
+                error: "That email address is already in use."
             })
         }
 
-        User.create(user).then((user) => {
-            var userInfo = setUserInfo(user);
-            user.password = "hidden"
-            res.status(201).json({
-                token: 'JWT' + generateToken(userInfo),
-                user: user,
+        User.findOne({
+            where: {
+                phone: user.phone
+            }
+        }).then((existingUser) => {
 
+            if(existingUser){
+                return res.status(400).send({
+                    error: "That phone number is already in use."
+                })
+            }
+
+            User.create(user).then((user) => {
+                var userInfo = setUserInfo(user);
+                user.password = "hidden"
+                res.status(201).json({
+                    token: 'JWT' + generateToken(userInfo),
+                    user: user,
+    
+                })
             })
-        })
-        .catch(error => {
-            res.status(400).send(error)
+            .catch(error => {
+                res.status(400).send(error)
+                next(error);
+            })
+        }).catch(error => {res.status(400).send(error)
             next(error);
         })
-    })
-    .catch(error => {res.status(400).send(error)
+    }).catch(error => {res.status(400).send(error)
         next(error);
     })
+
 }
  
-exports.roleAuthorization = function(roles){
+exports.roleAuthorization = (roles) => {
     console.log("Inside the role auth function");
     return function(req, res, next){
         console.log("user inside the role auth: " + req.user.role)

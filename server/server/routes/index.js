@@ -8,7 +8,7 @@ const passportService = require('../config/passport');
 const passport = require('passport');
 
 var requireAuth = passport.authenticate('jwt', {session: false});
-var requireLogin = passport.authenticate('local', {session: false});
+// var requireLogin = passport.authenticate('local',  {session: false});
 
 module.exports = (app) => {
     app.get('/api', (req, res) => res.status(200).send({
@@ -25,7 +25,20 @@ module.exports = (app) => {
 
 
     app.post('/api/register', AuthenticationController.register);
-    app.post('/api/login', requireLogin, AuthenticationController.login);
+    app.post('/api/login', function(req, res, next) {
+        passport.authenticate('local', {session: false}, function(err, user, info) {
+          if (err) { 
+              return res.status(505).send(err);
+          }
+          if (!user) { 
+              return res.status(401).send(info);
+          }
+          var success = AuthenticationController.login(user);
+          res.status(200).json(success);
+          next(user);
+        })(req, res, next);
+      });
+    // app.post('/api/login', requireLogin, AuthenticationController.login);
 
     app.get('/api/users', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.list);
     app.get('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.retrive);

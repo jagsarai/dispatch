@@ -83,7 +83,4 @@ export class StatusModalPage {
     this.viewCtrl.dismiss(this.status);
   }
 
-
-
-
 }

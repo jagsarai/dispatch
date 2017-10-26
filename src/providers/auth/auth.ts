@@ -78,8 +78,8 @@ export class AuthProvider {
             resolve(data);
 
           },(err) => {
-            alert(response.json())
-            reject(err);
+            console.log("createAccountError ", err.json().error)
+            reject(err.json().error)
           });
     });
   }
@@ -112,6 +112,7 @@ export class AuthProvider {
 
             resolve(res.json());
           }, (err) => {
+            console.log("loginError: ", err)
             reject(err);
           });
     });

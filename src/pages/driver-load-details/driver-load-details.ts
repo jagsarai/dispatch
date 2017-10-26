@@ -18,11 +18,13 @@ export class DriverLoadDetailsPage {
   loading:any;
   showStatusEditButton: any = true;
   loadAccepted:boolean = false;
+  loadRejected:boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService:ShipperProvider, public receiverService:ReceiverProvider, public modalCtrl:ModalController, public alertCtrl:AlertController, public loadingCtrl:LoadingController, public loadService:LoadProvider) {
     this.load = navParams.get("Load");
     this.status = this.load.status;
     this.loadAccepted = this.load.loadAccepted;
+    this.loadRejected = this.load.loadRejected;
   }
 
   ionViewDidLoad() {
@@ -77,8 +79,11 @@ export class DriverLoadDetailsPage {
     let updatedStatus = {
       id: this.load.id,
       status: this.status,
-      loadAccepted: this.loadAccepted
+      loadAccepted: this.loadAccepted,
+      loadRejected: this.loadRejected
     }
+
+    console.log("this is the update status", updatedStatus);
 
     let prompt = this.alertCtrl.create({
       title: `${updateWord} load#${this.load.id}`,
@@ -141,11 +146,13 @@ export class DriverLoadDetailsPage {
   rejectLoad(){
     this.status = 'assigned';
     this.loadAccepted = false;
+    this.loadRejected = true;
     this.updateLoad();
   }
   
   acceptLoad(){
     this.loadAccepted = true;
+    this.loadRejected = false;
     this.updateLoad();
   }
 

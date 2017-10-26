@@ -23,7 +23,7 @@ export class LoadDetailsPage {
   imagesLoaded:boolean = false;
   email:any;
   browser:boolean = false;
-  
+  loadAccepted:boolean
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public shipperService: ShipperProvider, public receiverService: ReceiverProvider, public truckService: TruckProvider, public alertCtrl:AlertController, public loadingCtrl: LoadingController, public loadService: LoadProvider, public modalCtrl:ModalController, private callNumber: CallNumber, private emailComposer: EmailComposer, public platform: Platform) {
     this.load = this.navParams.get("Load");
@@ -71,7 +71,9 @@ export class LoadDetailsPage {
         pickupTime: this.load.pickupTime,
         deliveryDate: this.load.deliveryDate,
         deliveryTime: this.load.deliveryTime,
-        status: this.load.status
+        status: this.load.status,
+        loadAccepted: this.load.loadAccepted,
+        loadRejected: this.load.loadRejected
       }
     });
   }
@@ -122,7 +124,7 @@ export class LoadDetailsPage {
   }
 
   callDriver(){
-    let phone = this.load.driver.phone.toString(); 
+    let phone = '1'+ this.load.driver.phone.toString(); 
     console.log("This is phone number", phone);
     this.callNumber.callNumber(phone, true).then(() => {
       console.log("Dailer launched")

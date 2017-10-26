@@ -21,7 +21,9 @@ export class LoadEditPage {
   delivery = {
     date: '',
     time: ''
-  }
+  };
+  loadAccepted:any;
+  loadRejected:any;
   truckModalReturned: any = false;
   driverModalReturned: any = false;
   shipperModalReturned: any = false;
@@ -47,8 +49,9 @@ export class LoadEditPage {
     this.delivery.date = this.load.deliveryDate;
     this.delivery.time = this.load.deliveryTime;
     this.status = this.load.status;
+    this.loadAccepted = this.load.loadAccepted;
+    this.loadRejected = this.load.loadRejected;
     this.checkValidForm();
-    console.log(this.status);
   }
 
   showStatusModal(){
@@ -87,6 +90,7 @@ export class LoadEditPage {
       if(driver){
         this.driver = driver;
         this.driverModalReturned = true;
+        this.loadRejected = false;
       }
       this.checkValidForm();
     });
@@ -180,24 +184,22 @@ export class LoadEditPage {
   }
 
   updateLoad(){
-
-    // console.log("Driver inside updateLoad function", this.driver);
-    // console.log("Shipper inside updateLoad function", this.shipper);
-    // console.log("Receiver inside updateLoad function", this.receiver);    
-    // console.log("Truck inside updateLoad function", this.truck);
-
+    if(this.status === 'assigned' && this.load.loadAccepted === true){
+      this.loadAccepted = false;
+    }
     let load = {
       id: parseInt(this.load.id),
       userId: parseInt(this.driver.id),
       shipperId: parseInt(this.shipper.id),
       receiverId: parseInt(this.receiver.id),
       truckId: parseInt(this.truck.id),
-      // we need to find a method to appropriately create and update the date
       pickupDate: this.pickup.date, 
       pickupTime: this.pickup.time,
       deliveryDate: this.delivery.date,
       deliveryTime: this.delivery.time,
-      status: this.status
+      status: this.status,
+      loadAccepted: this.loadAccepted.toString(),
+      loadRejected: this.loadRejected.toString()
     }
 
     console.log("loadId inside updateLoad function", load.id);
@@ -210,6 +212,7 @@ export class LoadEditPage {
     console.log("deliveryDate inside updateLoad function", load.deliveryDate);
     console.log("deliveryTime inside updateLoad function", load.deliveryTime);
     console.log("status inside updateLoad function", load.status);
+    console.log("load accepted: ", load.loadAccepted);
 
     let prompt = this.alertCtrl.create({
       title: 'Update Load# ' + this.load.id,
@@ -249,27 +252,4 @@ export class LoadEditPage {
     this.loading.present();
   }
 
-  // checkLoadStatus(status){
-  //   if(status === 'assgined'){
-  //     this.loadStatus.assigned = true;
-  //   }
-  //   if(status === 'dispatched'){
-  //     this.loadStatus.dispatched = true;
-  //   }
-  //   if(status === 'at shipper'){
-  //     this.loadStatus.atShipper = true;
-  //   }
-  //   if(status === 'loaded'){
-  //     this.loadStatus.loaded = true;
-  //   }
-  //   if(status === 'en route'){
-  //     this.loadStatus.enRoute = true;
-  //   }
-  //   if(status === 'at receiver'){
-  //     this.loadStatus.atReceiver = true;
-  //   }
-  //   if(status === 'delivered'){
-  //     this.loadStatus.delivered = true;
-  //   }
-  // }
 }

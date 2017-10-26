@@ -35,7 +35,7 @@ export class UploadModalPage {
     console.log("Load information " + this.load);
   }
 
-  public presentActionSheet() {
+  presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Select Image Source',
       buttons: [
@@ -60,7 +60,7 @@ export class UploadModalPage {
     actionSheet.present();
   }
 
-  public takePicture(sourceType) {
+  takePicture(sourceType) {
   // Create options for the Camera Dialog
     var options = {
         quality: 50,
@@ -94,7 +94,7 @@ export class UploadModalPage {
 
 
   // Create a new name for the image
-  private createFileName() {
+  createFileName() {
     var d = new Date(),
     month = (d) => {
       if(d.getMonth() < 9){
@@ -143,7 +143,7 @@ export class UploadModalPage {
   }
  
   // Copy the image to a local folder
-  private copyFileToLocalDir(namePath, currentName, newFileName) {
+  copyFileToLocalDir(namePath, currentName, newFileName) {
     
     this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
       console.log("Copy event fired");
@@ -155,7 +155,7 @@ export class UploadModalPage {
     });
   }
  
-  private presentToast(text) {
+  presentToast(text) {
     let toast = this.toastCtrl.create({
       message: text,
       duration: 3000,
@@ -165,7 +165,7 @@ export class UploadModalPage {
   }
  
 // Always get the accurate path to your apps folder
-  public pathForImage(image) {
+  pathForImage(image) {
     if (image === null) {
       return '';
     } else {
@@ -206,30 +206,40 @@ export class UploadModalPage {
         
   // }
 
-  public async uploadImage(){
-    try {
-      this.loading = this.loadingCtrl.create({
-        content: 'Uploading...',
-      });
-      this.loading.present();
+  // async uploadImage(){
+  //   try {
+  //     this.loading = this.loadingCtrl.create({
+  //       content: 'Uploading...',
+  //     });
+  //     this.loading.present();
 
-      await this.images.map((image) => {
-        this.imagesToDataUrlUpload(image);
-      });
-    }
-    catch(e){
-      this.loading.dismiss(this.presentToast("Upload error"));
-      console.error("There was an error with the request");
-    }
+  //     await this.images.map((image) => {
+  //       this.imagesToDataUrlUpload(image);
+  //     });
+  //   }
+  //   catch(e){
+  //     this.loading.dismiss(this.presentToast("Upload error: e"));
+  //     console.error("There was an error with the request");
+  //   }
+  // }
+
+  uploadImage(){
+    this.loading = this.loadingCtrl.create({
+      content: 'Uploading...'
+    });
+    this.loading.present();
+
+    this.images.map((image) => {
+      this.imagesToDataUrlUpload(image);
+    });
   }
 
   imagesToDataUrlUpload(imageName){
   
-    this.file.readAsDataURL(cordova.file.dataDirectory, imageName).then((result)=>{
+    this.file.readAsDataURL(cordova.file.dataDirectory, imageName).then((result) => {
       console.log("getting results");
       const image = result;
-      const storageRef = storage().ref(`/loads/${this.load.id}/${imageName}`);          
-      // const storageRef = storage().ref('/loads/' + imageName);
+      const storageRef = storage().ref(`/loads/${this.load.id}/${imageName}`);
       const uploadTask = storageRef.putString(image, 'data_url');
 
       uploadTask.on('state_changed', (snapshot) => {
@@ -262,6 +272,9 @@ export class UploadModalPage {
     }, (err) => {
       this.loading.dismiss(this.presentToast("Upload error"));
       console.error(err);
+    }).catch((err) => {
+      this.loading.dismiss(this.presentToast("There was an error with the request"))
+      console.log("Something went wrong ", err);
     });
   }
 
