@@ -16,7 +16,6 @@
     <ion-item>
         <button ion-button  (click)="createToggle = !createToggle">
             <ion-icon color="title" item-start name="build"></ion-icon>
-            <!-- <ion-icon item-start></ion-icon>        -->
                 Create New Receiver
         </button>
     </ion-item>
@@ -26,7 +25,6 @@
         <ion-item>
             <button ion-button  (click)="createToggle = !createToggle">
                 <ion-icon color="title" item-start name="add-circle"></ion-icon>
-                <!-- <ion-icon item-start></ion-icon>        -->
                 Add Existing Receiver
             </button>
         </ion-item>
@@ -74,11 +72,11 @@
 
               <ion-item>
                   <ion-label floating>Name</ion-label>
-                  <ion-input type="text" [formControl]="receiverNameConfirmControl" [(ngModel)]="receiverName" required minLength="5"></ion-input>
+                  <ion-input type="text" [formControl]="receiverNameConfirmControl" [(ngModel)]="receiverName" required  pattern="[0-9?A-z]+\\s?[0-9?A-z]+\\s?[0-9?A-z]+\\s?\\w+"></ion-input>
               </ion-item>
     
               <div padding *ngIf="receiverNameConfirmControl.invalid && (receiverNameConfirmControl.dirty || receiverNameConfirmControl.touched)">
-                  <span class="global__input-error">Name is required (minimum of 5 characters).</span>
+                  <span class="global__input-error">Name is required (minimum of 5 characters) and cannot have special characters.</span>
               </div>
 
               <div padding *ngIf="receiverNameMatch">
@@ -88,11 +86,11 @@
 
               <ion-item>
                   <ion-label floating>Address</ion-label>
-                  <ion-input type="text" [formControl]="receiverAddressConfirmControl" [(ngModel)]="receiverAddress" required pattern=""></ion-input>
+                  <ion-input type="text" [formControl]="receiverAddressConfirmControl" [(ngModel)]="receiverAddress" required pattern="[0-9]+\\s[A-z]+\\s[A-z]+\\s?[A-z]+\\s?[A-z]+"></ion-input>
               </ion-item>
   
               <div padding *ngIf="receiverAddressConfirmControl.invalid && (receiverAddressConfirmControl.dirty || receiverAddressConfirmControl.touched)">
-                  <span class="global__input-error">Please provide a proper fromat with building number first and street name second</span>
+                  <span class="global__input-error">Please provide a proper fromat with building number first and street name second. Do not use any special characters.</span>
               </div>
 
               <div padding *ngIf="receiverAddressMatch">
@@ -101,20 +99,16 @@
 
               <ion-item>
                   <ion-label floating>City</ion-label>
-                  <ion-input type="text" name="city" [(ngModel)]="receiverCity" required #city="ngModel"></ion-input>
+                  <ion-input type="text" name="city" [(ngModel)]="receiverCity" required #city="ngModel" pattern="[0-9A-z]+\\s?[0-9A-z]+?"></ion-input>
               </ion-item>
   
               <div padding *ngIf="city.invalid && (city.dirty || city.touched)">
-                  <span class="global__input-error">City is required</span>
+                  <span class="global__input-error">City is required and cannot have any special characters.</span>
               </div>
-  
-              <!-- <div padding *ngIf="driverEmailMatch">
-                  <span class="global__input-error">This email is already taken</span>
-              </div> -->
 
             <ion-item>
                 <ion-label floating>State</ion-label>
-                <ion-input type="text" name="state" [(ngModel)]="receiverState" required #state="ngModel" maxLength ="2"pattern="[A-Z][A-Z]"></ion-input>
+                <ion-input type="text" name="state" [(ngModel)]="receiverState" required #state="ngModel" maxLength="2" pattern="[A-Z]{2}"></ion-input>
             </ion-item>
 
             <div padding *ngIf="state.invalid && (state.dirty || state.touched)">
@@ -123,7 +117,7 @@
 
             <ion-item>
                 <ion-label floating>Zip</ion-label>
-                <ion-input type="text" name="zip" [(ngModel)]="receiverZipCode" required #zip="ngModel" minLength="5" maxLength="5" pattern="[0-9][0-9][0-9][0-9][0-9]"></ion-input>
+                <ion-input type="text" name="zip" [(ngModel)]="receiverZipCode" required #zip="ngModel" minLength="5" maxLength="5" pattern="\\d{5}"></ion-input>
             </ion-item>
 
             <div padding *ngIf="zip.invalid && (zip.dirty || zip.touched)">

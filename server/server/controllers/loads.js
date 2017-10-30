@@ -63,18 +63,11 @@ module.exports = {
                         message: 'Load Not Found'
                     });
                 }
-                // load.driver.password = "hidden";
                 return res.status(200).send(load);
             })
             .catch(error => res.status(400).send(error));
     },
     update(req, res){
-        console.log("userid: ", req.body.userId);
-        console.log("shipperId: ", req.body.shipperId);
-        console.log("receiverId: ", req.body.receiverId);
-        console.log("truckId: ", req.body.truckId);
-        console.log("filesData ", req.body.filesData);
-        console.log("loadAccepted", req.body.loadAccepted);
         return Load
             .findById(req.params.loadId, {  
             })
@@ -109,7 +102,6 @@ module.exports = {
                     );
             })
             .catch( (error) => {
-                console.log(error) 
                 res.status(400).send(error)
             })
     },

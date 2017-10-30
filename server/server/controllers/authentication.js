@@ -4,6 +4,7 @@ var authConfig = require('../config/auth');
 var bcypt = require('bcrypt-node');
 var saltNum = require('../config/salt').SALT_WORK_FACTOR;
 
+//generate salted password
 let salt = bcypt.genSalt(saltNum,(err, salt) => {
     console.log("salt is " + salt);
     return salt;
@@ -29,16 +30,6 @@ let setUserInfo = (request) => {
     };
 }
  
-// exports.login = function(req, res, next){
-//     console.log("Request info: " + req);
-//     var userInfo = setUserInfo(req.user);
-//     res.status(200).json({
-//         token: 'JWT ' + generateToken(userInfo),
-//         user: userInfo
-//     });
-//     next(req.user);
-// }
-
 //set log in cerdentials after passing passport login test
 exports.login = (user) => {
     var userInfo = setUserInfo(user);

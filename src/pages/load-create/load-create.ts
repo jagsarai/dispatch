@@ -42,12 +42,12 @@ export class LoadCreatePage {
     const message = {
       event: "Pickup"
     }
-    const dateModal:Modal = this.modalCtrl.create('DateModalPage',{message: message})
 
+    const dateModal:Modal = this.modalCtrl.create('DateModalPage',{message: message})
     dateModal.present();
+
     dateModal.onDidDismiss((date) => {
       if(date){
-        console.log("date returned from pickup", date);
         this.pickup.date = date.date;
         this.pickup.time = date.time;
         this.pickupDateModalReturned = true;
@@ -61,12 +61,12 @@ export class LoadCreatePage {
     const message ={
       event: "Delivery"
     }
-    const dateModal:Modal = this.modalCtrl.create('DateModalPage', {message: message})
 
+    const dateModal:Modal = this.modalCtrl.create('DateModalPage', {message: message})
     dateModal.present();
+
     dateModal.onDidDismiss((date) => {
       if(date){
-        console.log("date returned from delivery", date);
         this.delivery.date = date.date;
         this.delivery.time = date.time;
         this.deliveryDateModalReturned = true;
@@ -77,8 +77,8 @@ export class LoadCreatePage {
 
   showTruckModal(){
     const truckModal:Modal = this.modalCtrl.create('TruckModalPage') 
-
     truckModal.present();
+
     truckModal.onDidDismiss((truck) => {
       if(truck){
         this.truck = truck;
@@ -90,8 +90,8 @@ export class LoadCreatePage {
 
   showDriverModal(){
     const driverModal:Modal = this.modalCtrl.create('DriverModalPage') 
-
     driverModal.present();
+
     driverModal.onDidDismiss((driver) => {
       if(driver){
         this.driver = driver.user;
@@ -103,8 +103,8 @@ export class LoadCreatePage {
 
   showShipperModal(){
     const shipperModal:Modal = this.modalCtrl.create('ShipperModalPage') 
-
     shipperModal.present();
+
     shipperModal.onDidDismiss((shipper) => {
       if(shipper){
         this.shipper = shipper;
@@ -116,8 +116,8 @@ export class LoadCreatePage {
 
   showReceiverModal(){
     const receiverModal:Modal = this.modalCtrl.create('ReceiverModalPage') 
-
     receiverModal.present();
+
     receiverModal.onDidDismiss((receiver) => {
       if(receiver){
         this.receiver = receiver;
@@ -128,10 +128,6 @@ export class LoadCreatePage {
   }
 
   createLoad(){
-    console.log("Driver inside createLoad function", this.driver);
-    console.log("Shipper inside createLoad function", this.shipper);
-    console.log("Receiver inside createLoad function", this.receiver);    
-    console.log("Truck inside createLoad function", this.truck);
 
     let load = {
       userId: this.driver.id,
@@ -154,18 +150,28 @@ export class LoadCreatePage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("Load inside of handlder", load);
             this.showLoader();
-                //Remove from database
             this.loadService.createLoad(load).then((result) => {
         
               this.loading.dismiss();
               //Pass back to create load page
               this.navCtrl.setRoot('HomePage');
         
-            }, (err) => {
+            }).catch((err) => {
               this.loading.dismiss();
-                console.log(err, "not allowed");
+              let prompt = this.alertCtrl.create({
+                title: 'Error creating laod',
+                message: 'There was an error creating the load, please try again.',
+                buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.navCtrl.setRoot('LandingPage');
+                    }
+                  }
+                ]
+              });
+              prompt.present();
             });
           }
         }

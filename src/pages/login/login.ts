@@ -38,17 +38,12 @@ export class LoginPage {
           password: this.userPassword
       };
 
-      console.log("Email inside login function " + this.userEmail);
-      console.log("password inside login function " + this.userPassword);
-      
       this.authService.login(credentials).then((result) => {
           this.loading.dismiss();
-          console.log(result);
-          
+    
           this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage');  
       }).catch((err) => {
             this.loading.dismiss();
-            console.log("loginError: ", err)
             if(err.status === 401){
                 let prompt = this.alertCtrl.create({
                     title: 'Login Failed',

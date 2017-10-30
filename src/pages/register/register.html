@@ -9,17 +9,15 @@
         <ion-card>
             <ion-card-content>
                 <ion-item>
-                    <!-- <ion-icon name="person"></ion-icon> -->
                     <ion-label floating>Name</ion-label>
-                    <ion-input type="text"  name="name" [(ngModel)]="userName" required minlength="3" #name="ngModel"></ion-input>
+                    <ion-input type="text"  name="name" [(ngModel)]="userName" required minlength="7" #name="ngModel" pattern="[A-z]+\\s[A-z]+"></ion-input>
                 </ion-item>
 
                 <div padding *ngIf="name.invalid && (name.dirty || name.touched)">
-                    <span class="global__input-error">Name is required (minimum 3 characters).</span>
+                    <span class="global__input-error">Name is required first and last name. Ex: 'John Doe'</span>
                 </div>
                 
                 <ion-item>
-                        <!-- <ion-icon name="call"></ion-icon> -->
                     <ion-label floating>Phone</ion-label>
                     <ion-input type='tel'  minlength="10" maxlength="10" name="phone" [(ngModel)]="userPhone" #phone="ngModel"></ion-input>
                 </ion-item>
@@ -60,18 +58,6 @@
                 <div padding *ngIf="userConfPasswordMissMatch && (passwordConfrimControl.dirty || passwordConfrimControl.touched)">
                     <span class="global__input-error">Password mismatch</span>
                 </div>
-                
-                <!-- <ion-item>
-                    <ion-label><ion-icon name="people"></ion-icon></ion-label>
-                    <ion-select name="role" placeholder="Role" [(ngModel)]="userRole" #role="ngModel" required>
-                        <ion-option value="driver">Driver</ion-option>
-                        <ion-option value="admin">Admin</ion-option>
-                    </ion-select>
-                </ion-item>
-
-                <div padding *ngIf="role.invalid && role.dirty">
-                    <span class="global__input-error">Please select a role</span>
-                </div> -->
                 
                 <div id="registration-button">
                     <button ion-button color="secondary" type="submit" [disabled]="f.invalid">Register</button>

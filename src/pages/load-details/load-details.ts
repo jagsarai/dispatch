@@ -30,33 +30,70 @@ export class LoadDetailsPage {
   }
 
   ionViewDidLoad() {
-    console.log("Platform is ", this.platform)
-    if(this.platform.is('core')){
-      this.browser = true;
+    if(this.load !== undefined){
+      if(this.platform.is('core')){
+        this.browser = true;
+      }
+      
+      this.load.filesData.length > 0 ? this.imagesLoaded = true : this.imagesLoaded = false;
+  
+      this.shipperService.retriveShipper(this.load.ShipperId).then((shipper) => {
+        this.shippers.push(shipper);
+      }).catch((err) => {
+        let prompt = this.alertCtrl.create({
+          title: "Error",
+          message: "There was an error fetching the shipper, please try again.",
+          buttons:[
+            {
+              text: 'Ok',
+              handler: () => {
+                this.navCtrl.setRoot("LandingPage");
+              }
+            }
+          ]
+        });
+        prompt.present();
+      });
+  
+      this.receiverService.retriveReceiver(this.load.ReceiverId).then((receiver) => {
+        this.receivers.push(receiver);
+      }).catch((err) => {
+        let prompt = this.alertCtrl.create({
+          title: "Error",
+          message: "There was an error fetching the reciever, please try again.",
+          buttons:[
+            {
+              text: 'Ok',
+              handler: () => {
+                this.navCtrl.setRoot("LandingPage");
+              }
+            }
+          ]
+        });
+        prompt.present();
+      });
+  
+      this.truckService.retriveTruck(this.load.TruckId).then((truck) => {
+        this.trucks.push(truck);
+      }).catch((err) => {
+        let prompt = this.alertCtrl.create({
+          title: "Error",
+          message: "There was an error fetching the truck, please try again.",
+          buttons:[
+            {
+              text: 'Ok',
+              handler: () => {
+                this.navCtrl.setRoot("LandingPage");
+              }
+            }
+          ]
+        });
+        prompt.present();
+      })
     }
-    
-    this.load.filesData.length > 0 ? this.imagesLoaded = true : this.imagesLoaded = false;
-
-    console.log("images not laoded ",  this.imagesLoaded);
-
-    this.shipperService.retriveShipper(this.load.ShipperId).then((shipper) => {
-      this.shippers.push(shipper);
-      console.log("Shipper is", shipper);
-    }, (err) => {
-      console.log(err);
-    })
-
-    this.receiverService.retriveReceiver(this.load.ReceiverId).then((receiver) => {
-      this.receivers.push(receiver);
-    }, (err) => {
-      console.log(err);
-    })
-
-    this.truckService.retriveTruck(this.load.TruckId).then((truck) => {
-      this.trucks.push(truck);
-    }, (err) => {
-      console.log(err);
-    })
+    else{
+      this.navCtrl.setRoot("LandingPage")
+    }
   }
 
   showLoadEditPage(){
@@ -91,17 +128,29 @@ export class LoadDetailsPage {
           text: 'Yes',
           handler: (load) => {
             this.showLoader();
-                //Remove from database
-                this.loadService.deleteLoad(this.load.id).then((result) => {
-            
-                  this.loading.dismiss();
-                  
-                  this.navCtrl.setRoot('HomePage');
-            
-                }, (err) => {
-                  this.loading.dismiss();
-                    console.log("not allowed");
-                });
+            //Remove from database
+            this.loadService.deleteLoad(this.load.id).then((result) => {
+        
+            this.loading.dismiss();
+              
+            this.navCtrl.setRoot('HomePage');
+        
+            }).catch((err) => {
+              this.loading.dismiss();
+              let prompt = this.alertCtrl.create({
+                title: "Error",
+                message: "There was an error deleting the load, please try again.",
+                buttons:[
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.navCtrl.setRoot("LandingPage");
+                    }
+                  }
+                ]
+              });
+              prompt.present();
+            });
           }
         }
       ]
@@ -125,9 +174,8 @@ export class LoadDetailsPage {
 
   callDriver(){
     let phone = '1'+ this.load.driver.phone.toString(); 
-    console.log("This is phone number", phone);
+
     this.callNumber.callNumber(phone, true).then(() => {
-      console.log("Dailer launched")
     }).catch(() => {
       let prompt = this.alertCtrl.create({
         title: 'Call denied',
@@ -139,7 +187,6 @@ export class LoadDetailsPage {
         ]
       })
       prompt.present();
-      console.log("Dailer failed")
     })
   }
 
@@ -174,7 +221,18 @@ export class LoadDetailsPage {
           }
         })
       }
-    })
+    }).catch((err) => {
+      let prompt = this.alertCtrl.create({
+        title: 'Email service not avaliable',
+        message: 'The Email service is not avaliable for this device',
+        buttons: [
+          {
+            text: 'Ok'
+          }
+        ]
+      });
+      prompt.present();
+    });
   }
 
 }

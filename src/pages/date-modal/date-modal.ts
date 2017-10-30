@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, ViewController, AlertController, LoadingController, NavParams } from 'ionic-angular';
 
-
-
 @IonicPage()
 @Component({
   selector: 'page-date-modal',
@@ -17,6 +15,7 @@ export class DateModalPage {
   year = this.date.getFullYear().toString();
   month = (this.date.getMonth() + 1).toString();
   
+  // Defualt event time if no initial pickup or delivery times are present.
   event = {
     date: this.year + '-' + this.month + '-' + this.checkDay(this.day),
     time: '00:00'
@@ -26,8 +25,7 @@ export class DateModalPage {
   }
 
   ionViewWillLoad() {
-    this.calledFrom = this.navParams.get('message');
-    console.log(this.calledFrom);
+    this.calledFrom = this.navParams.get('event');
     this.checkCalledFromEvent(this.calledFrom);
   }
 
@@ -35,6 +33,7 @@ export class DateModalPage {
     this.viewCtrl.dismiss();
   }
 
+  // Return day with leading 0 if it is less then 9.
   checkDay(day){
     if(day < 9){
       return '0' + day.toString();
@@ -44,6 +43,8 @@ export class DateModalPage {
     }
   }
 
+  // Check if we are setting the pickup or delivery time and get times accordingly.
+  // If no times are given then we use defualt event object times. 
   checkCalledFromEvent(event){
     if(event.event === "Pickup" && event.date && event.time){
       this.event.date = event.date;

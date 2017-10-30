@@ -2,6 +2,10 @@ const Shipper = require('../models').Shipper;
 
 module.exports = {
     create(req, res) {
+        if(req.body.name.length < 5){
+            let error =  "Shipper name has to be a minimum of 5 characters."
+            return res.status(400).send(error);
+        }
         return Shipper
             .create({
                 name: req.body.name,

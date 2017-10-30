@@ -6,7 +6,6 @@ var bcypt = require('bcrypt-node');
 module.exports = {
     
     list(req, res) {
-        console.log("Inside user.list");
         return User
             .findAll()
             .then(users => {
@@ -18,7 +17,6 @@ module.exports = {
             .catch(error => res.status(400).send(error))
     },
     listDrivers(req, res) {
-        console.log("Inside user.listDrivers");
         return User
             .findAll({
                 where: {

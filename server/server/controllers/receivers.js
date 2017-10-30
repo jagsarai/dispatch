@@ -2,6 +2,10 @@ const Receiver = require('../models').Receiver;
 
 module.exports = {
     create(req, res) {
+        if(req.body.name.length < 5){
+            let error = 'Receiver name has to be a minimum of 5 characters.'
+            return res.status(400).send(error);
+        }
         return Receiver
             .create({
                 name: req.body.name,

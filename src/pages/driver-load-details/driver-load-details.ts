@@ -28,16 +28,15 @@ export class DriverLoadDetailsPage {
   }
 
   ionViewDidLoad() {
+    //get shipper details from database
     this.shipperService.retriveShipper(this.load.ShipperId).then((shipper) => {
       this.shippers.push(shipper);
-      console.log("Shipper is", shipper);
     }, (err) => {
       console.log(err);
     })
-
+    //get reciever details from database
     this.receiverService.retriveReceiver(this.load.ReceiverId).then((receiver) => {
       this.receivers.push(receiver);
-      console.log("Receiver is", receiver);
     }, (err) => {
       console.log(err);
     });
@@ -47,32 +46,31 @@ export class DriverLoadDetailsPage {
 
   showStatusModal(){
     const status = this.status;
-    console.log("inside show status", status);
     const statusModal:Modal = this.modalCtrl.create('StatusModalPage', {status: status})
 
     statusModal.present();
     statusModal.onDidDismiss((status) => {
       if(status){
+        // If the status of the load has been changed we set the new status
         if(this.status !== status){
           this.status = status;
-          console.log("status", this.status)
+          // If the status of the load matches the load status in the database, we set the status model retured to false
           if(this.status === this.load.status){
-            console.log("status after return", this.status);
             return this.statusModalReturned = false; 
           }
           this.statusModalReturned = true;
         }
       }
-      console.log("statusModal:", this.statusModalReturned);
     })
   }
 
   updateLoad(){
+    // Check to see if the load is being updated, rejected, or accepted
     let updateWord = 'update'
     if(this.status === 'assigned' && this.loadAccepted === false){
       updateWord = 'reject'
     }
-    if(this.status !== 'assigned' && this.loadAccepted === true){
+    if(this.status === 'dispatched' && this.loadAccepted === true){
       updateWord = 'accept'
     }
 
@@ -82,8 +80,6 @@ export class DriverLoadDetailsPage {
       loadAccepted: this.loadAccepted,
       loadRejected: this.loadRejected
     }
-
-    console.log("this is the update status", updatedStatus);
 
     let prompt = this.alertCtrl.create({
       title: `${updateWord} load#${this.load.id}`,
@@ -99,7 +95,6 @@ export class DriverLoadDetailsPage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("Load inside of handlder", updatedStatus);
             this.isLoadUpdated();
             this.showLoader();
             //Update to the database
@@ -111,9 +106,18 @@ export class DriverLoadDetailsPage {
                 loadAccepted: this.loadAccepted
               });
         
-            }, (err) => {
+            }).catch((err) => {
               this.loading.dismiss();
-                console.log(err, "not allowed");
+                let prompt = this.alertCtrl.create({
+                  title: 'Error updating load',
+                  message: 'There was an error updating the load, please try again.',
+                  buttons: [
+                    {
+                      text: 'Ok'
+                    }
+                  ]
+                })
+                prompt.present();
             });
           }
         }
@@ -151,6 +155,7 @@ export class DriverLoadDetailsPage {
   }
   
   acceptLoad(){
+    this.status = 'dispatched';
     this.loadAccepted = true;
     this.loadRejected = false;
     this.updateLoad();

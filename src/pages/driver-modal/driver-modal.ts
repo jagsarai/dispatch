@@ -3,6 +3,7 @@ import { IonicPage, ViewController, AlertController, LoadingController } from 'i
 import { FormControl } from '@angular/forms';
 import { DriverProvider } from '../../providers/driver/driver';
 import 'rxjs/add/operator/debounceTime';
+import {mailGun} from 'mailgun-js'; 
 
 @IonicPage()
 @Component({
@@ -37,16 +38,25 @@ export class DriverModalPage {
   }
 
   ionViewDidLoad() {
+    // Get the list of the drivers
     this.driverService.getDrivers().then((data) => {
       this.driverData = data;
-      console.log("Driver data", this.driverData);
       this.filterDriverNames();
       this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
         this.searching = false;
         this.filterDriverNames();
       })
-    }, (err) => {
-      console.log("There was an error with the request");
+    }).catch((err) => {
+      let prompt = this.alertCtrl.create({
+        title: 'Error',
+        message:'There was an error fetching the list of drivers, please try again.',
+        buttons:[
+          {
+            text: 'Ok'
+          }
+        ]
+      });
+      prompt.present();
     });
     this.driverEmailConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
       this.checkDriverEmailCreateInput();
@@ -54,7 +64,7 @@ export class DriverModalPage {
     this.driverPhoneConfirmControl.valueChanges.debounceTime(700)
     .subscribe(search =>{
       this.checkDriverPhoneCreateInput();
-    })
+    });
   }
 
   closeDriverModal(){
@@ -68,18 +78,15 @@ export class DriverModalPage {
   }
 
   checkDriverEmailCreateInput(){
-    console.log("checkDriverEmail function fired");
     for(let driver of this.drivers){
       if(driver.email.toLowerCase() === this.driverEmail.toLowerCase()){
         return this.driverEmailMatch = true;
       }
-      
     }
     return this.driverEmailMatch = false;
   }
 
   checkDriverPhoneCreateInput(){
-    console.log("checkDriverPhone function fired");
     for(let driver of this.drivers){
       if(driver.phone.toString() === this.driverPhone){
         return this.driverPhoneMatch = true;
@@ -100,10 +107,6 @@ export class DriverModalPage {
        password: this.driverTempPassword.toString(),
        phone: this.driverPhone.toString()
      }
-     console.log("name", driver.name);
-     console.log("email", driver.email);
-     console.log("password", driver.password);
-     console.log("phone", driver.phone);
  
      let prompt = this.alertCtrl.create({
        title: 'Add Driver ' + driver.name,
@@ -115,19 +118,25 @@ export class DriverModalPage {
          {
            text: 'Yes',
            handler:() => {
-             console.log("Driver inside of handlder", driver);
              this.showLoader();
-                 //Remove from database
              this.driverService.createDriver(driver).then((result) => {
          
                this.loading.dismiss();
                //Pass back to create load page
-               console.log("driver created: ", result);
                this.viewCtrl.dismiss(result); 
          
-             }, (err) => {
+             }).catch((err) => {
                this.loading.dismiss();
-                 console.log(err, "not allowed");
+               this.alertCtrl.create({
+                 title: 'Driver Create Error',
+                 message: 'There was an error creating the driver, please try again.',
+                 buttons: [
+                   {
+                     text: 'Ok'
+                   }
+                 ]
+               });
+               prompt.present();
              });
            }
          }
@@ -137,7 +146,6 @@ export class DriverModalPage {
    }
 
    addExistingDriver(driver){
-    // this.truck = truck
     let prompt = this.alertCtrl.create({
       title: 'Add Driver ' + driver.name,
       message: 'Are you sure you want to add ' + driver.name + "?",
@@ -148,7 +156,6 @@ export class DriverModalPage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("Driver inside of handlder", driver);
             //Pass back to create load page
             this.viewCtrl.dismiss(driver); 
           }

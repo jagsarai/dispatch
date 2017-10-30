@@ -26,20 +26,35 @@ export class HomePage {
   }
 
 
-  ionViewDidLoad(){
+  ionViewWillLoad(){
     
-    this.authService.role !== "admin" && this.authService.role !== null ? this.navCtrl.setRoot("LandingPage") : console.log ("User is admin and authorized");
-
-    this.loadService.getLoads().then((data) => {
-      this.loadsData = data;
-      this.filterLoadNumbers();
-      this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
-        this.searching = false;
+    if(this.authService.role !== "admin" && this.authService.role !== null){ 
+    this.navCtrl.setRoot("LandingPage")
+    }
+    else if(this.authService.role === undefined){
+    this.navCtrl.setRoot("LandingPage")
+    }
+    else{
+      this.loadService.getLoads().then((data) => {
+        this.loadsData = data;
         this.filterLoadNumbers();
-      })
-    }, (err) => {
-        console.log("This user is not allowed");
-    });
+        this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
+          this.searching = false;
+          this.filterLoadNumbers();
+        })
+      }).catch((err) => {
+          let prompt = this.alertCtrl.create({
+            title: 'Error',
+            message: 'There was an error fetching the loads',
+            buttons:[
+              {
+                text: 'Ok'
+              }
+            ]
+          });
+          prompt.present();
+      });
+    }
   }
 
   filterLoadNumbers(){
@@ -65,21 +80,29 @@ export class HomePage {
           text: 'Yes',
           handler: (load) => {
             this.showLoader();
-                //Remove from database
-                this.loadService.deleteLoad(load.id).then((result) => {
-            
-                  this.loading.dismiss();
-                  //Remove locally
-                    let index = this.loads.indexOf(load);
+            //Remove from database
+            this.loadService.deleteLoad(load.id).then((result) => {
+        
+              this.loading.dismiss();
+              //Remove locally
+              let index = this.loads.indexOf(load);
 
-                    if(index > -1){
-                        this.loads.splice(index, 1);
-                    }   
-            
-                }, (err) => {
-                  this.loading.dismiss();
-                    console.log("not allowed");
-                });
+              if(index > -1){
+                  this.loads.splice(index, 1);
+              }   
+            }).catch((err) => {
+              this.loading.dismiss();
+              let prompt = this.alertCtrl.create({
+                title: 'Error',
+                message: 'There was an error deleting the load',
+                buttons:[
+                  {
+                    text: 'Ok'
+                  }
+                ]
+              });
+              prompt.present();
+            });
           }
         }
       ]
@@ -92,17 +115,10 @@ export class HomePage {
   }
 
   showLoadDetail(load){
-    console.log("this is the load: ", load);
     this.navCtrl.push('LoadDetailsPage', {
       Load: load
     });
   }
-
-  // showLoadEdit(load){
-  //   this.navCtrl.push('LoadEditPage', {
-  //     Load: load
-  //   });
-  // }
 
   showLoader(){
     this.loading = this.loadingCtrl.create({

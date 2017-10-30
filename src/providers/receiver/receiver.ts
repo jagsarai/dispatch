@@ -65,7 +65,8 @@ export class ReceiverProvider {
         .subscribe(res => {
           resolve(res);
         }, (err) => {
-          reject(err);
+          console.log(err);
+          reject(err._body);
         });
     });
   }

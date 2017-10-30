@@ -33,26 +33,11 @@
             <small class="driver-view-load-status">
                 <ion-icon name="bookmark" color="danger"></ion-icon>
                {{load.status}}
-               <!-- <ion-icon item-start></ion-icon>
-               <ion-icon name="speedometer" color="primary"></ion-icon>
-               Truck # {{load.TruckId}} -->
                <ion-icon item-start></ion-icon>
                <ion-icon name="calendar" color="secondary"></ion-icon>
                {{load.pickupDate}}
              </small>
         </div>
-        <!-- <div *ngIf="isLoadAssigned(load)">
-          <small>
-            <button ion-button color="secondary">
-                <ion-icon name="checkmark-circle" color="white"></ion-icon>
-            </button>
-          </small>
-          <small>
-            <button ion-button color="danger">
-                <ion-icon name="close-circle" color="white"></ion-icon>
-            </button> 
-          </small>
-        </div> -->
         <div class="upload-button" *ngIf="isLoadAccepted(load)">
             <small>
                 <button ion-button (click)="showUploadDocsModal(load)">
@@ -84,9 +69,6 @@
         <small class="driver-view-load-status">
           <ion-icon name="bookmark" color="danger"></ion-icon>
           {{load.status}}
-          <!-- <ion-icon item-start></ion-icon>
-          <ion-icon name="speedometer" color="primary"></ion-icon>
-          Truck # {{load.TruckId}} -->
           <ion-icon item-start></ion-icon>
           <ion-icon name="calendar" color="secondary"></ion-icon>
           {{load.pickupDate}}

@@ -12,7 +12,7 @@ import 'rxjs/add/operator/debounceTime';
 export class ReceiverModalPage {
 
   receiverData:any;
-  receivers:any;
+  receivers:any = [];
   searchTerm:string = '';
   searchControl: FormControl;
   receiverAddressConfirmControl: FormControl;
@@ -37,14 +37,25 @@ export class ReceiverModalPage {
   ionViewDidLoad() {
     this.receiverService.getReceivers().then((data) => {
       this.receiverData = data;
-      console.log("Receiver Data", this.receiverData);
       this.filterReceiverName();
       this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
         this.searching = false;
         this.filterReceiverName();
       })
-    }, (err) => {
-      console.log("There was an error with the request");
+    }).catch((err) => {
+      let prompt = this.alertCtrl.create({
+        title: 'Error',
+        message: 'There was an error fetching the recievers, please try again',
+        buttons:[
+          {
+            text:'Ok',
+            handler: () => {
+              this.viewCtrl.dismiss();
+            }
+          }
+        ]
+      });
+      prompt.present();
     });
     this.receiverAddressConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
       this.checkReceiverAddressCreateInput();
@@ -61,7 +72,6 @@ export class ReceiverModalPage {
   }
 
   checkReceiverAddressCreateInput(){
-    console.log("checkreceiverAddress function fired");
     for(let receiver of this.receivers){
       if(receiver.address.toLowerCase() === this.receiverAddress.toLowerCase()){
         return this.receiverAddressMatch = true;
@@ -72,7 +82,6 @@ export class ReceiverModalPage {
   }
 
   checkReceiverNameCreateInput(){
-    console.log("checkDriverName function fired");
     for(let receiver of this.receivers){
       if(receiver.name.toLowerCase() === this.receiverName.toLowerCase()){
         return this.receiverNameMatch = true;
@@ -88,16 +97,12 @@ export class ReceiverModalPage {
 
   addNewReceiver(){
     let receiver = {
-      name: this.receiverName,
-      address: this.receiverAddress, 
-      city: this.receiverCity,
+      name: this.toTitleCase(this.receiverName),
+      address: this.toTitleCase(this.receiverAddress), 
+      city: this.toTitleCase(this.receiverCity),
       state: this.receiverState,
       zipCode: parseInt(this.receiverZipCode)
-    } 
-    console.log("name", receiver.name);
-    console.log("address", receiver.address);
-    console.log("city", receiver.city);
-    console.log("state", receiver.state);
+    }   
 
     let prompt = this.alertCtrl.create({
       title: 'Add receiver ' + receiver.name,
@@ -109,19 +114,24 @@ export class ReceiverModalPage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("receiver inside of handlder", receiver);
             this.showLoader();
-                //Remove from database
             this.receiverService.createReceiver(receiver).then((result) => {
         
               this.loading.dismiss();
               //Pass back to create load page
-              console.log("receiver created: ", result);
               this.viewCtrl.dismiss(result); 
-        
-            }, (err) => {
+            }).catch((err) => {
               this.loading.dismiss();
-                console.log(err, "not allowed");
+              let prompt = this.alertCtrl.create({
+                title: 'Error',
+                message: err,
+                buttons:[
+                  {
+                    text:'Ok'
+                  }
+                ]
+              });
+              prompt.present();
             });
           }
         }
@@ -131,7 +141,6 @@ export class ReceiverModalPage {
   }
 
   addExistingReceiver(receiver){
-    // this.truck = truck
     let prompt = this.alertCtrl.create({
       title: 'Add receiver ' + receiver.name,
       message: 'Are you sure you want to add ' + receiver.name + "?",
@@ -142,8 +151,6 @@ export class ReceiverModalPage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("receiver inside of handlder", receiver);
-            //Pass back to create load page
             this.viewCtrl.dismiss(receiver); 
           }
         }
@@ -161,6 +168,10 @@ export class ReceiverModalPage {
 
   closeReceiverModal(){
     this.viewCtrl.dismiss();
+  }
+
+  toTitleCase(str){
+    return str.replace(/[A-z]\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }
 
 }

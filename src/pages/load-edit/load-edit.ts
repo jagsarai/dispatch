@@ -40,30 +40,34 @@ export class LoadEditPage {
 
   ionViewWillLoad() {
     this.load = this.navParams.get("Load");
-    this.driver = this.load.driver;
-    this.shipper = this.load.shipper;
-    this.receiver = this.load.receiver;
-    this.truck  = this.load.truck;
-    this.pickup.date = this.load.pickupDate;
-    this.pickup.time = this.load.pickupTime;
-    this.delivery.date = this.load.deliveryDate;
-    this.delivery.time = this.load.deliveryTime;
-    this.status = this.load.status;
-    this.loadAccepted = this.load.loadAccepted;
-    this.loadRejected = this.load.loadRejected;
-    this.checkValidForm();
+    if(this.load !== undefined){
+      this.driver = this.load.driver;
+      this.shipper = this.load.shipper;
+      this.receiver = this.load.receiver;
+      this.truck  = this.load.truck;
+      this.pickup.date = this.load.pickupDate;
+      this.pickup.time = this.load.pickupTime;
+      this.delivery.date = this.load.deliveryDate;
+      this.delivery.time = this.load.deliveryTime;
+      this.status = this.load.status;
+      this.loadAccepted = this.load.loadAccepted;
+      this.loadRejected = this.load.loadRejected;
+      this.checkValidForm();
+    }
+    else{
+      this.navCtrl.setRoot("LandingPage")
+    }
   }
 
   showStatusModal(){
     const status = this.status;
-    console.log("inside show status", status);
-    const statusModal:Modal = this.modalCtrl.create('StatusModalPage', {status: status})
 
+    const statusModal:Modal = this.modalCtrl.create('StatusModalPage', {status: status})
     statusModal.present();
+
     statusModal.onDidDismiss((status) => {
       if(status){
         this.status = status;
-        console.log("status after return", this.status);
         this.statusModalReturned = true;
       }
     })
@@ -71,8 +75,8 @@ export class LoadEditPage {
 
   showTruckModal(){
     const truckModal:Modal = this.modalCtrl.create('TruckModalPage') 
-
     truckModal.present();
+
     truckModal.onDidDismiss((truck) => {
       if(truck){
         this.truck = truck;
@@ -84,8 +88,8 @@ export class LoadEditPage {
 
   showDriverModal(){
     const driverModal:Modal = this.modalCtrl.create('DriverModalPage') 
-
     driverModal.present();
+
     driverModal.onDidDismiss((driver) => {
       if(driver){
         this.driver = driver;
@@ -98,8 +102,8 @@ export class LoadEditPage {
 
   showShipperModal(){
     const shipperModal:Modal = this.modalCtrl.create('ShipperModalPage') 
-
     shipperModal.present();
+
     shipperModal.onDidDismiss((shipper) => {
       if(shipper){
         this.shipper = shipper;
@@ -111,8 +115,8 @@ export class LoadEditPage {
 
   showReceiverModal(){
     const receiverModal:Modal = this.modalCtrl.create('ReceiverModalPage') 
-
     receiverModal.present();
+
     receiverModal.onDidDismiss((receiver) => {
       if(receiver){
         this.receiver = receiver;
@@ -123,17 +127,16 @@ export class LoadEditPage {
   }
 
   showPickupDateModal(){
-    const message = {
+    const event = {
       event: "Pickup",
       date: this.pickup.date,
       time: this.pickup.time
     }
-    const dateModal:Modal = this.modalCtrl.create('DateModalPage',{message: message})
-
+    const dateModal:Modal = this.modalCtrl.create('DateModalPage',{event: event})
     dateModal.present();
+
     dateModal.onDidDismiss((date) => {
       if(date){
-        console.log("date returned from pickup", date);
         this.pickup.date = date.date;
         this.pickup.time = date.time;
         this.pickupDateModalReturned = true;
@@ -144,17 +147,16 @@ export class LoadEditPage {
 
 
   showDeliveryDateModal(){
-    const message ={
+    const event ={
       event: "Delivery",
       date: this.delivery.date,
       time: this.delivery.time
     }
-    const dateModal:Modal = this.modalCtrl.create('DateModalPage', {message: message})
-
+    const dateModal:Modal = this.modalCtrl.create('DateModalPage', {event: event})
     dateModal.present();
+
     dateModal.onDidDismiss((date) => {
       if(date){
-        console.log("date returned from delivery", date);
         this.delivery.date = date.date;
         this.delivery.time = date.time;
         this.deliveryDateModalReturned = true;
@@ -180,7 +182,6 @@ export class LoadEditPage {
       this.delivery.time === this.load.deliveryTime){
         this.navCtrl.setRoot("HomePage");
       }
-    
   }
 
   updateLoad(){
@@ -202,18 +203,6 @@ export class LoadEditPage {
       loadRejected: this.loadRejected.toString()
     }
 
-    console.log("loadId inside updateLoad function", load.id);
-    console.log("userId inside updateLoad function", load.userId);
-    console.log("shipperId inside updateLoad function", load.shipperId);
-    console.log("receiverId inside updateLoad function", load.receiverId);
-    console.log("truckId inside updateLoad function", load.truckId);
-    console.log("pickupDate inside updateLoad function", load.pickupDate);
-    console.log("pickupTime inside updateLoad function", load.pickupTime);
-    console.log("deliveryDate inside updateLoad function", load.deliveryDate);
-    console.log("deliveryTime inside updateLoad function", load.deliveryTime);
-    console.log("status inside updateLoad function", load.status);
-    console.log("load accepted: ", load.loadAccepted);
-
     let prompt = this.alertCtrl.create({
       title: 'Update Load# ' + this.load.id,
       message: 'Are you sure you want to update this load?',
@@ -224,7 +213,6 @@ export class LoadEditPage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("Load inside of handlder", load);
             this.isLoadUpdated();
             this.showLoader();
             //Update to the database
@@ -234,9 +222,20 @@ export class LoadEditPage {
               //Pass back to home page
               this.navCtrl.setRoot('HomePage');
         
-            }, (err) => {
+            }).catch((err) => {
               this.loading.dismiss();
-                console.log(err, "not allowed");
+              let prompt = this.alertCtrl.create({
+                title: 'Error updating laod',
+                message: 'There was an error updating the load, please try again',
+                buttons: [
+                  {
+                    text: 'Ok',
+                    handler: () => {
+                      this.navCtrl.setRoot('LandingPage');
+                    }
+                  }
+                ]
+              })
             });
           }
         }

@@ -38,14 +38,15 @@ export class DriverHomePage {
   ionViewWillLoad() {
       this.authService.role !== "driver" && this.authService.role !== null ? this.navCtrl.setRoot("LandingPage") : console.log("User is driver");
 
+      // Get the id of user that is stored inside the temp storage. 
       this.storage.get("id").then((id) => {
         this.driverId = id;
+        // Use the id to lookup all of the loads associated with that Id.
         this.loadService.getDriverLoads(this.driverId).then((loads) => {
-            console.log("loads inside driver home", loads);
             this.driverLoads = loads;
             this.currentDriverLoads = this.filterCurrentLoads(this.driverLoads);
-            this.pastDriverLoads = this.filterPastLoads(this.driverLoads);
-            console.log("CurrentDriverLoad ", this.currentDriverLoads)       
+            this.pastDriverLoads = this.filterPastLoads(this.driverLoads); 
+            // If there are new assigned loads, give an alert.       
             if(this.checkAssignedLoads(this.driverLoads).length > 0){
               let prompt = this.alertCtrl.create({
                 title:'New Loads',
@@ -58,18 +59,38 @@ export class DriverHomePage {
               });
               prompt.present();
             }
-            }, (err) => {
-              console.log("There was an error with the request");
+            }).catch((err) => {
+              let prompt = this.alertCtrl.create({
+                title: 'Error',
+                message: 'There was an error fetching the loads',
+                buttons:[
+                  {
+                    text: 'Ok'
+                  }
+                ]
+              });
+              prompt.present();
             });
-      }, (err) => {
-        console.log("Unable to get the driver id");
-      })
+      }).catch((err) => {
+        let prompt = this.alertCtrl.create({
+          title: 'Error',
+          message: 'There was an error fetching the driver',
+          buttons:[
+            {
+              text: 'Ok'
+            }
+          ]
+        });
+        prompt.present();
+      });
 
+      // Watch for value change in the current loads field and search by load name
       this.currentLoadSearchControl.valueChanges.debounceTime(700).subscribe(search => {
         this.currentLoadSearching = false;
         this.filterCurrentDriverLoadsByName();
       })
-  
+
+      // Watch for value change in the past loads field and search by load name
       this.pastLoadSearchControl.valueChanges.debounceTime(700).subscribe(search => {
         this.pastLoadSearching = false;
         this.filterPastDriverLoadsByName();
@@ -121,7 +142,6 @@ export class DriverHomePage {
   }
 
   showLoadDetail(load){
-    console.log(load);
     this.navCtrl.push('DriverLoadDetailsPage', {
       Load: load
     });
@@ -131,11 +151,11 @@ export class DriverHomePage {
     const uploadModal:Modal = this.modalCtrl.create('UploadModalPage', {load: load})
 
     uploadModal.present();
-    uploadModal.onDidDismiss((downloadUrl) => {
-      console.log(downloadUrl);
-      if(downloadUrl){
-
-        downloadUrl.map((urlObject) => {
+    //Returning downloadUrls from the upload modal 
+    uploadModal.onDidDismiss((downloadUrls) => {
+      if(downloadUrls){
+        //Push the download urls into the files data of the load
+        downloadUrls.map((urlObject) => {
           return load.filesData.push(urlObject);
         })
 
@@ -145,26 +165,46 @@ export class DriverHomePage {
           content: 'Loading...',
         });
         this.loading.present();
-        
-        this.loadService.updateLoad(load).then((updateLoad) => {
-          this.isLoadAccepted(updateLoad);
-          load = updateLoad;
-        }, (err) => {
+
+        // Update the load in the database
+        this.loadService.updateLoad(load).then((updatedLoad) => {
+          this.isLoadAssigned(updatedLoad);
+          this.isLoadAccepted(updatedLoad);
+          load = updatedLoad;
+        }).catch((err) => {
+          let prompt = this.alertCtrl.create({
+            title: 'Error',
+            message: 'There was an error updating the load, please try again.',
+            buttons:[
+              {
+                text: 'Ok'
+              }
+            ]
+          });
+          prompt.present();
           this.loading.dismiss();
-          console.error("There was a problem with the request ");
         });
 
+        // Get the loads from the database by driver id
         this.loadService.getDriverLoads(this.driverId).then((loads) => {
-          console.log("loads inside driver home", loads);
           this.driverLoads = loads;
           this.currentDriverLoads = this.filterCurrentLoads(this.driverLoads);
-          this.pastDriverLoads = this.filterPastLoads(this.driverLoads);
-          console.log("CurrentDriverLoad ", this.currentDriverLoads)          
+          this.pastDriverLoads = this.filterPastLoads(this.driverLoads);          
           this.loading.dismiss();
-          }, (err) => {
+          }).catch((err) => {
             this.loading.dismiss();
-            console.log("There was an error with the request");
+            let prompt = this.alertCtrl.create({
+              title: 'Error',
+              message: 'There was an error fetching the loads',
+              buttons:[
+                {
+                  text: 'Ok'
+                }
+              ]
+            });
+            prompt.present();
         });
+
       }
     })
   }

@@ -88,16 +88,12 @@ export class ShipperModalPage {
 
   addNewShipper(){
     let shipper = {
-      name: this.shipperName,
-      address: this.shipperAddress, 
-      city: this.shipperCity,
+      name: this.toTitleCase(this.shipperName),
+      address: this.toTitleCase(this.shipperAddress), 
+      city: this.toTitleCase(this.shipperCity),
       state: this.shipperState,
       zipCode: parseInt(this.shipperZipCode)
     } 
-    console.log("name", shipper.name);
-    console.log("address", shipper.address);
-    console.log("city", shipper.city);
-    console.log("state", shipper.state);
 
     let prompt = this.alertCtrl.create({
       title: 'Add shipper ' + shipper.name,
@@ -161,6 +157,10 @@ export class ShipperModalPage {
 
   closeShipperModal(){
     this.viewCtrl.dismiss();
+  }
+
+  toTitleCase(str){
+    return str.replace(/[A-z]\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }
 
 }

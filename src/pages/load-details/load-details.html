@@ -1,12 +1,12 @@
 <ion-header>
 
-  <ion-navbar color="primary">
-    <ion-title>Load # {{load.id}}</ion-title>
+  <ion-navbar color="primary" *ngIf="load">
+    <ion-title >Load # {{load.id}}</ion-title>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding>
+<ion-content padding *ngIf="load">
     <ion-buttons end>
         <button ion-button (click)="callDriver()" color="secondary" *ngIf="!browser">
             <ion-icon name="call"></ion-icon>

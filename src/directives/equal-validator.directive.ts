@@ -7,6 +7,9 @@ import { Validator, AbstractControl, NG_VALIDATORS } from '@angular/forms';
         { provide: NG_VALIDATORS, useExisting: forwardRef(() => EqualValidator), multi: true }
     ]
 })
+
+//This will test word equality and match 
+//We are using this for comparing password text to make sure the text user renters for the password field matches the original. 
 export class EqualValidator implements Validator {
     constructor( @Attribute('validateEqual') public validateEqual: string,
         @Attribute('reverse') public reverse: string) {

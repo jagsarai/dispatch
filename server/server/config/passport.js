@@ -9,6 +9,7 @@ var localOptions = {
     usernameField: 'email'
 };
 
+//use a local email and password login strategy
 var localLogin = new LocalStrategy(localOptions, (email, password, done) => {
     User.findOne({
         where: {
@@ -37,11 +38,13 @@ var localLogin = new LocalStrategy(localOptions, (email, password, done) => {
     })
 });
 
+//get the JSON secret key
 var jwtOptions = {
     secretOrKey: config.secret,
     jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken()
 };
  
+//login with JSON token for session persistance
 var jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
     console.log("Inside the jwtLogin");
     console.log("payload is: " + payload);

@@ -24,18 +24,13 @@ export class LandingPage {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad LandingPage');
-
     this.showLoader();
-           //Check if already authenticated
+      //Check if already authenticated
       this.authService.checkAuthentication().then((res) => {
-          console.log("Already authorized");
           this.loading.dismiss();
-          
-            this.authService.role === "admin" && this.authService.role !== null ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage'); 
-      }, (err) => {
-          console.log("Not already authorized");
-          this.loading.dismiss();
+          this.authService.role === "admin" && this.authService.role !== null ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage'); 
+      }).catch((err) => {
+        this.loading.dismiss();
       });
   }
 
@@ -47,13 +42,5 @@ export class LandingPage {
 
     this.loading.present();
   }
-
-  // call(){
-  //   this.callNumber.callNumber('1234567890', true).then(() => {
-  //     console.log("dailer fired")
-  //   }).catch(() => {
-  //     console.log("dailer failed")
-  //   })
-  // }
 
 }

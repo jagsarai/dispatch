@@ -13,12 +13,11 @@ export class AuthProvider {
 
   tokenValue = (value) => {
     value = value.replace(/[A-Z][A-Z][A-Z]\s/g, "");
-    console.log("New Value is: " + value);
     return value;
   };
 
   constructor(public http: Http, public storage: Storage) {
-    console.log('Inside AuthProvider');
+    
   }
 
   checkAuthentication(){
@@ -47,18 +46,12 @@ export class AuthProvider {
     
   createAccount(details){
 
-    console.log("Name inside the create Account method: " + details.name);
-    console.log("Email inside the create Account method: " + details.email);
-    console.log("Phone inside the create Account method: " + details.phone);
-    console.log("Password inside the create Account method: " + details.password);
-    console.log("Role inside the create Account method: " + details.role);
-
     return new Promise((resolve, reject) => {
         var response;
         let headers = new Headers();
         
         headers.append('Content-Type', 'application/json');
-        //to test on ios device we must link to local database with ip address
+        //To test on ios device we must link to local database with ip address
         this.http.post('http://localhost:8000/api/register', JSON.stringify(details), {headers: headers})
           .subscribe(res => {
             response = res;
@@ -70,15 +63,11 @@ export class AuthProvider {
 
             this.storage.set('token', this.token);
             this.storage.set('id', this.id);
-            console.log("userId inside register: " + this.id);
             this.storage.set('role', this.role);
-            console.log("role inside register: " + this.role);
             this.storage.set('email', this.email);
-            console.log("user email inside register: " + this.email);
-            resolve(data);
 
-          },(err) => {
-            console.log("createAccountError ", err.json().error)
+            resolve(data);
+          }, (err) => {
             reject(err.json().error)
           });
     });
@@ -96,23 +85,18 @@ export class AuthProvider {
 
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
-            console.log("Token in login " + this.token);
             this.role = data.user.role;
             this.id = data.user.id;
             this.email = data.user.email;
 
             this.storage.set('token', this.token);
             this.storage.set('id', this.id);
-            console.log("userId inside login: " + this.id);
             this.storage.set('role', this.role);
-            console.log("role inside login: " + this.role);
             this.storage.set('email', this.email);
-            console.log("user email inside login: " + this.email);
-            resolve(data);
 
+            resolve(data);
             resolve(res.json());
           }, (err) => {
-            console.log("loginError: ", err)
             reject(err);
           });
     });

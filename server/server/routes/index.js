@@ -7,8 +7,8 @@ const AuthenticationController = require('../controllers/authentication');
 const passportService = require('../config/passport');
 const passport = require('passport');
 
+//require JSON token upon any request made 
 var requireAuth = passport.authenticate('jwt', {session: false});
-// var requireLogin = passport.authenticate('local',  {session: false});
 
 module.exports = (app) => {
     app.get('/api', (req, res) => res.status(200).send({
@@ -38,7 +38,6 @@ module.exports = (app) => {
           next(user);
         })(req, res, next);
       });
-    // app.post('/api/login', requireLogin, AuthenticationController.login);
 
     app.get('/api/users', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.list);
     app.get('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.retrive);
