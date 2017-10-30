@@ -19,19 +19,7 @@ var localLogin = new LocalStrategy(localOptions, (email, password, done) => {
         if(!user){
             return done(null, false, {error: 'Email does not match. Please try again.'})
         }
-        User.comparePassword (password, user, (err, isMatch) => {
-            if(err){
-                console.log("Inside error");
-                return done(err);
-            }
-
-            if(!isMatch){
-                console.log("This failed");
-                return done(null, false, {error: 'Password does not match. Please try again.'});
-            }
-            console.log("User is in: ", user)
-            return done(null, user);
-        });
+        User.comparePassword(password, user, done);
     })
     .catch((err) => {
         return done(err)
@@ -46,8 +34,6 @@ var jwtOptions = {
  
 //login with JSON token for session persistance
 var jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-    console.log("Inside the jwtLogin");
-    console.log("payload is: " + payload);
 
     User.findById(payload.id)
         .then((user) => {

@@ -26,6 +26,7 @@ module.exports = (app) => {
 
     app.post('/api/register', AuthenticationController.register);
     app.post('/api/login', function(req, res, next) {
+        console.log('password is ', req);
         passport.authenticate('local', {session: false}, function(err, user, info) {
           if (err) { 
               return res.status(505).send(err);

@@ -46,20 +46,18 @@ module.exports = (sequelize, DataTypes) => {
     })
   }
 
-  User.comparePassword = (password, user, done, next) => {
+  User.comparePassword = (password, user, done) => {
     var passwd = user.password;
-    console.log("Inside compare pass")
     bcrypt.compare(password, passwd, (err, isMatch) => {
       console.log("Inside bcrypt function")
       if (err) {
-        console.log(err)
+        return done(err);
       }
       if (isMatch){
-        console.log("this worked and user is" + user);
         return done(null, user)
       }
       else{
-        return done(null, false)
+        return done(null, false, {error: 'Password does not match, Please try again.'});
       }
     });
   }
