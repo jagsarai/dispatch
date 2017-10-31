@@ -7,6 +7,7 @@ const AuthenticationController = require('../controllers/authentication');
 const passportService = require('../config/passport');
 const passport = require('passport');
 
+
 //require JSON token upon any request made 
 var requireAuth = passport.authenticate('jwt', {session: false});
 
@@ -26,7 +27,6 @@ module.exports = (app) => {
 
     app.post('/api/register', AuthenticationController.register);
     app.post('/api/login', function(req, res, next) {
-        console.log('password is ', req);
         passport.authenticate('local', {session: false}, function(err, user, info) {
           if (err) { 
               return res.status(505).send(err);
@@ -38,12 +38,13 @@ module.exports = (app) => {
           res.status(200).json(success);
           next(user);
         })(req, res, next);
-      });
+    });
 
     app.get('/api/users', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.list);
     app.get('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.retrive);
     app.put('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.update);
     app.delete('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.destroy);
+    app.post('/api/users/forgot', usersController.passwordReset)
 
     app.post('/api/loads/', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.create);
     app.get('/api/loads', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.list);

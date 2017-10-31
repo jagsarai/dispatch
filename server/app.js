@@ -6,6 +6,8 @@ const db = require("./server/models/index");
 // Set up the express app
 const app = express();
 var env = require('dotenv').load();
+require('dotenv').config();
+
 
 // Log requests to the console.
 app.use(logger('dev'));

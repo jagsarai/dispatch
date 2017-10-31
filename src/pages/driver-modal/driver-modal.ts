@@ -29,7 +29,7 @@ export class DriverModalPage {
   driverName:string;
   driverPhone:string = '';
   driverEmail:string = '';
-  driverTempPassword:string = '';
+  // driverTempPassword:string = '';
 
   constructor(public viewCtrl: ViewController, public driverService:DriverProvider, public alertCtrl: AlertController, public loadingCtrl:LoadingController) {
     this.searchControl = new FormControl();
@@ -104,8 +104,9 @@ export class DriverModalPage {
     let driver = {
        name: this.driverName.toString(),
        email: this.driverEmail.toString(),
-       password: this.driverTempPassword.toString(),
-       phone: this.driverPhone.toString()
+       password: Math.random().toString(36).slice(-8),
+       phone: this.driverPhone.toString(),
+       firstLogin: 'true'
      }
  
      let prompt = this.alertCtrl.create({
@@ -119,11 +120,11 @@ export class DriverModalPage {
            text: 'Yes',
            handler:() => {
              this.showLoader();
-             this.driverService.createDriver(driver).then((result) => {
+             this.driverService.createDriver(driver).then((driver) => {
          
                this.loading.dismiss();
                //Pass back to create load page
-               this.viewCtrl.dismiss(result); 
+               this.viewCtrl.dismiss(driver); 
          
              }).catch((err) => {
                this.loading.dismiss();

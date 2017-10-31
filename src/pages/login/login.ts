@@ -21,6 +21,7 @@ export class LoginPage {
   userEmail: string;
   userPassword: string;
   loading: any;
+  firstLogin: any;
 
   constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl:AlertController) {
   }
@@ -39,9 +40,18 @@ export class LoginPage {
       };
 
       this.authService.login(credentials).then((result) => {
+          this.firstLogin = result['user'].firstLogin;
+          console.log(this.firstLogin);
           this.loading.dismiss();
-    
-          this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot('DriverHomePage');  
+          if(this.firstLogin === true){
+            this.navCtrl.setRoot('HomePage');
+          }
+          else if(this.firstLogin === false && this.authService.role === 'admin'){
+              this.navCtrl.setRoot('HomePage');
+          }
+          else{
+              this.navCtrl.setRoot('DriverHomePage');
+          }
       }).catch((err) => {
             this.loading.dismiss();
             if(err.status === 401){
@@ -79,6 +89,10 @@ export class LoginPage {
       });
 
       this.loading.present();
-  }
+    }
+
+    showPasswordResetPage(){
+        this.navCtrl.setRoot('PasswordResetPage');
+    }
 
 }

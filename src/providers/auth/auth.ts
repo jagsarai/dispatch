@@ -47,14 +47,12 @@ export class AuthProvider {
   createAccount(details){
 
     return new Promise((resolve, reject) => {
-        var response;
         let headers = new Headers();
         
         headers.append('Content-Type', 'application/json');
         //To test on ios device we must link to local database with ip address
         this.http.post('http://localhost:8000/api/register', JSON.stringify(details), {headers: headers})
           .subscribe(res => {
-            response = res;
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
             this.role = data.user.role;
@@ -95,7 +93,21 @@ export class AuthProvider {
             this.storage.set('email', this.email);
 
             resolve(data);
-            resolve(res.json());
+          }, (err) => {
+            reject(err);
+          });
+    });
+  }
+
+  resetPassword(email){
+    return new Promise((resolve, reject) => {
+      
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        this.http.post('http://localhost:8000/api/users/forgot', JSON.stringify(email), {headers: headers})
+          .subscribe(res => {
+            resolve(res);
           }, (err) => {
             reject(err);
           });

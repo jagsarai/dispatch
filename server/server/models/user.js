@@ -39,6 +39,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false, 
       notEmpty: true
     },
+    firstLogin: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
+    }
   });
 
   User.associate = (models) =>{

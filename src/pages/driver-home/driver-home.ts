@@ -36,16 +36,32 @@ export class DriverHomePage {
   }
 
   ionViewWillLoad() {
-      this.authService.role !== "driver" && this.authService.role !== null ? this.navCtrl.setRoot("LandingPage") : console.log("User is driver");
-
-      // Get the id of user that is stored inside the temp storage. 
-      this.storage.get("id").then((id) => {
-        this.driverId = id;
+      if(this.authService.role !== "driver" && this.authService.role !== null || this.authService.role === undefined){ 
+        this.navCtrl.setRoot("LandingPage")
+      }
+      else{
+        // Get the id of user that is stored inside the temp storage. 
+        this.storage.get("id").then((id) => {
+          this.driverId = id;
         // Use the id to lookup all of the loads associated with that Id.
         this.loadService.getDriverLoads(this.driverId).then((loads) => {
             this.driverLoads = loads;
-            this.currentDriverLoads = this.filterCurrentLoads(this.driverLoads);
-            this.pastDriverLoads = this.filterPastLoads(this.driverLoads); 
+            if(this.driverLoads.length <= 0){
+              let alert = this.alertCtrl.create({
+                title: "No loads assigned",
+                message: 'You have no loads assigned to you, please check back later.',
+                buttons: [
+                  {
+                    text: 'Ok'
+                  }
+                ]
+              });
+              alert.present();
+            }
+            else{
+              this.currentDriverLoads = this.filterCurrentLoads(this.driverLoads);
+              this.pastDriverLoads = this.filterPastLoads(this.driverLoads); 
+            }
             // If there are new assigned loads, give an alert.       
             if(this.checkAssignedLoads(this.driverLoads).length > 0){
               let prompt = this.alertCtrl.create({
@@ -71,43 +87,48 @@ export class DriverHomePage {
               });
               prompt.present();
             });
-      }).catch((err) => {
-        let prompt = this.alertCtrl.create({
-          title: 'Error',
-          message: 'There was an error fetching the driver',
-          buttons:[
-            {
-              text: 'Ok'
-            }
-          ]
+        }).catch((err) => {
+          let prompt = this.alertCtrl.create({
+            title: 'Error',
+            message: 'There was an error fetching the driver',
+            buttons:[
+              {
+                text: 'Ok'
+              }
+            ]
+          });
+          prompt.present();
         });
-        prompt.present();
-      });
 
-      // Watch for value change in the current loads field and search by load name
-      this.currentLoadSearchControl.valueChanges.debounceTime(700).subscribe(search => {
-        this.currentLoadSearching = false;
-        this.filterCurrentDriverLoadsByName();
-      })
+        // Watch for value change in the current loads field and search by load name
+        this.currentLoadSearchControl.valueChanges.debounceTime(700).subscribe(search => {
+          this.currentLoadSearching = false;
+          this.filterCurrentDriverLoadsByName();
+        })
 
-      // Watch for value change in the past loads field and search by load name
-      this.pastLoadSearchControl.valueChanges.debounceTime(700).subscribe(search => {
-        this.pastLoadSearching = false;
-        this.filterPastDriverLoadsByName();
-      })
+        // Watch for value change in the past loads field and search by load name
+        this.pastLoadSearchControl.valueChanges.debounceTime(700).subscribe(search => {
+          this.pastLoadSearching = false;
+          this.filterPastDriverLoadsByName();
+        })
+      }
   }
 
 
   filterCurrentDriverLoadsByName(){
-    this.filteredCurrentDriverLoads = this.currentDriverLoads.filter((load) => {
-      return load.pickupDate.toString().indexOf(this.currentLoadSearchTerm) > -1;
-    });
+    if(this.currentDriverLoads){
+      this.filteredCurrentDriverLoads = this.currentDriverLoads.filter((load) => {
+        return load.pickupDate.toString().indexOf(this.currentLoadSearchTerm) > -1;
+      });
+    }
   }
 
   filterPastDriverLoadsByName(){
-    this.filteredPastDriverLoads = this.pastDriverLoads.filter((load) => {
-      return load.pickupDate.toString().indexOf(this.pastLoadSearchTerm) > -1;
-    });
+    if(this.currentDriverLoads){
+      this.filteredPastDriverLoads = this.pastDriverLoads.filter((load) => {
+        return load.pickupDate.toString().indexOf(this.pastLoadSearchTerm) > -1;
+      });
+    }
   }
 
   onCurrentLoadSearchInput(){

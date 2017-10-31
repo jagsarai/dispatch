@@ -1,12 +1,14 @@
 var jwt = require('jsonwebtoken');  
 var User = require('../models').User;
 var authConfig = require('../config/auth');
-var bcypt = require('bcrypt-node');
+var bcrypt = require('bcrypt-node');
 var saltNum = require('../config/salt').SALT_WORK_FACTOR;
+var mailGunConfig = require('../config/email');
+const mailGun = require('mailgun-js')(mailGunConfig);
 
-//generate salted password
-let salt = bcypt.genSalt(saltNum,(err, salt) => {
-    console.log("salt is " + salt);
+
+//generate salt for password
+let salt = bcrypt.genSalt(saltNum,(err, salt) => {
     return salt;
 })
 
@@ -26,7 +28,8 @@ let setUserInfo = (request) => {
         id: request.id,
         phone: request.phone,
         email: request.email,
-        role: request.role
+        role: request.role,
+        firstLogin: request.firstLogin
     };
 }
  
@@ -49,11 +52,13 @@ exports.register = (req, res, next) => {
     console.log(req.body.phone);
     let user = {
         email: req.body.email,
-        password: bcypt.hashSync(req.body.password, salt),
+        password: bcrypt.hashSync(req.body.password, salt),
         role: req.body.role,
         name: req.body.name,
-        phone:  parseInt(req.body.phone)
+        phone:  parseInt(req.body.phone),
+        firstLogin: req.body.firstLogin
     }
+    let tempPassword = req.body.password
    
  
     if(!user.email){
@@ -89,13 +94,15 @@ exports.register = (req, res, next) => {
             }
 
             User.create(user).then((user) => {
+                if(user.firstLogin){
+                    this.sendMail(user, tempPassword);
+                }
                 var userInfo = setUserInfo(user);
                 user.password = "hidden"
                 res.status(201).json({
                     token: 'JWT' + generateToken(userInfo),
                     user: user,
-    
-                })
+                });
             })
             .catch(error => {
                 res.status(400).send(error)
@@ -114,7 +121,7 @@ exports.register = (req, res, next) => {
 exports.roleAuthorization = (roles) => {
     console.log("Inside the role auth function");
     return function(req, res, next){
-        console.log("user inside the role auth: " + req.user.role)
+        console.log("user inside the role auth: ")
         var user = req.user;
 
         User.findById(user.id)
@@ -133,4 +140,21 @@ exports.roleAuthorization = (roles) => {
             return next(error)
         }); 
     }
+}
+
+exports.sendMail = (user, tempPassword) => {
+    var data = {
+      from: '<postmaster@sandboxc405fb24f04442438e497838ee5022cd.mailgun.org>',
+      to: 'sarai.jagvir@gmail.com',
+      subject: `${user.name}, you have a new load waiting`,
+      text: `Hi ${user.name}, welcome to Simple Dispatch!! Please log in using your temp password ${tempPassword} and start hauling.`
+    };    
+    mailGun.messages().send(data, (error, body) => {
+      if(error){
+          console.log(error);
+      }
+      else{
+          console.log("message sent");
+      }
+    });
 }
