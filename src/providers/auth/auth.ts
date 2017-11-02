@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
-import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/map';
+import { Storage } from '@ionic/storage';
 
 @Injectable()
 export class AuthProvider {
 
   token: any;
-  role: any;
-  email: any;
-  id: any;
+  // role: any;
+  // email: any;
+  // id: any;
+  // firstLogin: any;
+  // phone: any;
+  user: any;
 
   tokenValue = (value) => {
     value = value.replace(/[A-Z][A-Z][A-Z]\s/g, "");
@@ -28,10 +31,19 @@ export class AuthProvider {
             this.token = value;
             console.log("This Token: " + this.token);
             let headers = new Headers();
-            this.storage.get("role").then((role) => {
-              this.role = role;
-              console.log("Role inside checkAuth", this.role);
-            });
+            // this.storage.get("role").then((role) => {
+            //   this.role = role;
+            //   console.log("Role inside checkAuth", this.role);
+            // });
+            // this.storage.get("email").then((email) => {
+            //   this.email = email;
+            // });
+            // this.storage.get("id").then((id) => {
+            //   this.id = id;
+            // });
+            // this.storage.get("phone").then((phone) =>{
+            //   this.phone = phone;
+            // })
             headers.append('Authorization', this.token);
 
             this.http.get('http://localhost:8000/api/protected', {headers: headers})
@@ -40,6 +52,8 @@ export class AuthProvider {
                 }, (err) => {
                     reject(err);
                 }); 
+        }).catch((err) => {
+          console.log(err);
         });         
     });
   }
@@ -55,14 +69,21 @@ export class AuthProvider {
           .subscribe(res => {
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
-            this.role = data.user.role;
-            this.id = data.user.id;
-            this.email = data.user.email;
+            this.user = data.user;
+            // this.role = data.user.role;
+            // this.id = data.user.id;
+            // this.email = data.user.email;
+            // this.phone = data.user.phone;
+            // this.firstLogin = data.user.firstLogin;
 
+            // this.storage.set('token', this.token);
+            // this.storage.set('id', this.id);
+            // this.storage.set('role', this.role);
+            // this.storage.set('email', this.email);
+            // this.storage.set('phone', this.phone);
+            // this.storage.set('firstLogin', this.firstLogin);
+            this.storage.set('user', this.user);
             this.storage.set('token', this.token);
-            this.storage.set('id', this.id);
-            this.storage.set('role', this.role);
-            this.storage.set('email', this.email);
 
             resolve(data);
           }, (err) => {
@@ -83,15 +104,21 @@ export class AuthProvider {
 
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
-            this.role = data.user.role;
-            this.id = data.user.id;
-            this.email = data.user.email;
+            this.user = data.user
+            // this.role = data.user.role;
+            // this.id = data.user.id;
+            // this.email = data.user.email;
+            // this.firstLogin = data.user.firstLogin,
+            // this.phone = data.user.phone
 
             this.storage.set('token', this.token);
-            this.storage.set('id', this.id);
-            this.storage.set('role', this.role);
-            this.storage.set('email', this.email);
-
+            // this.storage.set('id', this.id);
+            // this.storage.set('role', this.role);
+            // this.storage.set('email', this.email);
+            // this.storage.set('firstLogin', this.firstLogin);
+            // this.storage.set('phone', this.phone);
+            this.storage.set('user', data.user);
+            console.log("The user is", data.user.role);
             resolve(data);
           }, (err) => {
             reject(err);
@@ -105,7 +132,7 @@ export class AuthProvider {
         let headers = new Headers();
         headers.append('Content-Type', 'application/json');
 
-        this.http.post('http://localhost:8000/api/users/forgot', JSON.stringify(email), {headers: headers})
+        this.http.post('http://localhost:8000/api/users/forgot_password', JSON.stringify(email), {headers: headers})
           .subscribe(res => {
             resolve(res);
           }, (err) => {
@@ -116,9 +143,11 @@ export class AuthProvider {
     
   logout(){
     this.storage.set('token', '');
-    this.storage.set('role', '');
-    this.storage.set('email', '');
-    this.storage.set('id', '');
+    // this.storage.set('role', '');
+    // this.storage.set('email', '');
+    // this.storage.set('id', '');
+    // this.storage.set('firstLogin', '');
+    this.storage.set('user', '');
   }
     
 }

@@ -3,6 +3,7 @@ import { IonicPage, NavController, AlertController, LoadingController, ModalCont
 import { LoadProvider } from '../../providers/load/load';
 import { AuthProvider } from '../../providers/auth/auth';
 import { FormControl } from '@angular/forms';
+import { Storage } from '@ionic/storage';
 import 'rxjs/add/operator/debounceTime';
 
 @IonicPage()
@@ -11,7 +12,7 @@ import 'rxjs/add/operator/debounceTime';
   templateUrl: 'home.html',
 })
 export class HomePage {
-
+  user: any;
   loading: any;
   loads: any;
   loadsData:any;
@@ -21,40 +22,71 @@ export class HomePage {
   
 
   constructor(public navCtrl: NavController, public loadService: LoadProvider, public modalCtrl: ModalController, 
-    public alertCtrl: AlertController, public authService: AuthProvider, public loadingCtrl: LoadingController) {
+    public alertCtrl: AlertController, public authService: AuthProvider, public loadingCtrl: LoadingController, public storage:Storage) {
       this.searchControl = new FormControl();
   }
 
 
   ionViewWillLoad(){
-    
-    if(this.authService.role !== "admin" && this.authService.role !== null){ 
-    this.navCtrl.setRoot("LandingPage")
-    }
-    else if(this.authService.role === undefined){
-    this.navCtrl.setRoot("LandingPage")
-    }
-    else{
-      this.loadService.getLoads().then((data) => {
-        this.loadsData = data;
-        this.filterLoadNumbers();
-        this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
-          this.searching = false;
-          this.filterLoadNumbers();
-        })
-      }).catch((err) => {
-          let prompt = this.alertCtrl.create({
-            title: 'Error',
-            message: 'There was an error fetching the loads',
-            buttons:[
-              {
-                text: 'Ok'
-              }
-            ]
-          });
-          prompt.present();
+    this.authService.checkAuthentication().then(() => {
+    }).catch((err) => {
+      let prompt = this.alertCtrl.create({
+        title: 'Error',
+        message: 'There was an authentication error. Please log in again.',
+        buttons:[
+          {
+            text: 'Ok',
+            handler: () => {
+              this.authService.logout();
+              this.navCtrl.setRoot("LandingPage");
+            }
+          }
+        ]
       });
-    }
+      prompt.present();
+    });
+    this.storage.get('user').then((user)=> {
+      this.user = user;
+      
+      if(this.user.role !== "admin" && this.user.role !== null){ 
+        this.navCtrl.setRoot("LandingPage")
+        }
+        else if(this.user.role === undefined){
+        this.navCtrl.setRoot("LandingPage")
+        }
+        else{
+          this.loadService.getLoads().then((data) => {
+            this.loadsData = data;
+            this.filterLoadNumbers();
+            this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
+              this.searching = false;
+              this.filterLoadNumbers();
+            })
+          }).catch((err) => {
+              let prompt = this.alertCtrl.create({
+                title: 'Error',
+                message: 'There was an error fetching the loads',
+                buttons:[
+                  {
+                    text: 'Ok'
+                  }
+                ]
+              });
+              prompt.present();
+          });
+        }
+      }).catch((err) => {
+        let prompt = this.alertCtrl.create({
+          title: "Error",
+          message: "There was an error fetching the user.",
+          buttons: [
+            {
+              text: 'Ok',
+            }
+          ]
+        });
+        prompt.present();
+      })
   }
 
   filterLoadNumbers(){

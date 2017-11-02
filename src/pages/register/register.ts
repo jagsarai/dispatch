@@ -12,7 +12,7 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class RegisterPage {
   loading: any;
-
+  // user: any;
   userEmail: string;
   userPassword: string = '';
   userRole: string;
@@ -50,9 +50,9 @@ export class RegisterPage {
     };
 
     this.authService.createAccount(details).then((result) => {
-      this.loading.dismiss();
-      
-        this.authService.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot("DriverHomePage");     
+        this.loading.dismiss();
+
+        this.authService.user.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot("DriverHomePage");     
     }).catch((err) => {
         this.loading.dismiss();
         console.log(err);

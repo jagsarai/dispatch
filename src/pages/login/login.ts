@@ -17,11 +17,11 @@ import { AuthProvider } from '../../providers/auth/auth';
   templateUrl: 'login.html',
 })
 export class LoginPage {
-
+  user: any;
   userEmail: string;
   userPassword: string;
   loading: any;
-  firstLogin: any;
+//   firstLogin: any;
 
   constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl:AlertController) {
   }
@@ -40,13 +40,13 @@ export class LoginPage {
       };
 
       this.authService.login(credentials).then((result) => {
-          this.firstLogin = result['user'].firstLogin;
-          console.log(this.firstLogin);
+          this.user = result['user'];
           this.loading.dismiss();
-          if(this.firstLogin === true){
-            this.navCtrl.setRoot('HomePage');
+
+          if(this.user.firstLogin === true){
+            this.navCtrl.setRoot('ChangePasswordPage', {user: result['user']});
           }
-          else if(this.firstLogin === false && this.authService.role === 'admin'){
+          else if(this.user.firstLogin === false && this.user.role === 'admin'){
               this.navCtrl.setRoot('HomePage');
           }
           else{

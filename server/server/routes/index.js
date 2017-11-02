@@ -44,7 +44,8 @@ module.exports = (app) => {
     app.get('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.retrive);
     app.put('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.update);
     app.delete('/api/users/:userId', requireAuth, AuthenticationController.roleAuthorization(['admin']), usersController.destroy);
-    app.post('/api/users/forgot', usersController.passwordReset)
+    app.post('/api/users/forgot_password', usersController.passwordReset)
+    app.post('/api/users/change_password', )
 
     app.post('/api/loads/', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.create);
     app.get('/api/loads', requireAuth, AuthenticationController.roleAuthorization(['admin']), loadsController.list);
