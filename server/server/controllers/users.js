@@ -130,5 +130,41 @@ module.exports = {
                     res.status(400).send(error);
                 });
          });
-    }
+    },
+    changePassword(req, res){
+        return User
+         .findOne({
+             where:{
+                 email : req.body.email
+             }
+         }).then((user) => {
+             if(!user){
+                 return res.status(404).send('Unable to locate user.');
+             }
+             return user
+                .update({
+                    name: user.name,
+                    email: user.email,
+                    password: bcrypt.hashSync(req.body.password, salt),
+                    phone: user.phone,
+                    role: user.role,
+                    firstLogin: false
+                }).then((user) => {
+                    var data = {
+                        from: '<postmaster@sandboxc405fb24f04442438e497838ee5022cd.mailgun.org>',
+                        to: 'sarai.jagvir@gmail.com',
+                        subject: 'Password Changed',
+                        text: `Hi ${user.name}, your password was recently changed, if you did not make this change, please contact the admin.`
+                    };
+                    mailGun.messages().send(data, (error, body) => {
+                        if(error){
+                            console.log("Password change email not sent: ", error);
+                        }
+                    });
+                    res.status(200).json({user: user});
+                }).catch((error) => {
+                    res.status(400).send(error);
+                });
+         });
+    },
 };

@@ -4,13 +4,6 @@ import { AuthProvider } from '../../providers/auth/auth';
 
 
 
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
 @IonicPage()
 @Component({
   selector: 'page-login',
@@ -21,11 +14,16 @@ export class LoginPage {
   userEmail: string;
   userPassword: string;
   loading: any;
-//   firstLogin: any;
 
   constructor(public navCtrl: NavController, public authService: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl:AlertController) {
   }
 
+  ionViewWillLoad(){
+      this.authService.checkAuthentication().then(() => {
+         this.navCtrl.setRoot("LandingPage");
+      }).catch((err) => {
+      });
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
@@ -44,7 +42,7 @@ export class LoginPage {
           this.loading.dismiss();
 
           if(this.user.firstLogin === true){
-            this.navCtrl.setRoot('ChangePasswordPage', {user: result['user']});
+            this.navCtrl.setRoot('ChangePasswordPage', {user: this.user});
           }
           else if(this.user.firstLogin === false && this.user.role === 'admin'){
               this.navCtrl.setRoot('HomePage');

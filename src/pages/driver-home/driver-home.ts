@@ -15,7 +15,6 @@ import 'rxjs/add/operator/debounceTime';
 export class DriverHomePage {
   user: any
   driverLoads:any;
-  // driverId: any;
   currentDriverLoads:any;
   filteredCurrentDriverLoads:any;
   pastDriverLoads:any;
@@ -42,6 +41,9 @@ export class DriverHomePage {
 
         if(this.user.role !== "driver" && this.user.role !== null || this.user.role === undefined){ 
           this.navCtrl.setRoot("LandingPage")
+        }
+        else if(this.user.firstLogin === true){
+          this.navCtrl.setRoot("ChangePasswordPage", {user: this.user});
         }
         else{
           // Use the id to lookup all of the loads associated with that Id.
