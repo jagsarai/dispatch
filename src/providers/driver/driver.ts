@@ -13,7 +13,6 @@ import 'rxjs/add/operator/map';
 export class DriverProvider {
 
   constructor(public http: Http, public authService: AuthProvider) {
-    console.log('Hello DriverProvider Provider');
   }
 
   getDrivers(){
@@ -33,7 +32,6 @@ export class DriverProvider {
   }
 
   createDriver(driver){
-    console.log("driver inside createDriver func", driver);
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       let token = this.authService.token;

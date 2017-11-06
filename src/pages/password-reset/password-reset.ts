@@ -13,19 +13,16 @@ export class PasswordResetPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public authService:AuthProvider, public alertCtrl:AlertController) {
   }
 
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad PasswordResetPage');
-  }
-
   resetPassword(){
+    //create email object with the inputed Email.
     let email = {
       email: this.userEmail
     }
+    //reset the password.
     this.authService.resetPassword(email).then((result)=>{
-      console.log(result);
       let prompt = this.alertCtrl.create({
         title: "Reset Password",
-        message: "Your password has been reset, please check your email for further instructions",
+        message: "Your password has been reset, please check your email for further instructions.",
         buttons:[
           {
             text: 'Ok',
@@ -37,7 +34,6 @@ export class PasswordResetPage {
       });
       prompt.present()
     }).catch((err) => {
-      console.log(err);
       let prompt = this.alertCtrl.create({
         title: "Reset Password Error",
         message: err._body,

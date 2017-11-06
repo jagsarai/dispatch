@@ -19,13 +19,11 @@ export class LoginPage {
   }
 
   ionViewWillLoad(){
+      //check authentication and if user is already authenticated then redirect to the landing page. 
       this.authService.checkAuthentication().then(() => {
          this.navCtrl.setRoot("LandingPage");
       }).catch((err) => {
       });
-  }
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad LoginPage');
   }
     
     login(){
@@ -36,11 +34,11 @@ export class LoginPage {
           email: this.userEmail,
           password: this.userPassword
       };
-
       this.authService.login(credentials).then((result) => {
+          //set local user object to the returned json user object. 
           this.user = result['user'];
           this.loading.dismiss();
-
+          //check if the user is logging in for the first time and redirect accordingly.
           if(this.user.firstLogin === true){
             this.navCtrl.setRoot('ChangePasswordPage', {user: this.user});
           }

@@ -35,9 +35,12 @@ export class ReceiverModalPage {
   }
 
   ionViewDidLoad() {
+    //get all the receivers from the database. 
     this.receiverService.getReceivers().then((data) => {
+      //set the respnonse data to local var.
       this.receiverData = data;
       this.filterReceiverName();
+      //create an observable on the search bar. 
       this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
         this.searching = false;
         this.filterReceiverName();
@@ -57,9 +60,11 @@ export class ReceiverModalPage {
       });
       prompt.present();
     });
+    //create an obserable on the receiver address input 
     this.receiverAddressConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
       this.checkReceiverAddressCreateInput();
     });
+    //create an obserable on the receiver name input
     this.receiverNameConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
       this.checkReceiverNameCreateInput();
     })
@@ -71,6 +76,7 @@ export class ReceiverModalPage {
     });
   }
 
+  //check if address already exists in local receiver object.
   checkReceiverAddressCreateInput(){
     for(let receiver of this.receivers){
       if(receiver.address.toLowerCase() === this.receiverAddress.toLowerCase()){
@@ -81,6 +87,7 @@ export class ReceiverModalPage {
     return this.receiverAddressMatch = false;
   }
 
+  //check if name already exists in local receiver object.
   checkReceiverNameCreateInput(){
     for(let receiver of this.receivers){
       if(receiver.name.toLowerCase() === this.receiverName.toLowerCase()){
@@ -151,6 +158,7 @@ export class ReceiverModalPage {
         {
           text: 'Yes',
           handler:() => {
+            //pass back to create load page.
             this.viewCtrl.dismiss(receiver); 
           }
         }
@@ -170,6 +178,7 @@ export class ReceiverModalPage {
     this.viewCtrl.dismiss();
   }
 
+  //make sure we have title cased format for all our inputed data. 
   toTitleCase(str){
     return str.replace(/[A-z]\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }

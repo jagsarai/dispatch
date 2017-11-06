@@ -22,12 +22,11 @@ export class AuthProvider {
     return new Promise((resolve, reject) => {
         //Load token if exists
         this.storage.get('token').then((value) => {
-            
+            //set returned data to local var. 
             this.token = value;
-            console.log("This Token: " + this.token);
             let headers = new Headers();
             headers.append('Authorization', this.token);
-
+            //make authentication request to backend. 
             this.http.get('http://localhost:8000/api/protected', {headers: headers})
                 .subscribe(res => {
                     resolve(res);
@@ -35,7 +34,7 @@ export class AuthProvider {
                     reject(err);
                 }); 
         }).catch((err) => {
-          console.log(err);
+          //do nothing
         });         
     });
   }
@@ -76,7 +75,7 @@ export class AuthProvider {
             let data = res.json();
             this.token = 'Bearer ' + this.tokenValue(data.token);
             this.user = data.user
-
+            //set local storage objects with user object and token.
             this.storage.set('token', this.token);
             this.storage.set('user', data.user);
             resolve(data);
@@ -120,12 +119,13 @@ export class AuthProvider {
             reject(err);
           });
       }).catch((err) => {
-        console.log(err);
+        //do nothing.
       });
     })
   }
     
   logout(){
+    //set all our local storage objects to empty
     this.storage.set('token', '');
     this.storage.set('user', '');
   }

@@ -44,7 +44,7 @@ export class DateModalPage {
   }
 
   // Check if we are setting the pickup or delivery time and get times accordingly.
-  // If no times are given then we use defualt event object times. 
+  // If no times are given, use defualt event object times. 
   checkCalledFromEvent(event){
     if(event.event === "Pickup" && event.date && event.time){
       this.event.date = event.date;

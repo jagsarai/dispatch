@@ -2,9 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ViewController, LoadingController, ToastController, AlertController } from 'ionic-angular';
 import { storage } from 'firebase';
 import { FIREBASE_CONFIG } from '../../app/firebase.config';
-import { Transfer, TransferObject } from '@ionic-native/transfer';
-import { FilePath } from '@ionic-native/file-path';
-import { File } from '@ionic-native/file';
+import { Transfer } from '@ionic-native/transfer';
 
 declare var cordova: any;
 
@@ -24,12 +22,13 @@ export class LoadDownloadModalPage {
 
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl:ViewController, private transfer: Transfer, private file: File, private filePath:FilePath, public loadingCtrl:LoadingController, public toastCtrl:ToastController, public alertCtrl:AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public viewCtrl:ViewController, private transfer: Transfer, public loadingCtrl:LoadingController, public toastCtrl:ToastController, public alertCtrl:AlertController) {
   }
 
   ionViewWillLoad() {
+    //get the passed load object from the load details page.    
     this.load = this.navParams.get("load");
-
+    //find the image url data on the object and download the thumbnails. 
     this.load.filesData.map((object)=> {
       const img = Object.keys(object)[0].toString();
       if(storage().ref(`/loads/${this.load.id}/${img}${this.imageThumbnailSize}`)){

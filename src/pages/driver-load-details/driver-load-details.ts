@@ -32,15 +32,32 @@ export class DriverLoadDetailsPage {
     this.shipperService.retriveShipper(this.load.ShipperId).then((shipper) => {
       this.shippers.push(shipper);
     }, (err) => {
-      console.log(err);
+      let prompt = this.alertCtrl.create({
+        title: 'Download Error',
+        message: 'There was a problem getting the shipper data, please try again.',
+        buttons: [
+          {
+            text: 'Ok'
+          }
+        ]
+      });
+      prompt.present();
     })
     //get reciever details from database
     this.receiverService.retriveReceiver(this.load.ReceiverId).then((receiver) => {
       this.receivers.push(receiver);
     }, (err) => {
-      console.log(err);
+      let prompt = this.alertCtrl.create({
+        title: 'Download Error',
+        message: 'There was a problem getting the receiver data, please try again.',
+        buttons: [
+          {
+            text: 'Ok'
+          }
+        ]
+      });
+      prompt.present();
     });
-
     this.isLoadCompleted();
   }
 

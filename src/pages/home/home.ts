@@ -28,6 +28,7 @@ export class HomePage {
 
 
   ionViewWillLoad(){
+    //Check for user authentication
     this.authService.checkAuthentication().then(() => {
     }).catch((err) => {
       let prompt = this.alertCtrl.create({
@@ -45,9 +46,10 @@ export class HomePage {
       });
       prompt.present();
     });
+    //get user cerdentials from storage
     this.storage.get('user').then((user)=> {
       this.user = user;
-      
+      //check specific role of user and get load information. 
       if(this.user.role !== "admin" && this.user.role !== null){ 
         this.navCtrl.setRoot("LandingPage")
         }

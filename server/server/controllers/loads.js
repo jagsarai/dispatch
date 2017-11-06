@@ -34,7 +34,6 @@ module.exports = {
             .catch(error => res.status(400).send(error))
     },
     getDriverLoads(req, res) {
-        console.log("Inside load.getDriverLoads", req.body.driverId);
         return Load
             .findAll({
                 where: {
@@ -46,7 +45,6 @@ module.exports = {
                 }]
             })
             .then(loads => {
-                console.log("loads are: ", loads);
                 loads.map((load) => {
                     load.driver.password = "hidden";
                 });

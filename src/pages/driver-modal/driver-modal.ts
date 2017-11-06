@@ -29,8 +29,7 @@ export class DriverModalPage {
   driverName:string;
   driverPhone:string = '';
   driverEmail:string = '';
-  // driverTempPassword:string = '';
-
+  
   constructor(public viewCtrl: ViewController, public driverService:DriverProvider, public alertCtrl: AlertController, public loadingCtrl:LoadingController) {
     this.searchControl = new FormControl();
     this.driverEmailConfirmControl = new FormControl();

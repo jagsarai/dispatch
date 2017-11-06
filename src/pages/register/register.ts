@@ -30,10 +30,14 @@ export class RegisterPage {
   }
 
   ionViewDidLoad(){
+    //create obseravle on the confirm password form input.
     this.passwordConfrimControl.valueChanges.debounceTime(700).subscribe(search => {
+      //check upon each value change if the confirm password input matches the password input.
       this.checkPasswordMatch(this.userConfPassword);
     });
+    //create obseravle on the password form input.
     this.passwordControl.valueChanges.debounceTime(700).subscribe(search => {
+      //check upon each value change if the password input matches the confrim password input.
       this.checkPasswordMatch(this.userPassword);
     })
   }
@@ -48,14 +52,13 @@ export class RegisterPage {
         name: this.userName,
         phone: this.userPhone
     };
-
+    //create the user
     this.authService.createAccount(details).then((result) => {
         this.loading.dismiss();
-
+        //check user role and send them to appropritate page. 
         this.authService.user.role === "admin" ? this.navCtrl.setRoot('HomePage') : this.navCtrl.setRoot("DriverHomePage");     
     }).catch((err) => {
         this.loading.dismiss();
-        console.log(err);
         let prompt = this.alertCtrl.create({
           title: 'Registration Failed!',
           message: err,

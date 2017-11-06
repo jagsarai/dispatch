@@ -39,7 +39,9 @@ export class LoadEditPage {
   }
 
   ionViewWillLoad() {
+    //get load object passed by the LoadDetialsPage.
     this.load = this.navParams.get("Load");
+    //setup local variables if the load object is defined. 
     if(this.load !== undefined){
       this.driver = this.load.driver;
       this.shipper = this.load.shipper;
@@ -61,7 +63,7 @@ export class LoadEditPage {
 
   showStatusModal(){
     const status = this.status;
-
+    //pass the status object to the status modal page. 
     const statusModal:Modal = this.modalCtrl.create('StatusModalPage', {status: status})
     statusModal.present();
 
@@ -127,11 +129,13 @@ export class LoadEditPage {
   }
 
   showPickupDateModal(){
+    //create a pickup event object with the date and time detials.
     const event = {
       event: "Pickup",
       date: this.pickup.date,
       time: this.pickup.time
     }
+    //pass the event object into the pickup modal page. 
     const dateModal:Modal = this.modalCtrl.create('DateModalPage',{event: event})
     dateModal.present();
 
@@ -147,11 +151,13 @@ export class LoadEditPage {
 
 
   showDeliveryDateModal(){
+    //create a delivery event object with the date and time detials.
     const event ={
       event: "Delivery",
       date: this.delivery.date,
       time: this.delivery.time
     }
+    //pass the event object into the delivery modal page    
     const dateModal:Modal = this.modalCtrl.create('DateModalPage', {event: event})
     dateModal.present();
 
@@ -164,13 +170,14 @@ export class LoadEditPage {
       this.checkValidForm();
     });
   }
-
+  //check if all required feilds are filled. 
   checkValidForm(){
     if(this.driver !== undefined && this.shipper !== undefined && this.receiver !== undefined && this.truck !== undefined &&this.pickup.date !== '' && this.pickup.time !== '' && this.delivery.date !== '' && this.delivery.time !== ''){
       this.createFormComplete = true;
     }
   }
 
+  //check if any load data has changed. 
   isLoadUpdated(){
     if(this.driver === this.load.driver &&
       this.shipper === this.load.shipper &&
@@ -185,9 +192,11 @@ export class LoadEditPage {
   }
 
   updateLoad(){
+    //if the load was accepted and status is changed to assigned, the load can no longer be accepted. 
     if(this.status === 'assigned' && this.load.loadAccepted === true){
       this.loadAccepted = false;
     }
+    //create a load object with appropriate data. 
     let load = {
       id: parseInt(this.load.id),
       userId: parseInt(this.driver.id),
@@ -236,6 +245,7 @@ export class LoadEditPage {
                   }
                 ]
               })
+              prompt.present();
             });
           }
         }

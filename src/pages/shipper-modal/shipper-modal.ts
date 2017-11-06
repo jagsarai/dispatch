@@ -35,20 +35,37 @@ export class ShipperModalPage {
   }
 
   ionViewDidLoad() {
+    //get all the receivers from the database. 
     this.shipperService.getShippers().then((data) => {
+      //set the respnonse data to local var.
       this.shipperData = data;
       console.log("Shipper Data", this.shipperData);
       this.filterShipperName();
+       //create an observable on the search bar. 
       this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
         this.searching = false;
         this.filterShipperName();
       })
-    }, (err) => {
-      console.log("There was an error with the request");
+    }).catch((err) => {
+      let prompt = this.alertCtrl.create({
+        title: 'Error',
+        message: 'There was an error fetching the shippers, please try again',
+        buttons:[
+          {
+            text:'Ok',
+            handler: () => {
+              this.viewCtrl.dismiss();
+            }
+          }
+        ]
+      });
+      prompt.present();
     });
+    //create an obserable on the receiver address input 
     this.shipperAddressConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
       this.checkShipperAddressCreateInput();
     });
+    //create an obserable on the receiver name input
     this.shipperNameConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
       this.checkShipperNameCreateInput();
     })
@@ -60,6 +77,7 @@ export class ShipperModalPage {
     });
   }
 
+  //check if address already exists in local shipper object.
   checkShipperAddressCreateInput(){
     console.log("checkShipperAddress function fired");
     for(let shipper of this.shippers){
@@ -71,6 +89,7 @@ export class ShipperModalPage {
     return this.shipperAddressMatch = false;
   }
 
+  //check if name already exists in local shipper object.
   checkShipperNameCreateInput(){
     console.log("checkDriverName function fired");
     for(let shipper of this.shippers){
@@ -105,19 +124,25 @@ export class ShipperModalPage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("Shipper inside of handlder", shipper);
             this.showLoader();
-                //Remove from database
             this.shipperService.createShipper(shipper).then((result) => {
         
               this.loading.dismiss();
               //Pass back to create load page
-              console.log("shipper created: ", result);
               this.viewCtrl.dismiss(result); 
         
-            }, (err) => {
+            }).catch((err) => {
               this.loading.dismiss();
-                console.log(err, "not allowed");
+              let prompt = this.alertCtrl.create({
+                title: 'Error',
+                message: err,
+                buttons:[
+                  {
+                    text:'Ok'
+                  }
+                ]
+              });
+              prompt.present();
             });
           }
         }
@@ -127,7 +152,6 @@ export class ShipperModalPage {
   }
 
   addExistingShipper(shipper){
-    // this.truck = truck
     let prompt = this.alertCtrl.create({
       title: 'Add Shipper ' + shipper.name,
       message: 'Are you sure you want to add ' + shipper.name + "?",
@@ -138,8 +162,7 @@ export class ShipperModalPage {
         {
           text: 'Yes',
           handler:() => {
-            console.log("Shipper inside of handlder", shipper);
-            //Pass back to create load page
+            //Pass back to create load page.
             this.viewCtrl.dismiss(shipper); 
           }
         }
@@ -159,6 +182,7 @@ export class ShipperModalPage {
     this.viewCtrl.dismiss();
   }
 
+  //make sure we have title cased format for all our inputed data. 
   toTitleCase(str){
     return str.replace(/[A-z]\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
   }

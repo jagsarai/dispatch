@@ -19,7 +19,7 @@ export class UploadModalPage {
 
   images:any = [];
   dataUrlImages: any;
-  // lastImage: string = null;
+  lastImage: string = null;
   loading: Loading;
   duplicateImage:Boolean = false;
   load: any;
@@ -31,10 +31,11 @@ export class UploadModalPage {
   
 
   ionViewDidLoad() {
+    //get the load object from driver load details page
     this.load = this.navParams.get('load');
-    console.log("Load information " + this.load);
   }
 
+  //present option to user to select camera or library option for uploading. 
   presentActionSheet() {
     let actionSheet = this.actionSheetCtrl.create({
       title: 'Select Image Source',
@@ -73,8 +74,7 @@ export class UploadModalPage {
 
       // Get the data of an image
        this.camera.getPicture(options).then((imagePath) => {
-        // Special handling for Android library
-        console.log("This is the proper image path " + imagePath);
+        // Special handling for Android library 
         if (this.platform.is('android') && sourceType === this.camera.PictureSourceType.PHOTOLIBRARY) {
           this.filePath.resolveNativePath(imagePath)
             .then(filePath => {
@@ -93,7 +93,7 @@ export class UploadModalPage {
    }
 
 
-  // Create a new name for the image
+  // Create a new name for the image using the current date and time. 
   createFileName() {
     var d = new Date(),
     month = (d) => {
@@ -138,7 +138,6 @@ export class UploadModalPage {
     }, 
     n = d.getFullYear().toString() + month(d) + day(d) +  hour(d) + minutes(d) + seconds(d),
     newFileName =  n + ".jpg";
-    console.log("This is the new file name " +  newFileName);
     return newFileName;
   }
  
@@ -146,11 +145,9 @@ export class UploadModalPage {
   copyFileToLocalDir(namePath, currentName, newFileName) {
     
     this.file.copyFile(namePath, currentName, cordova.file.dataDirectory, newFileName).then(success => {
-      console.log("Copy event fired");
-      console.log("Success storing in local folder " +  cordova.file.dataDirectory + " " + newFileName);
       this.images.push(newFileName);
-      // this.lastImage  = this.images[this.images.length - 1];
-    }, error => {
+      this.lastImage  = this.images[this.images.length - 1];
+    }).catch((error) => {
       this.presentToast('Error while storing file.');
     });
   }
@@ -173,56 +170,6 @@ export class UploadModalPage {
     }
   }
 
-  // public async uploadImage(){
-  //   try{
-  //     console.log("This is the image name " + this.lastImage);
-  //     this.loading = this.loadingCtrl.create({
-  //       content: 'Uploading...',
-  //      });
-
-  //     this.loading.present();
-
-      
-  //     const image = await this.file.readAsDataURL(cordova.file.dataDirectory, this.lastImage);
-
-  //     console.log("This is the file " + image);
-
-  
-  //     const storageRef = storage().ref('/loads/' + 'load' + this.load.id.toString() + "/" + this.lastImage);
-      
-  //     storageRef.putString(image, 'data_url');
-
-
-  //     this.images = [];
-  //     this.loading.dismiss();
-  //     this.presentToast("Upload successful");
-  //   }
-   
-  //   catch(e){
-  //     this.loading.dismiss();
-  //     this.presentToast("Upload failed, please try again");
-  //     console.error(e);
-  //   }
-        
-  // }
-
-  // async uploadImage(){
-  //   try {
-  //     this.loading = this.loadingCtrl.create({
-  //       content: 'Uploading...',
-  //     });
-  //     this.loading.present();
-
-  //     await this.images.map((image) => {
-  //       this.imagesToDataUrlUpload(image);
-  //     });
-  //   }
-  //   catch(e){
-  //     this.loading.dismiss(this.presentToast("Upload error: e"));
-  //     console.error("There was an error with the request");
-  //   }
-  // }
-
   uploadImage(){
     this.loading = this.loadingCtrl.create({
       content: 'Uploading...'
@@ -234,10 +181,10 @@ export class UploadModalPage {
     });
   }
 
+  //Upload data url of images to firebase.
   imagesToDataUrlUpload(imageName){
-  
+    //get the images and convert into data urls.
     this.file.readAsDataURL(cordova.file.dataDirectory, imageName).then((result) => {
-      console.log("getting results");
       const image = result;
       const storageRef = storage().ref(`/loads/${this.load.id}/${imageName}`);
       const uploadTask = storageRef.putString(image, 'data_url');
@@ -271,15 +218,13 @@ export class UploadModalPage {
       });
     }, (err) => {
       this.loading.dismiss(this.presentToast("Upload error"));
-      console.error(err);
     }).catch((err) => {
       this.loading.dismiss(this.presentToast("There was an error with the request"))
-      console.log("Something went wrong ", err);
     });
   }
 
   closeUploadModal(){
-    console.log("Download url inside modal close " + this.downloadUrl)
+    //check if there were any image urls created and send back download url object.
     if(this.downloadUrl.length === 0){
       this.viewCtrl.dismiss();
     }

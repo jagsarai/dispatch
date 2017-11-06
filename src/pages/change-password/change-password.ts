@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { FormControl } from '@angular/forms';
-import { Storage } from '@ionic/storage';
 import { AuthProvider } from '../../providers/auth/auth';
 import 'rxjs/add/operator/debounceTime';
 
@@ -25,11 +24,11 @@ export class ChangePasswordPage {
   }
 
   ionViewWillLoad() {
+    //get the user passed from login screen
     this.user = this.navParams.get('user');
     if(this.user === undefined){
       this.navCtrl.setRoot('LandingPage');
     }
-    console.log(this.user);
   }
   ionViewDidLoad(){
     this.passwordConfrimControl.valueChanges.debounceTime(700).subscribe(search => {
@@ -70,7 +69,6 @@ export class ChangePasswordPage {
       });
       prompt.present()
       }).catch((err) => {
-        console.log(err);
         let prompt = this.alertCtrl.create({
           title: "Change Password Error",
           message: err._body,

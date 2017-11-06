@@ -25,12 +25,13 @@ export class StatusModalPage {
   }
 
   ionViewWillLoad() {
+    //get user role from local storage.
     this.storage.get('role').then((role) => {
-      console.log("Role inside status modal ", role);
+      //check if users role is admin.
       this.checkRole(role);
     })
+    //get the status object from the load page.
     this.checkLoadStatus(this.navParams.get("status"));
-    console.log("Inside the status modal", this.status);
   }
 
   closeStatusModal(){
@@ -79,7 +80,7 @@ export class StatusModalPage {
   }
 
   saveStatusModal(){
-    console.log(this.status);
+    //send back to the loads page. 
     this.viewCtrl.dismiss(this.status);
   }
 

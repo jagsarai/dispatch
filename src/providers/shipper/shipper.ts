@@ -3,17 +3,10 @@ import { Http, Headers } from '@angular/http';
 import { AuthProvider } from '../auth/auth';
 import 'rxjs/add/operator/map';
 
-/*
-  Generated class for the ShipperProvider provider.
-
-  See https://angular.io/guide/dependency-injection for more info on providers
-  and Angular DI.
-*/
 @Injectable()
 export class ShipperProvider {
 
   constructor(public http: Http, public authService: AuthProvider) {
-    console.log('Hello ShipperProvider Provider');
   }
 
   getShippers(){
@@ -37,7 +30,7 @@ export class ShipperProvider {
     return new Promise((resolve, reject) => {
       let headers = new Headers();
       let token = this.authService.token;
-      console.log(token);
+    
       headers.append('Authorization', token);
 
       this.http.get('http://localhost:8000/api/shippers/' + id, {headers: headers})
@@ -51,11 +44,10 @@ export class ShipperProvider {
   }
 
   createShipper(shipper){
-    
     return new Promise((resolve, reject) => {
-
       let headers = new Headers();
       let token = this.authService.token;
+
       headers.append('Content-Type', 'application/json');
       headers.append('Authorization', token);
 
@@ -71,9 +63,9 @@ export class ShipperProvider {
 
   updateShipper(shipper){
     return new Promise((resolve, reject) => {
-
       let headers = new Headers();
       let token = this.authService.token;
+
       headers.append('Authorization', token);
 
       this.http.put('http://localhost:8000/api/shippers/' + shipper.id, JSON.stringify(shipper), {headers: headers}).subscribe((res) => {
@@ -85,11 +77,10 @@ export class ShipperProvider {
   }
 
   deleteShipper(id){
-    
     return new Promise((resolve, reject) => {
-
         let headers = new Headers();
         let token = this.authService.token;
+        
         headers.append('Authorization', token);
 
         this.http.delete('http://localhost:8000/api/shippers/' + id, {headers: headers}).subscribe((res) => {

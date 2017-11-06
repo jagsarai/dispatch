@@ -30,13 +30,14 @@ export class LoadDetailsPage {
   }
 
   ionViewDidLoad() {
+    //check is platfrom of device is web and adjust the front end buttons accordingly.
     if(this.load !== undefined){
       if(this.platform.is('core')){
         this.browser = true;
       }
       
       this.load.filesData.length > 0 ? this.imagesLoaded = true : this.imagesLoaded = false;
-  
+      // get shipper data for the load. 
       this.shipperService.retriveShipper(this.load.ShipperId).then((shipper) => {
         this.shippers.push(shipper);
       }).catch((err) => {
@@ -54,7 +55,7 @@ export class LoadDetailsPage {
         });
         prompt.present();
       });
-  
+      //get receiver data for the load. 
       this.receiverService.retriveReceiver(this.load.ReceiverId).then((receiver) => {
         this.receivers.push(receiver);
       }).catch((err) => {
@@ -72,7 +73,7 @@ export class LoadDetailsPage {
         });
         prompt.present();
       });
-  
+      //get the truck data for the load. 
       this.truckService.retriveTruck(this.load.TruckId).then((truck) => {
         this.trucks.push(truck);
       }).catch((err) => {
@@ -191,11 +192,12 @@ export class LoadDetailsPage {
   }
 
   emailDriver(){
+    // create email template and alert driver of new load assignement. 
     let email = {
       to: this.load.driver.email,
       cc: 'admin@gmail.com',
       subject: `Load# ${this.load.id}`,
-      body: `Hi ${this.load.driver.email}`,
+      body: `Hi ${this.load.driver.email}, you have a new load assigned. Please log in your app to view the detials.`,
       isHtml: true
     };
     this.emailComposer.hasPermission().then((permission:boolean) => {

@@ -19,11 +19,7 @@ let generateToken = (user) => {
     });
 }
  
-let setUserInfo = (request) => {
-    console.log("inside setUserInfo");
-    console.log("request id: " + request.id);
-    console.log("request email: " + request.email);
-    console.log("request role: " + request.role);    
+let setUserInfo = (request) => { 
     return {
         id: request.id,
         phone: request.phone,
@@ -44,12 +40,6 @@ exports.login = (user) => {
 
 //handle incoming request to register user.
 exports.register = (req, res, next) => {
-    console.log("inside register function");
-    console.log(req.body.email);
-    console.log(req.body.password);
-    console.log(req.body.role);
-    console.log(req.body.name);
-    console.log(req.body.phone);
     let user = {
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, salt),
@@ -119,9 +109,7 @@ exports.register = (req, res, next) => {
 
 //authorize the users role
 exports.roleAuthorization = (roles) => {
-    console.log("Inside the role auth function");
     return function(req, res, next){
-        console.log("user inside the role auth: ")
         var user = req.user;
 
         User.findById(user.id)

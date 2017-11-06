@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, LoadingController } from 'ionic-angular';
 import { AuthProvider } from '../../providers/auth/auth';
-import { CallNumber } from '@ionic-native/call-number';
 import { Storage } from '@ionic/storage';
 
 @IonicPage()
@@ -14,12 +13,12 @@ export class LandingPage {
   loading: any;
   user: any;
 
-  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public authService: AuthProvider, private callNumber:CallNumber, public storage:Storage) {
+  constructor(public navCtrl: NavController, public loadingCtrl: LoadingController, public authService: AuthProvider, public storage:Storage) {
   }
 
   ionViewWillLoad() {
     this.showLoader();
-      //Check if already authenticated
+      //Check user authentication
       this.authService.checkAuthentication().then((res) => {
           this.loading.dismiss();
           this.storage.get('user').then((user) => {

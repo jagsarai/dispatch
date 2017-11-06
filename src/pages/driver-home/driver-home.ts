@@ -35,10 +35,11 @@ export class DriverHomePage {
   }
 
   ionViewWillLoad() {
+    //check user authentication
     this.authService.checkAuthentication().then(() => {
       this.storage.get('user').then((user)=> {
         this.user = user;
-
+        //check user role
         if(this.user.role !== "driver" && this.user.role !== null || this.user.role === undefined){ 
           this.navCtrl.setRoot("LandingPage")
         }

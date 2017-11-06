@@ -34,25 +34,41 @@ export class TruckModalPage {
   }
 
   ionViewDidLoad() {
+    //get the truck data
     this.truckService.getTrucks().then((data) => {
+      //set the data to local var.
       this.trucksData = data;
-      console.log("Truck data", this.trucksData);
+      //filter all the truck numbers
       this.filterTruckNumbers();
+      //create obseravle on the search field. 
       this.searchControl.valueChanges.debounceTime(700).subscribe(search => {
         this.searching = false;
         this.filterTruckNumbers();
       })
-    }, (err) => {
-      console.log("There was an error with the request");
+    }).catch((err) => {
+      let prompt = this.alertCtrl.create({
+        title: 'Error',
+        message: 'There was an error getting the truck data, please try again',
+        buttons:[
+          {
+            text:'Ok',
+            handler: () => {
+              this.viewCtrl.dismiss();
+            }
+          }
+        ]
+      });
+      prompt.present();
     });
+    //create obserable on the truck confirm input 
     this.truckConfirmControl.valueChanges.debounceTime(700).subscribe(search => {
       this.checkTruckNumberCreateInput();
     })
 
   }
 
+  //check if truck number is already located in our local object.
   checkTruckNumberCreateInput(){
-    console.log("checkTruckNumber function fired");
     for(let truck of this.trucks){
       if(truck.number.toString() === this.truckNumber){
         return this.truckNumberMatch = true;
@@ -73,9 +89,6 @@ export class TruckModalPage {
   }
 
   closeTruckModal(){
-    // const truck = {
-    //   name: ""
-    // }
     this.viewCtrl.dismiss();
   }
 
@@ -86,10 +99,6 @@ export class TruckModalPage {
       year: this.truckYear,
       number: parseInt(this.truckNumber),
     }
-    console.log("number", truck.number);
-    console.log("make", truck.make);
-    console.log("model", truck.model);
-    console.log("year", truck.year);
 
     let prompt = this.alertCtrl.create({
       title: 'Add Truck# ' + truck.number,
@@ -123,7 +132,6 @@ export class TruckModalPage {
   }
 
   addExistingTruck(truck){
-    // this.truck = truck
     let prompt = this.alertCtrl.create({
       title: 'Add Truck# ' + truck.number,
       message: 'Are you sure you want to add truck# ' + truck.number + "?",
