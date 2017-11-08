@@ -50,10 +50,7 @@ export class HomePage {
     this.storage.get('user').then((user)=> {
       this.user = user;
       //check specific role of user and get load information. 
-      if(this.user.role !== "admin" && this.user.role !== null){ 
-        this.navCtrl.setRoot("LandingPage")
-        }
-        else if(this.user.role === undefined){
+      if((this.user.role !== "admin" && this.user.role !== null) || this.user.role === undefined){ 
         this.navCtrl.setRoot("LandingPage")
         }
         else{
